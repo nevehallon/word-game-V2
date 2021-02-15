@@ -1,0 +1,142 @@
+<div
+    #container
+    class="container mat-elevation-z8"
+>
+    <table
+        #table
+        mat-table
+        [dataSource]="dataSource"
+        multiTemplateDataRows
+        [trackBy]="trackByFn"
+    >
+
+        <!-- Moves Column -->
+        <ng-container matColumnDef="move">
+            <th
+                [ngStyle]="{'color': 'black'}"
+                mat-header-cell
+                *matHeaderCellDef
+            > Moves </th>
+            <td
+                #td
+                mat-cell
+                *matCellDef="let element"
+                [class]="element?.isAI ? 'opponent' : 'player'"
+            >
+                <div class="move-column-text">
+
+                    {{element?.word | lowercase}}
+                    <span [ngClass]="{'bold': element?.points}">
+                        {{element?.points ? '[+' + element?.points + ']': element?.skip?.isSwap ? "Swap"
+                        :
+                        "Pass"}}
+                    </span>
+                </div>
+            </td>
+            <td
+                [class]="lastEntry?.isAI ? 'opponent' : 'player'"
+                mat-footer-cell
+                *matFooterCellDef
+            >
+                <div class="move-column-text">
+
+                    {{lastEntry?.word | lowercase}}
+                    <span [ngClass]="{'bold': lastEntry?.points}">
+                        {{lastEntry?.points ? '[+' + lastEntry?.points + ']': lastEntry?.skip?.isSwap ? "Swap"
+                        : firstTurn && !gameOver ? 'Start of Game' : gameOver ? '' : "Pass"}}
+                    </span>
+                </div>
+            </td>
+        </ng-container>
+
+        <!-- Opponent Column -->
+        <ng-container matColumnDef="opponent">
+            <th
+                class="opponent"
+                mat-header-cell
+                *matHeaderCellDef
+            > Opponent </th>
+            <td
+                class="opponent"
+                mat-cell
+                *matCellDef="let element"
+                [ngClass]="{'bold': element?.points && element?.isAI}"
+            > {{element?.score?.computerScore}} </td>
+            <td
+                class="opponent bold"
+                mat-footer-cell
+                *matFooterCellDef
+            > {{lastEntry?.score?.computerScore || 0}} </td>
+        </ng-container>
+
+        <!-- Player Column -->
+        <ng-container matColumnDef="player">
+            <th
+                class="player"
+                mat-header-cell
+                *matHeaderCellDef
+            > Player </th>
+            <td
+                class="player"
+                mat-cell
+                *matCellDef="let element"
+                [ngClass]="{'bold': element?.points && !element?.isAI}"
+            > {{element?.score?.playerScore}} </td>
+            <td
+                class="player bold"
+                mat-footer-cell
+                *matFooterCellDef
+            > {{lastEntry?.score?.playerScore || 0}} </td>
+        </ng-container>
+
+
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+            <td
+                #tCell
+                mat-cell
+                *matCellDef="let element"
+                [attr.colspan]="displayedColumns.length"
+            >
+                <div
+                    class="element-detail"
+                    [@detailExpand]="(element === expandedElement ? 'expanded'  : 'collapsed') | scrollTo:container:tCell"
+                >
+                    <app-tab-container
+                        [@fadeInOut]
+                        *ngIf="expandedElement === element"
+                        class="tab-container"
+                        [element]="element"
+                    ></app-tab-container>
+                </div>
+            </td>
+        </ng-container>
+
+        <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
+        <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns; dataIndex as i"
+            [hidden]="i === dataSource.length - 1"
+            class="element-row"
+            [class.expanded-row]="expandedElement === row"
+            [class.expandable]="row?.points"
+            (click)="row?.points && expandedElement = expandedElement === row ? null : row"
+        ></tr>
+        <tr
+            mat-footer-row
+            *matFooterRowDef="displayedColumns; sticky: true"
+            class="element-row"
+            [class.expanded-row]="expandedElement === lastEntry"
+            [class.expandable]="lastEntry?.points"
+            (click)="lastEntry?.points && expandedElement = expandedElement === lastEntry ? null : lastEntry"
+        ></tr>
+        <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+            class="detail-row"
+        ></tr>
+    </table>
+</div>

@@ -1,0 +1,21 @@
+#board {
+  width: 100vmin;
+  height: 100vmin;
+  max-height: 75vh;
+  max-width: 75vh;
+  min-height: 42vh;
+  min-width: 42vh;
+  background: black;
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  justify-content: center;
+  margin: 0 auto;
+}
+
+#board.zoomedIn {
+  width: 200vmin;
+  height: 200vmin;
+  max-height: 120vh;
+  max-width: 120vh;
+}

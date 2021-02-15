@@ -1,0 +1,43 @@
+<div id="rackImg">
+    <div
+        id="rack"
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        [cdkDropListConnectedTo]="squareIds"
+        [cdkDropListData]="tiles"
+        (cdkDropListDropped)="drop($event)"
+    >
+        <div
+            [attr.data-drag]="tile.id"
+            [id]="tile.id"
+            [class]="tile.class"
+            *ngFor="let tile of tiles"
+            cdkDrag
+            (cdkDragStarted)="dragStart($event)"
+        >
+            <svg viewBox="0 0 20 20">
+                <text
+                    x="50%"
+                    y="50%"
+                    dominant-baseline="middle"
+                    text-anchor="middle"
+                >
+                    {{ tile.content.letter }}
+                </text>
+            </svg>
+
+            <div>
+                <svg viewBox="0 0 40 40">
+                    <text
+                        x="82%"
+                        y="85%"
+                        dominant-baseline="middle"
+                        text-anchor="middle"
+                    >
+                        {{tile.content.points ? tile.content.points : ''}}
+                    </text>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>

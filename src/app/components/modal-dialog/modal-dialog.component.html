@@ -1,0 +1,286 @@
+<div *ngIf="data?.type === 'bag'">
+    <h2 class="center-align">Remaining Tiles in Bag:</h2>
+    <div class="tilesLeft">
+        <div
+            *ngFor="let x of letterToPointsSorted"
+            class="status-box"
+        >
+            <div class="tile">
+
+                <svg viewBox="0 0 20 20">
+                    <text
+                        x="50%"
+                        y="50%"
+                        dominant-baseline="middle"
+                        text-anchor="middle"
+                    >{{x.letter === "" ? "" : x.letter}}</text>
+                </svg>
+                <div>
+                    <svg viewBox="0 0 40 40">
+                        <text
+                            x="82%"
+                            y="85%"
+                            dominant-baseline="middle"
+                            text-anchor="middle"
+                        >{{x.points}}</text>
+                    </svg>
+                </div>
+            </div>
+            <svg viewBox="0 0 35 35">
+                <text
+                    x="50%"
+                    y="50%"
+                    dominant-baseline="middle"
+                    text-anchor="middle"
+                >{{currentFreq()[(x.letter === "BLANK" ? "" : x.letter) + ""]}}</text>
+            </svg>
+        </div>
+    </div>
+    <mat-dialog-actions>
+        <button
+            color="primary"
+            mat-raised-button
+            mat-dialog-close
+        >Close</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="data?.type === 'settings'">
+    <h1 class="center-align">Settings</h1>
+    <h3 class="center-align">Current difficulty:</h3>
+
+    <div>
+        <label
+            class="center-align"
+            [ngStyle]="difficultyStyles"
+            id="difficultyText"
+            for="difficulty"
+        >{{difficultyText}}</label>
+        <mat-slider
+            [value]="value"
+            (input)="giveFeedBack($event)"
+            step="1"
+            min="15"
+            max="65"
+        ></mat-slider>
+        <div
+            [ngStyle]="difficultyStyles"
+            id="difficultyPercentage"
+            [class]="'center-align'"
+        >
+            {{((value - 15) * 100) / (65 - 15)}}%
+        </div>
+        <hr id="between" />
+        <div class="center-align">
+            <label
+                id="hints"
+                for="showHints"
+            >Show hints: </label>
+            <mat-checkbox
+                id="showHints"
+                [(ngModel)]="checked"
+            ></mat-checkbox>
+        </div>
+    </div>
+
+    <mat-dialog-actions>
+        <button
+            mat-raised-button
+            mat-dialog-close
+        >Close</button>
+        <button
+            (click)="saveSettings()"
+            color="primary"
+            mat-raised-button
+            mat-dialog-close
+        >Save</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="data?.type === 'swap'">
+    <h1 class="center-align">Swap Tiles</h1>
+    <h3 class="center-align">Select the tiles you want to exchange</h3>
+    <div class="center-align">
+        <small>(click a second time to undo)</small>
+    </div>
+
+    <div
+        class="blankOptions"
+        [ngStyle]="{'grid-template-columns': 'repeat(7, 1fr)','max-width': '100%', 'column-gap': '0.1em'}"
+    >
+        <div
+            (click)="selectTile(tile)"
+            [ngStyle]="{'cursor': 'pointer'}"
+            [class]="tile.class"
+            *ngFor="let tile of tiles"
+            [class.selected]="tile.selected"
+        >
+            <svg viewBox="0 0 20 20">
+                <text
+                    x="50%"
+                    y="50%"
+                    dominant-baseline="middle"
+                    text-anchor="middle"
+                >{{tile.content.letter}}</text>
+            </svg>
+            <div>
+                <svg viewBox="0 0 40 40">
+                    <text
+                        x="82%"
+                        y="85%"
+                        dominant-baseline="middle"
+                        text-anchor="middle"
+                    >{{tile.content.points ? tile.content.points : ''}}</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+
+    <mat-dialog-actions>
+        <button
+            mat-raised-button
+            mat-dialog-close
+        >Close</button>
+        <button
+            (click)="swapTiles()"
+            color="primary"
+            mat-raised-button
+            [mat-dialog-close]="data.bagLength ? true : false"
+        >Confirm</button>
+    </mat-dialog-actions>
+</div>
+
+
+
+<div
+    id="blanks"
+    *ngIf="data?.type === 'blankOptions'"
+>
+    <h2 class="center-align">How would you like to use your blank tile?</h2>
+    <div class="blankOptions">
+        <div
+            *ngFor="let x of letterToPointsSorted"
+            class="status-box"
+            [mat-dialog-close]="{letter: x.letter, points: 0}"
+            [ngStyle]="x.points ? '' :{'display': 'none'}"
+        >
+            <div class="tile">
+
+                <svg viewBox="0 0 20 20">
+                    <text
+                        x="50%"
+                        y="50%"
+                        dominant-baseline="middle"
+                        text-anchor="middle"
+                    >{{x.letter === "" ? "" : x.letter}}</text>
+                </svg>
+                <div>
+                    <svg viewBox="0 0 40 40">
+                        <text
+                            x="82%"
+                            y="85%"
+                            dominant-baseline="middle"
+                            text-anchor="middle"
+                        >0</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-dialog-actions>
+        <button
+            (click)="revert()"
+            color="primary"
+            mat-raised-button
+            [mat-dialog-close]="false"
+        >Close</button>
+    </mat-dialog-actions>
+</div>
+
+<div
+    id="confirmPass"
+    *ngIf="data?.type === 'confirmPass'"
+>
+    <h2 class="center-align">Are you sure you want to pass?</h2>
+
+    <mat-dialog-actions>
+        <button
+            color="warn"
+            mat-raised-button
+            [mat-dialog-close]="false"
+        >Cancel</button>
+        <button
+            color="primary"
+            mat-raised-button
+            [mat-dialog-close]="true"
+        >Confirm</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="data?.type === 'message'">
+    <h2 class="center-align">{{data.message}}</h2>
+
+    <div class="center-align player bold">{{data.player}}</div>
+    <div class="center-align opponent bold">{{data.opponent}}</div>
+
+    <mat-dialog-actions *ngIf="data?.buttons">
+        <button
+            *ngFor="let btn of 
+            data.buttons; index as i"
+            color="primary"
+            mat-raised-button
+            [mat-dialog-close]="data.btnCloseData[i]"
+        >
+            {{btn}}
+        </button>
+    </mat-dialog-actions>
+</div>
+
+<div
+    class="loading"
+    *ngIf="data?.type === 'loading'"
+>
+    <h2 class="center-align">{{data.message}}</h2>
+    <div class="spinner-container center-align">
+        <svg
+            fill="currentColor"
+            class="spinner"
+            data-loading="lazy"
+            xmlns="http://www.w3.org/2000/svg"
+            width="135"
+            height="135"
+            viewBox="0 0 135 135"
+        >
+            <path
+                id="path1"
+                d="M67.447 58c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm9.448 9.447c0 5.523 4.477 10 10 10 5.522 0 10-4.477 10-10s-4.478-10-10-10c-5.523 0-10 4.477-10 10zm-9.448 9.448c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10s10-4.478 10-10c0-5.523-4.477-10-10-10zM58 67.447c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z"
+            >
+            </path>
+            <path
+                id="path2"
+                d="M28.19 40.31c6.627 0 12-5.374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z"
+            >
+            </path>
+        </svg>
+    </div>
+</div>
+
+<div *ngIf="data?.type === 'history'">
+    <h2 class="center-align">Play History</h2>
+
+    <app-history-table></app-history-table>
+
+    <div class='text-info center-align'>* Click on word to see definition *</div>
+
+    <mat-dialog-actions>
+        <button
+            class="center-align"
+            color="primary"
+            mat-raised-button
+            mat-dialog-close
+        >
+            Close
+        </button>
+    </mat-dialog-actions>
+</div>

@@ -1,0 +1,94 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$client-primary: mat-palette($mat-indigo);
+$client-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$client-warn: mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$client-theme: mat-light-theme(
+  (
+    color: (
+      primary: $client-primary,
+      accent: $client-accent,
+      warn: $client-warn,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($client-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+  scrollbar-width: thin;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+  .mat-tooltip {
+    font-size: 1.1em !important;
+    text-align: center !important;
+  }
+}
+
+body.inheritCursors * {
+  cursor: inherit !important;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 18px;
+}
+::-webkit-scrollbar-thumb {
+  height: 6px;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  -webkit-border-radius: 7px;
+  background-color: rgba(0, 0, 0, 0.35);
+  -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05),
+    inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+}
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
