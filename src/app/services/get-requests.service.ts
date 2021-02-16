@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { LetterToPointsService } from './letter-to-points.service.js';
-import { getTrie } from '../../trie-prefix-tree-alt/main.js';
+import { LetterToPointsService } from './letter-to-points.service';
+import { getTrie } from '../../assets/trie-prefix-tree-alt/main.js';
 import { HttpClient } from '@angular/common/http';
 import { orderBy } from 'lodash-es';
 import * as localforage from 'localforage';
+
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GetRequestsService {
-  url: string = 'http://localhost:3001';
+  url: string = environment.serverUrl;
 
   async checkServerStatus() {
     let requestStatus: Promise<any> = this.http
