@@ -180,29 +180,36 @@ export class GameLogicService {
         data: {
           type: 'loading',
           message: 'Loading Resources...',
+          notes:
+            '*Note that if this is the first time you visit this page it might take time till everything loads - do not close this browser',
         },
       });
     }
     let status = await this.http.checkServerStatus();
     let TO;
     if (status) {
-      clearTimeout(TO);
-      let checkHasList = () => {
-        if (!check.getHasList()) {
-          return (TO = setTimeout(() => {
-            checkHasList();
-          }, 2500));
-        }
+      let start = () => {
+        this.closeDialog();
+        this.source.loaderShown = false;
+        return this.startGame($document);
       };
-      checkHasList();
-      this.closeDialog();
-      this.source.loaderShown = false;
-      return this.startGame($document);
+      let checkHasList = () => {
+        clearTimeout(TO);
+        console.log(check.getHasList());
+        if (check.getHasList()) {
+          return start();
+        }
+        return (TO = setTimeout(() => {
+          checkHasList();
+        }, 2500));
+      };
+      if (!check.getHasList()) {
+        return checkHasList();
+      }
+      return start();
     }
     clearTimeout(TO);
     TO = setTimeout(() => {
-      console.log('still');
-
       this.serverCheck(check, $document);
     }, 2222);
   };

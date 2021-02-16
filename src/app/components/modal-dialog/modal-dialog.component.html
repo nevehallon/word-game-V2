@@ -242,6 +242,9 @@
     *ngIf="data?.type === 'loading'"
 >
     <h2 class="center-align">{{data.message}}</h2>
+    <div *ngIf="data.notes">
+        <h4 class="center-align notes">{{data.notes}}</h4>
+    </div>
     <div class="spinner-container center-align">
         <svg
             fill="currentColor"

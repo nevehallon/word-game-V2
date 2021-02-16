@@ -58,7 +58,8 @@ export class GetRequestsService {
       await localforage.setItem('wordTrieStr', localTrieStr);
       await localforage.setItem('reverseWordTrieStr', localReverseTrieStr);
       let hasList = getTrie();
-      if (hasList) source.changeHasList(true);
+
+      if (await hasList) source.changeHasList(true);
     } catch (error) {
       console.error(error);
     }
