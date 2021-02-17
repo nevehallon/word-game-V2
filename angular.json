@@ -14,28 +14,6 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
-        "customServe": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "allowedCommonJsDependencies": ["hammerjs"],
-            "outputPath": "dist/client",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
-            "scripts": ["node_modules/localforage/dist/localforage.js"],
-            "optimization": { "styles": { "inlineCritical": true } },
-            "aot": true,
-            "outputHashing": "all",
-            "sourceMap": false,
-            "namedChunks": false,
-            "extractLicenses": true,
-            "vendorChunk": false,
-            "buildOptimizer": true
-          }
-        },
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
@@ -77,6 +55,18 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "custom": {
+              "aot": true,
+              "optimization": { "styles": { "inlineCritical": true } },
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "experimentalRollupPass": true,
+              "verbose": true,
+              "commonChunk": false
             }
           }
         },
@@ -88,6 +78,9 @@
           "configurations": {
             "production": {
               "browserTarget": "client:build:production"
+            },
+            "custom": {
+              "browserTarget": "client:build:custom"
             }
           }
         },
