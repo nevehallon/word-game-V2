@@ -36,6 +36,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "aot": true,
               "optimization": { "styles": { "inlineCritical": true } },
               "outputHashing": "all",
               "sourceMap": false,
@@ -60,13 +61,11 @@
               "aot": true,
               "optimization": { "styles": { "inlineCritical": true } },
               "sourceMap": false,
-              "namedChunks": false,
+              "namedChunks": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "experimentalRollupPass": true,
-              "verbose": true,
-              "commonChunk": false
+              "verbose": true
             }
           }
         },
