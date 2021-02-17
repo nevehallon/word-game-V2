@@ -11,10 +11,10 @@ import { SourceService } from './source.service';
 export class ComputeService {
   //window.Trie = Trie; //? used only for debugging
 
-  boardData;
+  boardData: any;
 
   updateBoardData() {
-    let tempSquares = cloneDeep(this.source.getBoard());
+    let tempSquares: any | never[] = cloneDeep(this.source.getBoard());
     this.boardData = [];
     while (tempSquares.length) this.boardData.push(tempSquares.splice(0, 15));
   }
@@ -23,7 +23,7 @@ export class ComputeService {
   idCount = 122;
 
   async calcPcMove(
-    gridState,
+    gridState: any,
     // firstTurn,
     // wordsLogged,
     // rivalRack,
@@ -33,12 +33,12 @@ export class ComputeService {
     let wordsLogged = this.source.wordsLogged;
     let rivalRack = [...this.source.rivalRack];
     this.updateBoardData();
-    let difficultlyLimit = +localStorage.getItem('difficulty')
-      ? +localStorage.getItem('difficulty')
+    let difficultlyLimit = +localStorage.getItem('difficulty')!
+      ? +localStorage.getItem('difficulty')!
       : 15;
     if (difficultlyLimit > 59) difficultlyLimit = 200;
-    let rack = [];
-    let pointRack = [];
+    let rack: any[] = [];
+    let pointRack: any[] = [];
     let numBlanks = 0;
 
     rivalRack.forEach((x) => {
@@ -54,11 +54,11 @@ export class ComputeService {
         rack.join('').toLowerCase(),
         numBlanks
       );
-      if (!wordSet.length) return false;
+      if (!wordSet?.length) return false;
       let extraCount = 0;
       let candidates = [];
       let wordSlice = wordSet;
-      let extraIndex = [];
+      let extraIndex: any[] = [];
 
       for (let x = 0; x < wordSlice.length; x++) {
         if (wordSlice[x].word.length > 4 && x < 5) {
@@ -66,13 +66,13 @@ export class ComputeService {
           extraCount++;
         }
 
-        let cleanGrid = cloneDeep(gridState);
+        let cleanGrid: any = cloneDeep(gridState);
         let start = 7;
 
         wordSlice[x].word
           .toUpperCase()
           .split('')
-          .forEach((letter, index) => {
+          .forEach((letter: string, index: number) => {
             let rackIndex = rack.findIndex((tile) => tile === letter);
             let points = rackIndex === -1 ? 0 : rivalRack[rackIndex].points;
 
@@ -110,9 +110,9 @@ export class ComputeService {
 
       if (!bestWord) return false;
 
-      let tiles = [];
+      let tiles: any[] = [];
 
-      bestWord.word.split('').forEach((letter, index) => {
+      bestWord.word.split('').forEach((letter: any, index: number) => {
         let rackIndex = rack.findIndex((tile) => tile === letter);
         if (rackIndex === -1) rackIndex = rack.findIndex((tile) => tile === '');
 
@@ -152,14 +152,14 @@ export class ComputeService {
         wordsPlayed: [bestWord.word],
       };
     } else {
-      let startingCoords = {}; //? the cells on the board where we can build off from
-      let tilesPlayedCoords = [];
+      let startingCoords: any = {}; //? the cells on the board where we can build off from
+      let tilesPlayedCoords: number[][] = [];
       let tilesPlayed = $document.querySelectorAll('#board .tile');
 
       tilesPlayed.forEach((coord) => {
         tilesPlayedCoords.push(
-          coord.parentElement
-            .getAttribute('data-location')
+          coord
+            .parentElement!.getAttribute('data-location')!
             .split(',')
             .map(Number)
         );
@@ -216,27 +216,42 @@ export class ComputeService {
         });
       });
 
-      let potentialWordsMain = [];
+      let potentialWordsMain: {
+        numHotTiles: number;
+        remaining: any;
+        startCoord: any;
+        word: any;
+        joined: any;
+        points: any;
+        score: number;
+        path: any;
+        reverseOrder: boolean;
+        a_set?: any;
+        a_branch2?: boolean;
+        a_isEnd?: any;
+        a_joined?: any;
+        set?: any;
+      }[] = [];
 
       tilesPlayedCoords.forEach((tile) => {
         if (!startingCoords.hasOwnProperty(tile.join(''))) return;
         let tileInfo = gridState.gridLetters[tile[0]][tile[1]];
-        let addLimit = {
+        let addLimit: any = {
           up: tile[0],
           down: 14 - tile[0],
           left: tile[1],
           right: 14 - tile[1],
         };
 
-        let extendPath = (path, isPre) => {
-          let potentialBranchMid = [];
-          let potentialNewBranchMid = [];
-          let potentialBranch2Mid = [];
+        let extendPath = (path: string, isPre: boolean) => {
+          let potentialBranchMid: any[] = [];
+          let potentialNewBranchMid: any[] = [];
+          let potentialBranch2Mid: { details?: { isEnd?: any } }[] | any[] = [];
 
           let set = isPre ? 'prefix' : 'suffix';
           let setTally = `${isPre ? 'prefix' : 'suffix'}Tally`;
 
-          let supply = {};
+          let supply: any = {};
 
           supply[set] = [`${tileInfo.letter}`];
           supply[setTally] = [+`${tileInfo.pointVal}`]; //converts to number
@@ -265,10 +280,10 @@ export class ComputeService {
           };
 
           checkNext();
-          let checkedOut = []; //
-          let checkedOut4Branch = []; //suffixes that have already been used to insure no repeats
-          let checkedOut4NewBranch = []; //
-          let level = {
+          let checkedOut: string[] = []; //
+          let checkedOut4Branch: string[] = []; //suffixes that have already been used to insure no repeats
+          let checkedOut4NewBranch: string[] = []; //
+          let level: any = {
             _0: { newBranch: [] },
             _1: {
               branch: [],
@@ -451,11 +466,24 @@ export class ComputeService {
           let nextXRotatedInverse = nextX;
           let nextYRotatedInverse = nextY;
           let count = 0;
-          let checkBranchLevel = (prev, cur) => {
-            let startingCell;
-            let startingCellInverse;
-            let branch2StartingCoords;
-            let branch2StartingCoordsInverse;
+          let checkBranchLevel = (
+            prev: any[],
+            cur: {
+              letters: string;
+              points: number | string;
+              details: any;
+              score: number;
+              length: number;
+            }[]
+          ) => {
+            let startingCell:
+              | { letter: string; pointVal: string | number }
+              | undefined;
+            let startingCellInverse:
+              | { letter: string; pointVal: string | number }
+              | undefined;
+            let branch2StartingCoords: any[] | undefined;
+            let branch2StartingCoordsInverse: any[] | undefined;
             ++count;
             path === 'up' || path === 'down' ? --nextYRotated : --nextXRotated;
             path === 'up' || path === 'down'
@@ -488,8 +516,8 @@ export class ComputeService {
               branch2StartingCoordsInverse === undefined
             ) {
             }
-            let borderCell;
-            let borderCellInverse;
+            let borderCell: { letter: string } | undefined;
+            let borderCellInverse: { letter: string } | undefined;
             if (path === 'up' || path === 'down') {
               if (
                 nextYRotated > 0 &&
@@ -600,340 +628,361 @@ export class ComputeService {
             cellsAfter = cellsAfter.split(' ')[0];
             cellsAfterInverse = cellsAfterInverse.split(' ')[0];
 
-            prev.forEach((start, i) => {
-              jokerUsed = false;
-              let joker2Used = false;
-              let joker3Used = false;
+            prev.forEach(
+              (start: { letters: { b: any[]; a: any } }, i: number) => {
+                jokerUsed = false;
+                let joker2Used = false;
+                let joker3Used = false;
 
-              start.letters.b.forEach((letter, i2) => {
-                let run = () => {
-                  let temp1 = { letters: [], points: [], details: [] };
-                  let temp2 = { letters: [], points: [], details: [] };
-                  if (!letter) return;
-                  let originalLetter = letter;
-                  let points = prev[i].points.b[i2];
-                  //!  1.0
-                  let taken = false;
-                  if (
-                    count === 1 ||
-                    prev[i]?.details?.type === 1 ||
-                    prev[i]?.details?.type === 3
-                  ) {
-                    if (
-                      startingCell !== undefined &&
-                      startingCell.letter !== ' '
-                    ) {
-                      letter = startingCell.letter;
-                      points = +startingCell.pointVal;
-                      taken = true;
-                    }
-                    let cellsJoined = (cellsB4 + letter + cellsAfter).trim();
-                    if (
-                      (cellsJoined.length > 1 && Trie().hasWord(cellsJoined)) ||
-                      cellsJoined.length < 2
-                    ) {
-                      let isBordered =
-                        borderCell !== undefined && borderCell.letter !== ' '
-                          ? true
-                          : false;
-                      let boarderLetter = isBordered ? borderCell.letter : '';
-                      let joined = [
-                        boarderLetter,
-                        letter,
-                        ...start.letters.a,
-                      ].join('');
-                      if (!checkedOut4Branch.includes(joined)) {
+                start.letters.b.forEach(
+                  (letter: string, i2: string | number) => {
+                    let run = () => {
+                      let temp1: any = { letters: [], points: [], details: [] };
+                      let temp2: any = { letters: [], points: [], details: [] };
+                      if (!letter) return;
+                      let originalLetter = letter;
+                      let points = prev[i].points.b[i2];
+                      //!  1.0
+                      let taken = false;
+                      if (
+                        count === 1 ||
+                        prev[i]?.details?.type === 1 ||
+                        prev[i]?.details?.type === 3
+                      ) {
                         if (
-                          Trie().isSuffix(
-                            joined.split('').reverse().join('')
-                          ) ||
-                          Trie().isPrefix(joined)
+                          startingCell !== undefined &&
+                          startingCell.letter !== ' '
                         ) {
-                          if (startingCell !== undefined) {
-                            checkedOut4Branch.push(joined); //?
-                            temp1.letters.push({
-                              a: [letter, ...start.letters.a],
-                              b: start.letters.b.filter(
-                                (x, index) => index !== (taken ? 8 : i2)
-                              ),
-                            });
-                            temp1.points.push({
-                              a: [points, ...prev[i].points.a],
-                              b: prev[i].points.b.filter(
-                                (x, index) => index !== (taken ? 8 : i2)
-                              ),
-                            });
-                            temp1.details.push({
-                              coords: branch2StartingCoords,
-                              isEnd: false,
-                              type: 1,
-                            });
-                          }
-                          //!1.1
-                          if (
-                            ((temp1.letters[0]?.b?.length && count === 1) ||
-                              (temp1.letters[0]?.b?.length &&
-                                prev[i]?.details?.type === 3)) &&
-                            startingCellInverse !== undefined
-                          ) {
-                            let run4Type3 = () => {
-                              let taken = false;
-                              letter = temp1.letters[0].b[0];
-                              points = temp1.points[0].b[0];
-                              if (!letter) return;
-                              if (
-                                startingCellInverse !== undefined &&
-                                startingCellInverse.letter !== ' '
-                              ) {
-                                letter = startingCellInverse.letter;
-                                points = +startingCellInverse.pointVal;
-                                taken = true;
+                          letter = startingCell.letter;
+                          points = +startingCell.pointVal;
+                          taken = true;
+                        }
+                        let cellsJoined = (
+                          cellsB4 +
+                          letter +
+                          cellsAfter
+                        ).trim();
+                        if (
+                          (cellsJoined.length > 1 &&
+                            Trie().hasWord(cellsJoined)) ||
+                          cellsJoined.length < 2
+                        ) {
+                          let isBordered =
+                            borderCell !== undefined &&
+                            borderCell.letter !== ' '
+                              ? true
+                              : false;
+                          let boarderLetter = isBordered
+                            ? borderCell?.letter
+                            : '';
+                          let joined = [
+                            boarderLetter,
+                            letter,
+                            ...start.letters.a,
+                          ].join('');
+                          if (!checkedOut4Branch.includes(joined)) {
+                            if (
+                              Trie().isSuffix(
+                                joined.split('').reverse().join('')
+                              ) ||
+                              Trie().isPrefix(joined)
+                            ) {
+                              if (startingCell !== undefined) {
+                                checkedOut4Branch.push(joined); //?
+                                temp1.letters.push({
+                                  a: [letter, ...start.letters.a],
+                                  b: start.letters.b.filter(
+                                    (x: any, index: any) =>
+                                      index !== (taken ? 8 : i2)
+                                  ),
+                                });
+                                temp1.points.push({
+                                  a: [points, ...prev[i].points.a],
+                                  b: prev[i].points.b.filter(
+                                    (x: any, index: any) =>
+                                      index !== (taken ? 8 : i2)
+                                  ),
+                                });
+                                temp1.details.push({
+                                  coords: branch2StartingCoords,
+                                  isEnd: false,
+                                  type: 1,
+                                });
                               }
-                              cellsJoined = (
-                                cellsB4Inverse +
-                                letter +
-                                cellsAfter
-                              ).trim();
+                              //!1.1
                               if (
-                                (cellsJoined.length > 1 &&
-                                  Trie().hasWord(cellsJoined)) ||
-                                cellsJoined.length < 2
+                                ((temp1.letters[0]?.b?.length && count === 1) ||
+                                  (temp1.letters[0]?.b?.length &&
+                                    prev[i]?.details?.type === 3)) &&
+                                startingCellInverse !== undefined
                               ) {
-                                let isBordered =
-                                  borderCellInverse !== undefined &&
-                                  borderCellInverse.letter !== ' '
-                                    ? true
-                                    : false;
-                                let boarderLetter = isBordered
-                                  ? borderCellInverse.letter
-                                  : '';
-                                let joined = [
-                                  ...temp1.letters[0].a,
-                                  letter,
-                                  boarderLetter,
-                                ].join('');
-                                if (!checkedOut4Branch.includes(joined)) {
+                                let run4Type3 = () => {
+                                  let taken = false;
+                                  letter = temp1.letters[0].b[0];
+                                  points = temp1.points[0].b[0];
+                                  if (!letter) return;
                                   if (
-                                    Trie().isSuffix(
-                                      joined.split('').reverse().join('')
-                                    ) ||
-                                    Trie().isPrefix(joined)
+                                    startingCellInverse !== undefined &&
+                                    startingCellInverse.letter !== ' '
                                   ) {
-                                    checkedOut4Branch.push(joined); //?
-                                    temp1.letters.unshift({
-                                      a: [...temp1.letters[0].a, letter],
-                                      b: temp1.letters[0].b.filter(
-                                        (x, index) => index !== (taken ? 8 : 0)
-                                      ),
-                                    });
-                                    temp1.points.unshift({
-                                      a: [...temp1.points[0].a, points],
-                                      b: temp1.points[0].b.filter(
-                                        (x, index) => index !== (taken ? 8 : 0)
-                                      ),
-                                    });
-                                    temp1.details.unshift({
-                                      coords: branch2StartingCoordsInverse,
-                                      isEnd: true,
-                                      type: 3,
-                                    });
+                                    letter = startingCellInverse.letter;
+                                    points = +startingCellInverse.pointVal;
+                                    taken = true;
                                   }
-                                }
-                              }
-                            };
-                            run4Type3();
-                            if (!letter && !joker2Used) {
-                              joker2Used = true;
-                              this.abc.forEach((joker) => {
-                                letter = joker;
+                                  cellsJoined = (
+                                    cellsB4Inverse +
+                                    letter +
+                                    cellsAfter
+                                  ).trim();
+                                  if (
+                                    (cellsJoined.length > 1 &&
+                                      Trie().hasWord(cellsJoined)) ||
+                                    cellsJoined.length < 2
+                                  ) {
+                                    let isBordered =
+                                      borderCellInverse !== undefined &&
+                                      borderCellInverse.letter !== ' '
+                                        ? true
+                                        : false;
+                                    let boarderLetter = isBordered
+                                      ? borderCellInverse?.letter
+                                      : '';
+                                    let joined = [
+                                      ...temp1.letters[0].a,
+                                      letter,
+                                      boarderLetter,
+                                    ].join('');
+                                    if (!checkedOut4Branch.includes(joined)) {
+                                      if (
+                                        Trie().isSuffix(
+                                          joined.split('').reverse().join('')
+                                        ) ||
+                                        Trie().isPrefix(joined)
+                                      ) {
+                                        checkedOut4Branch.push(joined); //?
+                                        temp1.letters.unshift({
+                                          a: [...temp1.letters[0].a, letter],
+                                          b: temp1.letters[0].b.filter(
+                                            (x: any, index: number) =>
+                                              index !== (taken ? 8 : 0)
+                                          ),
+                                        });
+                                        temp1.points.unshift({
+                                          a: [...temp1.points[0].a, points],
+                                          b: temp1.points[0].b.filter(
+                                            (x: any, index: number) =>
+                                              index !== (taken ? 8 : 0)
+                                          ),
+                                        });
+                                        temp1.details.unshift({
+                                          coords: branch2StartingCoordsInverse,
+                                          isEnd: true,
+                                          type: 3,
+                                        });
+                                      }
+                                    }
+                                  }
+                                };
                                 run4Type3();
-                              });
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  if (
-                    count === 1 ||
-                    prev[i]?.details?.type === 2 ||
-                    prev[i]?.details?.type === 3
-                  ) {
-                    letter = originalLetter;
-                    points = prev[i].points.b[i2];
-                    let taken = false;
-                    //!    2.0
-                    if (
-                      startingCellInverse !== undefined &&
-                      startingCellInverse.letter !== ' '
-                    ) {
-                      letter = startingCellInverse.letter;
-                      points = +startingCellInverse.pointVal;
-                      taken = true;
-                    }
-                    let cellsJoined = (
-                      cellsB4Inverse +
-                      letter +
-                      cellsAfter
-                    ).trim();
-                    if (
-                      (cellsJoined.length > 1 && Trie().hasWord(cellsJoined)) ||
-                      cellsJoined.length < 2
-                    ) {
-                      let isBordered =
-                        borderCellInverse !== undefined &&
-                        borderCellInverse.letter !== ' '
-                          ? true
-                          : false;
-                      let boarderLetter = isBordered
-                        ? borderCellInverse.letter
-                        : '';
-                      let joined = [
-                        ...start.letters.a,
-                        letter,
-                        boarderLetter,
-                      ].join('');
-                      if (!checkedOut4Branch.includes(joined)) {
-                        if (
-                          Trie().isSuffix(
-                            joined.split('').reverse().join('')
-                          ) ||
-                          Trie().isPrefix(joined)
-                        ) {
-                          if (startingCellInverse !== undefined) {
-                            checkedOut4Branch.push(joined); //?
-                            temp2.letters.unshift({
-                              a: [...start.letters.a, letter],
-                              b: start.letters.b.filter(
-                                (x, index) => index !== (taken ? 8 : i2)
-                              ),
-                            });
-                            temp2.points.unshift({
-                              a: [...prev[i].points.a, points],
-                              b: prev[i].points.b.filter(
-                                (x, index) => index !== (taken ? 8 : i2)
-                              ),
-                            });
-                            temp2.details.push({
-                              coords: branch2StartingCoordsInverse,
-                              isEnd: true,
-                              type: 2,
-                            });
-                          }
-                          //!  2.1
-                          if (
-                            ((temp2.letters[0]?.b?.length && count === 1) ||
-                              (temp2.letters[0]?.b?.length &&
-                                prev[i]?.details?.type === 3)) &&
-                            startingCell !== undefined
-                          ) {
-                            let run4Type3_2 = () => {
-                              let taken = false;
-                              letter = temp2.letters[0].b[0];
-                              points = temp2.points[0].b[0];
-                              if (!letter) return; //!check if start.a has already been used with a blank
-                              if (
-                                startingCell !== undefined &&
-                                startingCell.letter !== ' '
-                              ) {
-                                letter = startingCell.letter;
-                                points = +startingCell.pointVal;
-                                taken = true;
-                              }
-                              cellsJoined = (
-                                cellsB4 +
-                                letter +
-                                cellsAfter
-                              ).trim();
-                              if (
-                                (cellsJoined.length > 1 &&
-                                  Trie().hasWord(cellsJoined)) ||
-                                cellsJoined.length < 2
-                              ) {
-                                let isBordered =
-                                  borderCell !== undefined &&
-                                  borderCell.letter !== ' '
-                                    ? true
-                                    : false;
-                                let boarderLetter = isBordered
-                                  ? borderCell.letter
-                                  : '';
-                                let joined = [
-                                  boarderLetter,
-                                  letter,
-                                  ...temp2.letters[0].a,
-                                ].join('');
-                                if (!checkedOut4Branch.includes(joined)) {
-                                  if (
-                                    Trie().isSuffix(
-                                      joined.split('').reverse().join('')
-                                    ) ||
-                                    Trie().isPrefix(joined)
-                                  ) {
-                                    checkedOut4Branch.push(joined); //?
-                                    temp2.letters.unshift({
-                                      a: [letter, ...temp2.letters[0].a],
-                                      b: temp2.letters[0].b.filter(
-                                        (x, index) => index !== (taken ? 8 : 0)
-                                      ),
-                                    });
-                                    temp2.points.unshift({
-                                      a: [points, ...temp2.points[0].a],
-                                      b: temp2.points[0].b.filter(
-                                        (x, index) => index !== (taken ? 8 : 0)
-                                      ),
-                                    });
-                                    temp2.details.unshift({
-                                      coords: branch2StartingCoords,
-                                      isEnd: true,
-                                      type: 3,
-                                    });
-                                  }
+                                if (!letter && !joker2Used) {
+                                  joker2Used = true;
+                                  this.abc.forEach((joker) => {
+                                    letter = joker;
+                                    run4Type3();
+                                  });
                                 }
                               }
-                            };
-                            run4Type3_2();
-                            if (!letter && !joker3Used) {
-                              joker3Used = true;
-                              this.abc.forEach((joker) => {
-                                letter = joker;
-                                run4Type3_2();
-                              });
                             }
                           }
                         }
                       }
+                      if (
+                        count === 1 ||
+                        prev[i]?.details?.type === 2 ||
+                        prev[i]?.details?.type === 3
+                      ) {
+                        letter = originalLetter;
+                        points = prev[i].points.b[i2];
+                        let taken = false;
+                        //!    2.0
+                        if (
+                          startingCellInverse !== undefined &&
+                          startingCellInverse.letter !== ' '
+                        ) {
+                          letter = startingCellInverse.letter;
+                          points = +startingCellInverse.pointVal;
+                          taken = true;
+                        }
+                        let cellsJoined = (
+                          cellsB4Inverse +
+                          letter +
+                          cellsAfter
+                        ).trim();
+                        if (
+                          (cellsJoined.length > 1 &&
+                            Trie().hasWord(cellsJoined)) ||
+                          cellsJoined.length < 2
+                        ) {
+                          let isBordered =
+                            borderCellInverse !== undefined &&
+                            borderCellInverse.letter !== ' '
+                              ? true
+                              : false;
+                          let boarderLetter = isBordered
+                            ? borderCellInverse?.letter
+                            : '';
+                          let joined = [
+                            ...start.letters.a,
+                            letter,
+                            boarderLetter,
+                          ].join('');
+                          if (!checkedOut4Branch.includes(joined)) {
+                            if (
+                              Trie().isSuffix(
+                                joined.split('').reverse().join('')
+                              ) ||
+                              Trie().isPrefix(joined)
+                            ) {
+                              if (startingCellInverse !== undefined) {
+                                checkedOut4Branch.push(joined); //?
+                                temp2.letters.unshift({
+                                  a: [...start.letters.a, letter],
+                                  b: start.letters.b.filter(
+                                    (x: any, index: any) =>
+                                      index !== (taken ? 8 : i2)
+                                  ),
+                                });
+                                temp2.points.unshift({
+                                  a: [...prev[i].points.a, points],
+                                  b: prev[i].points.b.filter(
+                                    (x: any, index: any) =>
+                                      index !== (taken ? 8 : i2)
+                                  ),
+                                });
+                                temp2.details.push({
+                                  coords: branch2StartingCoordsInverse,
+                                  isEnd: true,
+                                  type: 2,
+                                });
+                              }
+                              //!  2.1
+                              if (
+                                ((temp2.letters[0]?.b?.length && count === 1) ||
+                                  (temp2.letters[0]?.b?.length &&
+                                    prev[i]?.details?.type === 3)) &&
+                                startingCell !== undefined
+                              ) {
+                                let run4Type3_2 = () => {
+                                  let taken = false;
+                                  letter = temp2.letters[0].b[0];
+                                  points = temp2.points[0].b[0];
+                                  if (!letter) return; //!check if start.a has already been used with a blank
+                                  if (
+                                    startingCell !== undefined &&
+                                    startingCell.letter !== ' '
+                                  ) {
+                                    letter = startingCell.letter;
+                                    points = +startingCell.pointVal;
+                                    taken = true;
+                                  }
+                                  cellsJoined = (
+                                    cellsB4 +
+                                    letter +
+                                    cellsAfter
+                                  ).trim();
+                                  if (
+                                    (cellsJoined.length > 1 &&
+                                      Trie().hasWord(cellsJoined)) ||
+                                    cellsJoined.length < 2
+                                  ) {
+                                    let isBordered =
+                                      borderCell !== undefined &&
+                                      borderCell.letter !== ' '
+                                        ? true
+                                        : false;
+                                    let boarderLetter = isBordered
+                                      ? borderCell?.letter
+                                      : '';
+                                    let joined = [
+                                      boarderLetter,
+                                      letter,
+                                      ...temp2.letters[0].a,
+                                    ].join('');
+                                    if (!checkedOut4Branch.includes(joined)) {
+                                      if (
+                                        Trie().isSuffix(
+                                          joined.split('').reverse().join('')
+                                        ) ||
+                                        Trie().isPrefix(joined)
+                                      ) {
+                                        checkedOut4Branch.push(joined); //?
+                                        temp2.letters.unshift({
+                                          a: [letter, ...temp2.letters[0].a],
+                                          b: temp2.letters[0].b.filter(
+                                            (x: any, index: number) =>
+                                              index !== (taken ? 8 : 0)
+                                          ),
+                                        });
+                                        temp2.points.unshift({
+                                          a: [points, ...temp2.points[0].a],
+                                          b: temp2.points[0].b.filter(
+                                            (x: any, index: number) =>
+                                              index !== (taken ? 8 : 0)
+                                          ),
+                                        });
+                                        temp2.details.unshift({
+                                          coords: branch2StartingCoords,
+                                          isEnd: true,
+                                          type: 3,
+                                        });
+                                      }
+                                    }
+                                  }
+                                };
+                                run4Type3_2();
+                                if (!letter && !joker3Used) {
+                                  joker3Used = true;
+                                  this.abc.forEach((joker) => {
+                                    letter = joker;
+                                    run4Type3_2();
+                                  });
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                      temp1.letters.forEach((x: any, i: number) => {
+                        cur.unshift({
+                          letters: x,
+                          points: temp1.points[i],
+                          details: temp1.details[i],
+                          score: sum(temp1.points[i].a),
+                          length: 7 - x.b.length,
+                        });
+                      });
+                      temp2.letters.forEach((x: any, i: number) => {
+                        cur.unshift({
+                          letters: x,
+                          points: temp2.points[i],
+                          details: temp2.details[i],
+                          score: sum(temp2.points[i].a),
+                          length: 7 - x.b.length,
+                        });
+                      });
+                    };
+                    run();
+                    if (!letter && !jokerUsed) {
+                      jokerUsed = true;
+                      this.abc.forEach((joker) => {
+                        letter = joker;
+                        run();
+                      });
                     }
                   }
-                  temp1.letters.forEach((x, i) => {
-                    cur.unshift({
-                      letters: x,
-                      points: temp1.points[i],
-                      details: temp1.details[i],
-                      score: sum(temp1.points[i].a),
-                      length: 7 - x.b.length,
-                    });
-                  });
-                  temp2.letters.forEach((x, i) => {
-                    cur.unshift({
-                      letters: x,
-                      points: temp2.points[i],
-                      details: temp2.details[i],
-                      score: sum(temp2.points[i].a),
-                      length: 7 - x.b.length,
-                    });
-                  });
-                };
-                run();
-                if (!letter && !jokerUsed) {
-                  jokerUsed = true;
-                  this.abc.forEach((joker) => {
-                    letter = joker;
-                    run();
-                  });
-                }
-              });
-            });
+                );
+              }
+            );
           };
 
           let nextNewXRotated = tile[0];
@@ -941,11 +990,24 @@ export class ComputeService {
           let nextNewXRotatedInverse = tile[0];
           let nextNewYRotatedInverse = tile[1];
           count = 0;
-          let checkNewBranchLevel = (prev, cur) => {
-            let startingCell = undefined;
-            let startingCellInverse = undefined;
-            let newBranchStartingCoords = undefined;
-            let newBranchStartingCoordsInverse = undefined;
+          let checkNewBranchLevel = (
+            prev: any[],
+            cur: {
+              letters: any;
+              points: any;
+              details: any;
+              score: number;
+              length: number;
+            }[]
+          ) => {
+            let startingCell:
+              | { letter: string; pointVal: string | number }
+              | undefined = undefined;
+            let startingCellInverse:
+              | { letter: string; pointVal: string | number }
+              | undefined = undefined;
+            let newBranchStartingCoords: any[] | undefined = undefined;
+            let newBranchStartingCoordsInverse: any[] | undefined = undefined;
             ++count;
             path === 'up' || path === 'down'
               ? --nextNewXRotated
@@ -978,8 +1040,8 @@ export class ComputeService {
                 nextNewYRotatedInverse,
               ];
             }
-            let borderCell;
-            let borderCellInverse;
+            let borderCell: { letter: string } | undefined;
+            let borderCellInverse: { letter: string } | undefined;
             if (path === 'up' || path === 'down') {
               if (
                 nextNewXRotated > 0 &&
@@ -1091,350 +1153,384 @@ export class ComputeService {
             cellsAfter = cellsAfter.split(' ')[0];
             cellsAfterInverse = cellsAfterInverse.split(' ')[0];
 
-            prev.forEach((start, i) => {
-              jokerUsed = false;
-              let joker2Used = false;
-              let joker3Used = false;
+            prev.forEach(
+              (start: { letters: { b: any[]; a: any } }, i: number) => {
+                jokerUsed = false;
+                let joker2Used = false;
+                let joker3Used = false;
 
-              start.letters.b.forEach((letter, i2) => {
-                let run = () => {
-                  let temp1 = { letters: [], points: [], details: [] };
-                  let temp2 = { letters: [], points: [], details: [] };
-                  if (!letter) return; //!check if start.a has already been used with a blank
-                  let originalLetter = letter;
-                  let points = prev[i].points.b[i2];
-                  //!  1.0
-                  let taken = false;
-                  if (
-                    count === 1 ||
-                    prev[i]?.details?.type === 1 ||
-                    prev[i]?.details?.type === 3
-                  ) {
-                    if (
-                      startingCell !== undefined &&
-                      startingCell.letter !== ' '
-                    ) {
-                      letter = startingCell.letter;
-                      points = +startingCell.pointVal; //?string number value (can help determine which cells are taken)
-                      taken = true;
-                    }
-                    let cellsJoined = (cellsB4 + letter + cellsAfter).trim();
-                    if (
-                      (cellsJoined.length > 1 && Trie().hasWord(cellsJoined)) ||
-                      cellsJoined.length < 2
-                    ) {
-                      let isBordered =
-                        borderCell !== undefined && borderCell.letter !== ' '
-                          ? true
-                          : false;
-                      let boarderLetter = isBordered ? borderCell.letter : '';
-                      let joined = [
-                        boarderLetter,
-                        letter,
-                        ...start.letters.a,
-                      ].join('');
-                      if (!checkedOut4NewBranch.includes(joined)) {
-                        //?^^move to else condition without "!"^^?
+                start.letters.b.forEach(
+                  (letter: string, i2: string | number) => {
+                    let run = () => {
+                      let temp1: any = { letters: [], points: [], details: [] };
+                      let temp2: any = { letters: [], points: [], details: [] };
+                      if (!letter) return; //!check if start.a has already been used with a blank
+                      let originalLetter = letter;
+                      let points = prev[i].points.b[i2];
+                      //!  1.0
+                      let taken = false;
+                      if (
+                        count === 1 ||
+                        prev[i]?.details?.type === 1 ||
+                        prev[i]?.details?.type === 3
+                      ) {
                         if (
-                          Trie().isSuffix(
-                            joined.split('').reverse().join('')
-                          ) ||
-                          Trie().isPrefix(joined)
+                          startingCell !== undefined &&
+                          startingCell.letter !== ' '
                         ) {
-                          if (startingCell !== undefined) {
-                            checkedOut4NewBranch.push(joined); //?
-                            temp1.letters.push({
-                              a: [letter, ...start.letters.a],
-                              b: start.letters.b.filter(
-                                (x, index) => index !== (taken ? 8 : i2)
-                              ),
-                            });
-                            temp1.points.push({
-                              a: [points, ...prev[i].points.a],
-                              b: prev[i].points.b.filter(
-                                (x, index) => index !== (taken ? 8 : i2)
-                              ),
-                            });
-                            temp1.details.push({
-                              coords: newBranchStartingCoords,
-                              isEnd: false,
-                              type: 1,
-                            });
-                          }
-                          //!1.1
-                          if (
-                            ((temp1.letters[0]?.b?.length && count === 1) ||
-                              (temp1.letters[0]?.b?.length &&
-                                prev[i]?.details?.type === 3)) &&
-                            startingCellInverse !== undefined
-                          ) {
-                            let run4Type3 = () => {
-                              let taken = false;
-                              letter = temp1.letters[0].b[0];
-                              points = temp1.points[0].b[0];
-                              if (!letter) return; //!check if start.a has already been used with a blank
-                              if (
-                                startingCellInverse !== undefined &&
-                                startingCellInverse.letter !== ' '
-                              ) {
-                                letter = startingCellInverse.letter;
-                                points = +startingCellInverse.pointVal;
-                                taken = true;
+                          letter = startingCell.letter;
+                          points = +startingCell.pointVal; //?string number value (can help determine which cells are taken)
+                          taken = true;
+                        }
+                        let cellsJoined = (
+                          cellsB4 +
+                          letter +
+                          cellsAfter
+                        ).trim();
+                        if (
+                          (cellsJoined.length > 1 &&
+                            Trie().hasWord(cellsJoined)) ||
+                          cellsJoined.length < 2
+                        ) {
+                          let isBordered =
+                            borderCell !== undefined &&
+                            borderCell.letter !== ' '
+                              ? true
+                              : false;
+                          let boarderLetter = isBordered
+                            ? borderCell?.letter
+                            : '';
+                          let joined = [
+                            boarderLetter,
+                            letter,
+                            ...start.letters.a,
+                          ].join('');
+                          if (!checkedOut4NewBranch.includes(joined)) {
+                            //?^^move to else condition without "!"^^?
+                            if (
+                              Trie().isSuffix(
+                                joined.split('').reverse().join('')
+                              ) ||
+                              Trie().isPrefix(joined)
+                            ) {
+                              if (startingCell !== undefined) {
+                                checkedOut4NewBranch.push(joined); //?
+                                temp1.letters.push({
+                                  a: [letter, ...start.letters.a],
+                                  b: start.letters.b.filter(
+                                    (x: any, index: any) =>
+                                      index !== (taken ? 8 : i2)
+                                  ),
+                                });
+                                temp1.points.push({
+                                  a: [points, ...prev[i].points.a],
+                                  b: prev[i].points.b.filter(
+                                    (x: any, index: any) =>
+                                      index !== (taken ? 8 : i2)
+                                  ),
+                                });
+                                temp1.details.push({
+                                  coords: newBranchStartingCoords,
+                                  isEnd: false,
+                                  type: 1,
+                                });
                               }
-                              cellsJoined = (
-                                cellsB4Inverse +
-                                letter +
-                                cellsAfter
-                              ).trim();
+                              //!1.1
                               if (
-                                (cellsJoined.length > 1 &&
-                                  Trie().hasWord(cellsJoined)) ||
-                                cellsJoined.length < 2
+                                ((temp1.letters[0]?.b?.length && count === 1) ||
+                                  (temp1.letters[0]?.b?.length &&
+                                    prev[i]?.details?.type === 3)) &&
+                                startingCellInverse !== undefined
                               ) {
-                                let isBordered =
-                                  borderCellInverse !== undefined &&
-                                  borderCellInverse.letter !== ' '
-                                    ? true
-                                    : false;
-                                let boarderLetter = isBordered
-                                  ? borderCellInverse.letter
-                                  : '';
-                                let joined = [
-                                  ...temp1.letters[0].a,
-                                  letter,
-                                  boarderLetter,
-                                ].join('');
-                                if (!checkedOut4NewBranch.includes(joined)) {
+                                let run4Type3 = () => {
+                                  let taken = false;
+                                  letter = temp1.letters[0].b[0];
+                                  points = temp1.points[0].b[0];
+                                  if (!letter) return; //!check if start.a has already been used with a blank
                                   if (
-                                    Trie().isSuffix(
-                                      joined.split('').reverse().join('')
-                                    ) ||
-                                    Trie().isPrefix(joined)
+                                    startingCellInverse !== undefined &&
+                                    startingCellInverse.letter !== ' '
                                   ) {
-                                    checkedOut4NewBranch.push(joined); //?
-                                    temp1.letters.unshift({
-                                      a: [...temp1.letters[0].a, letter],
-                                      b: temp1.letters[0].b.filter(
-                                        (x, index) => index !== (taken ? 8 : 0)
-                                      ),
-                                    });
-                                    temp1.points.unshift({
-                                      a: [...temp1.points[0].a, points],
-                                      b: temp1.points[0].b.filter(
-                                        (x, index) => index !== (taken ? 8 : 0)
-                                      ),
-                                    });
-                                    temp1.details.unshift({
-                                      coords: newBranchStartingCoordsInverse,
-                                      isEnd: true,
-                                      type: 3,
-                                    });
+                                    letter = startingCellInverse.letter;
+                                    points = +startingCellInverse.pointVal;
+                                    taken = true;
                                   }
-                                }
-                              }
-                            };
-                            run4Type3();
-                            if (!letter && !joker2Used) {
-                              joker2Used = true;
-                              this.abc.forEach((joker) => {
-                                letter = joker;
+                                  cellsJoined = (
+                                    cellsB4Inverse +
+                                    letter +
+                                    cellsAfter
+                                  ).trim();
+                                  if (
+                                    (cellsJoined.length > 1 &&
+                                      Trie().hasWord(cellsJoined)) ||
+                                    cellsJoined.length < 2
+                                  ) {
+                                    let isBordered =
+                                      borderCellInverse !== undefined &&
+                                      borderCellInverse.letter !== ' '
+                                        ? true
+                                        : false;
+                                    let boarderLetter = isBordered
+                                      ? borderCellInverse?.letter
+                                      : '';
+                                    let joined = [
+                                      ...temp1.letters[0].a,
+                                      letter,
+                                      boarderLetter,
+                                    ].join('');
+                                    if (
+                                      !checkedOut4NewBranch.includes(joined)
+                                    ) {
+                                      if (
+                                        Trie().isSuffix(
+                                          joined.split('').reverse().join('')
+                                        ) ||
+                                        Trie().isPrefix(joined)
+                                      ) {
+                                        checkedOut4NewBranch.push(joined); //?
+                                        temp1.letters.unshift({
+                                          a: [...temp1.letters[0].a, letter],
+                                          b: temp1.letters[0].b.filter(
+                                            (x: any, index: number) =>
+                                              index !== (taken ? 8 : 0)
+                                          ),
+                                        });
+                                        temp1.points.unshift({
+                                          a: [...temp1.points[0].a, points],
+                                          b: temp1.points[0].b.filter(
+                                            (x: any, index: number) =>
+                                              index !== (taken ? 8 : 0)
+                                          ),
+                                        });
+                                        temp1.details.unshift({
+                                          coords: newBranchStartingCoordsInverse,
+                                          isEnd: true,
+                                          type: 3,
+                                        });
+                                      }
+                                    }
+                                  }
+                                };
                                 run4Type3();
-                              });
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  if (
-                    count === 1 ||
-                    prev[i]?.details?.type === 2 ||
-                    prev[i]?.details?.type === 3
-                  ) {
-                    letter = originalLetter;
-                    points = prev[i].points.b[i2];
-                    let taken = false;
-                    //!    2.0
-                    if (
-                      startingCellInverse !== undefined &&
-                      startingCellInverse.letter !== ' '
-                    ) {
-                      letter = startingCellInverse.letter;
-                      points = +startingCellInverse.pointVal;
-                      taken = true;
-                    }
-                    let cellsJoined = (
-                      cellsB4Inverse +
-                      letter +
-                      cellsAfter
-                    ).trim();
-                    if (
-                      (cellsJoined.length > 1 && Trie().hasWord(cellsJoined)) ||
-                      cellsJoined.length < 2
-                    ) {
-                      let isBordered =
-                        borderCellInverse !== undefined &&
-                        borderCellInverse.letter !== ' '
-                          ? true
-                          : false;
-                      let boarderLetter = isBordered
-                        ? borderCellInverse.letter
-                        : '';
-                      let joined = [
-                        ...start.letters.a,
-                        letter,
-                        boarderLetter,
-                      ].join('');
-                      if (!checkedOut4NewBranch.includes(joined)) {
-                        //?^^move to else condition without "!"^^?
-                        if (
-                          Trie().isSuffix(
-                            joined.split('').reverse().join('')
-                          ) ||
-                          Trie().isPrefix(joined)
-                        ) {
-                          if (startingCellInverse !== undefined) {
-                            checkedOut4NewBranch.push(joined); //?
-                            temp2.letters.unshift({
-                              a: [...start.letters.a, letter],
-                              b: start.letters.b.filter(
-                                (x, index) => index !== (taken ? 8 : i2)
-                              ),
-                            });
-                            temp2.points.unshift({
-                              a: [...prev[i].points.a, points],
-                              b: prev[i].points.b.filter(
-                                (x, index) => index !== (taken ? 8 : i2)
-                              ),
-                            });
-                            temp2.details.push({
-                              coords: newBranchStartingCoordsInverse,
-                              isEnd: true,
-                              type: 2,
-                            });
-                          }
-                          //!  2.1
-                          if (
-                            ((temp2.letters[0]?.b?.length && count === 1) ||
-                              (temp2.letters[0]?.b?.length &&
-                                prev[i]?.details?.type === 3)) &&
-                            startingCell !== undefined
-                          ) {
-                            let run4Type3_2 = () => {
-                              let taken = false;
-                              letter = temp2.letters[0].b[0];
-                              points = temp2.points[0].b[0];
-                              if (!letter) return; //!check if start.a has already been used with a blank
-                              if (
-                                startingCell !== undefined &&
-                                startingCell.letter !== ' '
-                              ) {
-                                letter = startingCell.letter;
-                                points = +startingCell.pointVal;
-                                taken = true;
-                              }
-                              cellsJoined = (
-                                cellsB4 +
-                                letter +
-                                cellsAfter
-                              ).trim();
-                              if (
-                                (cellsJoined.length > 1 &&
-                                  Trie().hasWord(cellsJoined)) ||
-                                cellsJoined.length < 2
-                              ) {
-                                let isBordered =
-                                  borderCell !== undefined &&
-                                  borderCell.letter !== ' '
-                                    ? true
-                                    : false;
-                                let boarderLetter = isBordered
-                                  ? borderCell.letter
-                                  : '';
-                                let joined = [
-                                  boarderLetter,
-                                  letter,
-                                  ...temp2.letters[0].a,
-                                ].join('');
-                                if (!checkedOut4NewBranch.includes(joined)) {
-                                  if (
-                                    Trie().isSuffix(
-                                      joined.split('').reverse().join('')
-                                    ) ||
-                                    Trie().isPrefix(joined)
-                                  ) {
-                                    checkedOut4NewBranch.push(joined); //?
-                                    temp2.letters.unshift({
-                                      a: [letter, ...temp2.letters[0].a],
-                                      b: temp2.letters[0].b.filter(
-                                        (x, index) => index !== (taken ? 8 : 0)
-                                      ),
-                                    });
-                                    temp2.points.unshift({
-                                      a: [points, ...temp2.points[0].a],
-                                      b: temp2.points[0].b.filter(
-                                        (x, index) => index !== (taken ? 8 : 0)
-                                      ),
-                                    });
-                                    temp2.details.unshift({
-                                      coords: newBranchStartingCoords,
-                                      isEnd: true,
-                                      type: 3,
-                                    });
-                                  }
+                                if (!letter && !joker2Used) {
+                                  joker2Used = true;
+                                  this.abc.forEach((joker) => {
+                                    letter = joker;
+                                    run4Type3();
+                                  });
                                 }
                               }
-                            };
-                            run4Type3_2();
-                            if (!letter && !joker3Used) {
-                              joker3Used = true;
-                              this.abc.forEach((joker) => {
-                                letter = joker;
-                                run4Type3_2();
-                              });
                             }
                           }
                         }
                       }
+                      if (
+                        count === 1 ||
+                        prev[i]?.details?.type === 2 ||
+                        prev[i]?.details?.type === 3
+                      ) {
+                        letter = originalLetter;
+                        points = prev[i].points.b[i2];
+                        let taken = false;
+                        //!    2.0
+                        if (
+                          startingCellInverse !== undefined &&
+                          startingCellInverse.letter !== ' '
+                        ) {
+                          letter = startingCellInverse.letter;
+                          points = +startingCellInverse.pointVal;
+                          taken = true;
+                        }
+                        let cellsJoined = (
+                          cellsB4Inverse +
+                          letter +
+                          cellsAfter
+                        ).trim();
+                        if (
+                          (cellsJoined.length > 1 &&
+                            Trie().hasWord(cellsJoined)) ||
+                          cellsJoined.length < 2
+                        ) {
+                          let isBordered =
+                            borderCellInverse !== undefined &&
+                            borderCellInverse.letter !== ' '
+                              ? true
+                              : false;
+                          let boarderLetter = isBordered
+                            ? borderCellInverse?.letter
+                            : '';
+                          let joined = [
+                            ...start.letters.a,
+                            letter,
+                            boarderLetter,
+                          ].join('');
+                          if (!checkedOut4NewBranch.includes(joined)) {
+                            //?^^move to else condition without "!"^^?
+                            if (
+                              Trie().isSuffix(
+                                joined.split('').reverse().join('')
+                              ) ||
+                              Trie().isPrefix(joined)
+                            ) {
+                              if (startingCellInverse !== undefined) {
+                                checkedOut4NewBranch.push(joined); //?
+                                temp2.letters.unshift({
+                                  a: [...start.letters.a, letter],
+                                  b: start.letters.b.filter(
+                                    (x: any, index: any) =>
+                                      index !== (taken ? 8 : i2)
+                                  ),
+                                });
+                                temp2.points.unshift({
+                                  a: [...prev[i].points.a, points],
+                                  b: prev[i].points.b.filter(
+                                    (x: any, index: any) =>
+                                      index !== (taken ? 8 : i2)
+                                  ),
+                                });
+                                temp2.details.push({
+                                  coords: newBranchStartingCoordsInverse,
+                                  isEnd: true,
+                                  type: 2,
+                                });
+                              }
+                              //!  2.1
+                              if (
+                                ((temp2.letters[0]?.b?.length && count === 1) ||
+                                  (temp2.letters[0]?.b?.length &&
+                                    prev[i]?.details?.type === 3)) &&
+                                startingCell !== undefined
+                              ) {
+                                let run4Type3_2 = () => {
+                                  let taken = false;
+                                  letter = temp2.letters[0].b[0];
+                                  points = temp2.points[0].b[0];
+                                  if (!letter) return; //!check if start.a has already been used with a blank
+                                  if (
+                                    startingCell !== undefined &&
+                                    startingCell.letter !== ' '
+                                  ) {
+                                    letter = startingCell.letter;
+                                    points = +startingCell.pointVal;
+                                    taken = true;
+                                  }
+                                  cellsJoined = (
+                                    cellsB4 +
+                                    letter +
+                                    cellsAfter
+                                  ).trim();
+                                  if (
+                                    (cellsJoined.length > 1 &&
+                                      Trie().hasWord(cellsJoined)) ||
+                                    cellsJoined.length < 2
+                                  ) {
+                                    let isBordered =
+                                      borderCell !== undefined &&
+                                      borderCell.letter !== ' '
+                                        ? true
+                                        : false;
+                                    let boarderLetter = isBordered
+                                      ? borderCell?.letter
+                                      : '';
+                                    let joined = [
+                                      boarderLetter,
+                                      letter,
+                                      ...temp2.letters[0].a,
+                                    ].join('');
+                                    if (
+                                      !checkedOut4NewBranch.includes(joined)
+                                    ) {
+                                      if (
+                                        Trie().isSuffix(
+                                          joined.split('').reverse().join('')
+                                        ) ||
+                                        Trie().isPrefix(joined)
+                                      ) {
+                                        checkedOut4NewBranch.push(joined); //?
+                                        temp2.letters.unshift({
+                                          a: [letter, ...temp2.letters[0].a],
+                                          b: temp2.letters[0].b.filter(
+                                            (x: any, index: number) =>
+                                              index !== (taken ? 8 : 0)
+                                          ),
+                                        });
+                                        temp2.points.unshift({
+                                          a: [points, ...temp2.points[0].a],
+                                          b: temp2.points[0].b.filter(
+                                            (x: any, index: number) =>
+                                              index !== (taken ? 8 : 0)
+                                          ),
+                                        });
+                                        temp2.details.unshift({
+                                          coords: newBranchStartingCoords,
+                                          isEnd: true,
+                                          type: 3,
+                                        });
+                                      }
+                                    }
+                                  }
+                                };
+                                run4Type3_2();
+                                if (!letter && !joker3Used) {
+                                  joker3Used = true;
+                                  this.abc.forEach((joker) => {
+                                    letter = joker;
+                                    run4Type3_2();
+                                  });
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                      temp1.letters.forEach((x: any, i: number) => {
+                        cur.unshift({
+                          letters: x,
+                          points: temp1.points[i],
+                          details: temp1.details[i],
+                          score: sum(temp1.points[i].a),
+                          length: 7 - x.b.length,
+                        });
+                      });
+                      temp2.letters.forEach((x: any, i: number) => {
+                        cur.unshift({
+                          letters: x,
+                          points: temp2.points[i],
+                          details: temp2.details[i],
+                          score: sum(temp2.points[i].a),
+                          length: 7 - x.b.length,
+                        });
+                      });
+                    };
+                    run();
+                    if (!letter && !jokerUsed) {
+                      jokerUsed = true;
+                      this.abc.forEach((joker) => {
+                        letter = joker;
+                        run();
+                      });
                     }
                   }
-                  temp1.letters.forEach((x, i) => {
-                    cur.unshift({
-                      letters: x,
-                      points: temp1.points[i],
-                      details: temp1.details[i],
-                      score: sum(temp1.points[i].a),
-                      length: 7 - x.b.length,
-                    });
-                  });
-                  temp2.letters.forEach((x, i) => {
-                    cur.unshift({
-                      letters: x,
-                      points: temp2.points[i],
-                      details: temp2.details[i],
-                      score: sum(temp2.points[i].a),
-                      length: 7 - x.b.length,
-                    });
-                  });
-                };
-                run();
-                if (!letter && !jokerUsed) {
-                  jokerUsed = true;
-                  this.abc.forEach((joker) => {
-                    letter = joker;
-                    run();
-                  });
-                }
-              });
-            });
+                );
+              }
+            );
           };
 
-          let nextCellInfo;
+          let nextCellInfo:
+            | { letter: string; pointVal: string | number }
+            | undefined;
 
-          let borderCellInfo;
+          let borderCellInfo: any;
           let borderLetterInverse = boarderLetter;
 
-          let checkLevel = (prev, cur) => {
+          let checkLevel = (
+            prev: any[],
+            cur: {
+              letters: { a: any[]; b: any };
+              points: { a: any[]; b: any };
+              startCoord: any[];
+            }[]
+          ) => {
             path === 'up'
               ? --nextX
               : path === 'down'
@@ -1465,67 +1561,86 @@ export class ComputeService {
             cellsB4 = cellsB4.split(' ')[0].split('').reverse().join('');
             cellsAfter = cellsAfter.split(' ')[0];
 
-            prev.forEach((start, i) => {
-              jokerUsed = false;
-              start.letters.b.forEach((letter, i2) => {
-                let run = () => {
-                  if (!letter) return;
-                  let taken = false;
-                  let points = prev[i].points.b[i2];
-                  if (
-                    nextCellInfo !== undefined &&
-                    nextCellInfo.letter !== ' '
-                  ) {
-                    letter = nextCellInfo.letter;
-                    points = +nextCellInfo.pointVal;
-                    taken = true;
-                  } else {
-                    let cellsJoined = (cellsB4 + letter + cellsAfter).trim();
-                    if (cellsJoined.length > 1 && !Trie().hasWord(cellsJoined))
-                      return;
-                  }
-                  let isBordered =
-                    borderCellInfo && borderCellInfo.letter !== ' '
-                      ? true
-                      : false;
-                  let boarderLetter = isBordered ? borderCellInfo.letter : '';
-                  let joined = [...start.letters.a, letter, boarderLetter].join(
-                    ''
-                  );
+            prev.forEach(
+              (start: { letters: { b: any[]; a: any } }, i: number) => {
+                jokerUsed = false;
+                start.letters.b.forEach(
+                  (letter: string, i2: string | number) => {
+                    let run = () => {
+                      if (!letter) return;
+                      let taken = false;
+                      let points = prev[i].points.b[i2];
+                      if (
+                        nextCellInfo !== undefined &&
+                        nextCellInfo.letter !== ' '
+                      ) {
+                        letter = nextCellInfo.letter;
+                        points = +nextCellInfo.pointVal;
+                        taken = true;
+                      } else {
+                        let cellsJoined = (
+                          cellsB4 +
+                          letter +
+                          cellsAfter
+                        ).trim();
+                        if (
+                          cellsJoined.length > 1 &&
+                          !Trie().hasWord(cellsJoined)
+                        )
+                          return;
+                      }
+                      let isBordered =
+                        borderCellInfo && borderCellInfo.letter !== ' '
+                          ? true
+                          : false;
+                      let boarderLetter = isBordered
+                        ? borderCellInfo.letter
+                        : '';
+                      let joined = [
+                        ...start.letters.a,
+                        letter,
+                        boarderLetter,
+                      ].join('');
 
-                  if (!checkedOut.includes(joined)) {
-                    if (
-                      isPre ? Trie().isPrefix(joined) : Trie().isSuffix(joined)
-                    ) {
-                      checkedOut.push(joined);
-                      cur.push({
-                        letters: {
-                          a: [...start.letters.a, letter],
-                          b: start.letters.b.filter(
-                            (x, index) => index !== (taken ? 8 : i2)
-                          ),
-                        },
-                        points: {
-                          a: [...prev[i].points.a, points],
-                          b: prev[i].points.b.filter(
-                            (x, index) => index !== (taken ? 8 : i2)
-                          ),
-                        },
-                        startCoord: [nextX, nextY],
+                      if (!checkedOut.includes(joined)) {
+                        if (
+                          isPre
+                            ? Trie().isPrefix(joined)
+                            : Trie().isSuffix(joined)
+                        ) {
+                          checkedOut.push(joined);
+                          cur.push({
+                            letters: {
+                              a: [...start.letters.a, letter],
+                              b: start.letters.b.filter(
+                                (x: any, index: any) =>
+                                  index !== (taken ? 8 : i2)
+                              ),
+                            },
+                            points: {
+                              a: [...prev[i].points.a, points],
+                              b: prev[i].points.b.filter(
+                                (x: any, index: any) =>
+                                  index !== (taken ? 8 : i2)
+                              ),
+                            },
+                            startCoord: [nextX, nextY],
+                          });
+                        }
+                      }
+                    };
+                    run();
+                    if (!letter && !jokerUsed) {
+                      this.abc.forEach((joker) => {
+                        jokerUsed = true;
+                        letter = joker;
+                        run();
                       });
                     }
                   }
-                };
-                run();
-                if (!letter && !jokerUsed) {
-                  this.abc.forEach((joker) => {
-                    jokerUsed = true;
-                    letter = joker;
-                    run();
-                  });
-                }
-              });
-            });
+                );
+              }
+            );
           };
           // gridState.gridLetters[1][7] = { letter: "E", id: "34", pointVal: "taken3", hot: " " }; //? uncomment to debug - checking with interrupting tiles
 
@@ -1628,7 +1743,7 @@ export class ComputeService {
               ) {
                 potentialWordsMain.push({
                   numHotTiles: rivalRack.length - word.b.length,
-                  remaining: word.b.map((x, index) => {
+                  remaining: word.b.map((x: any, index: string | number) => {
                     return {
                       letter: x,
                       points: potentialBranchMid[i].points.b[index],
@@ -1661,7 +1776,7 @@ export class ComputeService {
                 potentialWordsMain.push({
                   a_set: supply[set].join(''),
                   numHotTiles: rivalRack.length - word.b.length,
-                  remaining: word.b.map((x, index) => {
+                  remaining: word.b.map((x: any, index: string | number) => {
                     return {
                       letter: x,
                       points: potentialBranch2Mid[i].points.b[index],
@@ -1702,7 +1817,7 @@ export class ComputeService {
                   a_joined: setWord.join(''),
                   set: supply[set].join(''),
                   numHotTiles: rivalRack.length - word.b.length,
-                  remaining: word.b.map((x, index) => {
+                  remaining: word.b.map((x: any, index: string | number) => {
                     return {
                       letter: x,
                       points: potentialNewBranchMid[i].points.b[index],
@@ -1724,7 +1839,7 @@ export class ComputeService {
             }
           }
         };
-        startingCoords[`${tile.join('')}`].branch.forEach((path) => {
+        startingCoords[`${tile.join('')}`].branch.forEach((path: string) => {
           if (path === 'up') {
             extendPath(path, false); //?parameters ==> (path: string, isPrefix: boolean)
           }
@@ -1748,7 +1863,7 @@ export class ComputeService {
       let notBingos = potentialWordsMain.filter((x) => x.numHotTiles !== 7);
       notBingos = orderBy(notBingos, ['score'], ['desc']);
       bingos = orderBy(bingos, ['score'], ['desc']);
-      let candidates = [...bingos, ...notBingos];
+      let candidates: any = [...bingos, ...notBingos];
       if (!candidates.length) {
         return false;
       }
@@ -1757,17 +1872,17 @@ export class ComputeService {
       // let wordSlice = candidates.slice(0, 222); //? uncomment for reduced word options (potentially speeding up AI's moves)
 
       candidates = [];
-      wordSlice.forEach((item, index) => {
+      wordSlice.forEach((_: any, index: number) => {
         let badCookie = false;
         let choice = wordSlice[index];
         let cleanGrid = cloneDeep(gridState);
         let start = choice.startCoord;
-        let gridOrder = [];
+        let gridOrder: { x: any; y: any; taken: boolean }[] = [];
         if (choice.reverseOrder) {
           choice.word = choice.word.reverse();
           choice.points = choice.points.reverse();
         }
-        choice.word.forEach((letter, i) => {
+        choice.word.forEach((letter: any, i: number) => {
           let x;
           let y;
 
@@ -1874,7 +1989,7 @@ export class ComputeService {
           if (
             !$document.querySelector(
               `[data-location="${bestWord.gridOrder[i].x},${bestWord.gridOrder[i].y}"]`
-            ).children.length
+            )!.children.length
           ) {
             gridState.gridLetters[bestWord.gridOrder[i].x][
               bestWord.gridOrder[i].y

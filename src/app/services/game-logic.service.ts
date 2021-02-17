@@ -20,14 +20,13 @@ import { GetRequestsService } from './get-requests.service';
 export class GameLogicService {
   constructor(
     public dialog: MatDialog,
+    private dialogRef: MatDialogRef<any>,
     private calc: ComputeService,
     private gridService: CreateGridService,
     private validate: BoardValidatorService,
     private source: SourceService,
     private http: GetRequestsService
   ) {}
-
-  dialogRef: MatDialogRef<any>;
 
   closeDialog(timeOut: number = 0) {
     clearTimeout(this.source.modalTO);
@@ -60,7 +59,7 @@ export class GameLogicService {
     };
   }
 
-  startGame($document: HTMLDocument) {
+  startGame($document: HTMLDocument): void {
     let { player, pc } = this.whoStarts();
     if (player === pc) return this.startGame($document);
 
@@ -128,8 +127,8 @@ export class GameLogicService {
     );
   }
 
-  storageAvailable(type) {
-    let storage;
+  storageAvailable(type: any) {
+    let storage: any;
     try {
       storage = window[type];
       let x = '__storage_test__';
@@ -155,7 +154,7 @@ export class GameLogicService {
     }
   }
 
-  serverCheck = async (check, $document) => {
+  serverCheck = async (check: SourceService, $document: HTMLDocument) => {
     if (this.storageAvailable('localStorage') !== true) {
       // not available
       let data: DialogData = {
@@ -186,7 +185,7 @@ export class GameLogicService {
       });
     }
     let status = await this.http.checkServerStatus();
-    let TO;
+    let TO: NodeJS.Timeout;
     if (status) {
       let start = () => {
         this.closeDialog();
@@ -208,7 +207,6 @@ export class GameLogicService {
       }
       return start();
     }
-    clearTimeout(TO);
     TO = setTimeout(() => {
       this.serverCheck(check, $document);
     }, 2222);
@@ -251,15 +249,15 @@ export class GameLogicService {
   }
 
   pcPlay($document: HTMLDocument) {
-    let board = this.source.getBoard();
-    let newBoard = board.map((square) => {
-      if (square.data[0]?.class.includes('pcPlay')) {
+    let board: any = this.source.getBoard();
+    let newBoard = board.map((square: Square) => {
+      if (square?.data[0]?.class?.includes('pcPlay')) {
         let obj = square.data[0];
         return {
           data: [
             {
               ...obj,
-              class: obj.class.filter((klass) => klass !== 'pcPlay'),
+              class: obj?.class?.filter((klass) => klass !== 'pcPlay'),
             },
           ],
         };
@@ -312,7 +310,7 @@ export class GameLogicService {
 
   endGame($document: HTMLDocument) {
     this.source.gameOver = true;
-    let board: Square[] = this.source.getBoard();
+    let board: Square[] = this?.source?.getBoard() ?? [];
 
     //?prevent players from continuing
 
@@ -330,9 +328,10 @@ export class GameLogicService {
     let computerScore = this.source.computerScore;
 
     if (!this.source.rivalRack.length) {
-      let sum = this.source
-        .getPlayerRack()
-        .reduce((acc, cur) => acc + cur.content.points, 0);
+      let sum = (this?.source?.getPlayerRack() ?? [])?.reduce(
+        (acc: number, cur: any) => acc + cur.content.points,
+        0
+      );
 
       this.source.history.push({});
       let index = this.source.history.length - 1;
@@ -445,7 +444,13 @@ export class GameLogicService {
     //  offer rematch
   }
 
-  pass(wasClicked = false, isSwap, isAI, legalClick, $document: HTMLDocument) {
+  pass(
+    wasClicked = false,
+    isSwap: boolean | void,
+    isAI: boolean | undefined,
+    legalClick: boolean | void,
+    $document: HTMLDocument
+  ) {
     if (legalClick === false) return false;
     //if param = true ->
     //    add to passCount
@@ -509,7 +514,7 @@ export class GameLogicService {
     if (!this.source.isValidMove.words && this.source.DEBUG_MODE) {
       this.source.playersTurn = true;
     }
-    let board: Square[] = this.source.getBoard();
+    let board: Square[] = this?.source?.getBoard() ?? [];
 
     if (!this.source.isValidMove.words) {
       let data: DialogData = {
@@ -534,7 +539,7 @@ export class GameLogicService {
       let computerScore = this.source.computerScore;
       let playerScore = this.source.playerScore;
       let word = this.source.isValidMove.wordsPlayed
-        .map((x) => {
+        .map((x: string) => {
           let word = x[0].toUpperCase() + x.slice(1).toLowerCase();
           return `${word}`;
         })
@@ -569,7 +574,7 @@ export class GameLogicService {
       let playerScore = this.source.playerScore;
 
       let word = this.source.isValidMove.bestWord
-        .map((x) => {
+        .map((x: string) => {
           let word = x[0].toUpperCase() + x.slice(1).toLowerCase();
           return `${word}`;
         })
@@ -605,9 +610,8 @@ export class GameLogicService {
       let newBoard: Square[] = cloneDeep(board);
       //fill rack back up to 7 or what ever is left in bag
       for (let i = 0; i < refill; i++) {
-        let coords: string[] = tilesPlayed[i]
-          .getAttribute('data-location')
-          .split(',');
+        let coords: string[] =
+          tilesPlayed[i]?.getAttribute('data-location')?.split(',') ?? [];
 
         //?disable drag on "hot" tiles, remove "hot" & "multiplier" class from ".column .hot" and call pass()
 
@@ -659,13 +663,13 @@ export class GameLogicService {
 
       this.source.rivalRack = this.source.isValidMove.rivalRack;
       let tilesPlayed = board.filter((x) =>
-        x.data[0]?.class.includes('pcPlay')
+        (x?.data[0]?.class ?? []).includes('pcPlay')
       );
       let refill = tilesPlayed.length;
       //fill rack back up to 7 or what ever is left in bag
       for (let i = 0; i < refill; i++) {
         //remove multipliers from gridMultipliers
-        let coords = tilesPlayed[i].data[0].coords;
+        let coords = tilesPlayed[i]?.data[0]?.coords ?? [];
         this.gridService.gridState.gridMultipliers[coords[0]][coords[1]] = ' ';
         this.gridService.gridState.gridLetters[coords[0]][
           coords[1]
@@ -720,7 +724,7 @@ export class GameLogicService {
       }, 1650);
     }
 
-    this.source.changeBoard(this.source.getBoard());
+    this.source.changeBoard(this.source.getBoard() ?? []);
     //set firstTurn & isValidMove to false
     if (this.source.firstTurn) this.source.firstTurn = false;
     this.source.isValidMove = false;

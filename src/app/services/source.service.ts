@@ -4,6 +4,8 @@ import { take } from 'rxjs/operators';
 import { ScrabbleLettersService } from './scrabble-letters.service';
 import { shuffle, drop } from 'lodash-es';
 import { HistoryEntry } from '../interfaces/history-entry';
+import { BtnAttrs } from '../interfaces/btn-attrs';
+import { Square } from '../interfaces/square';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,9 @@ export class SourceService {
 
   public numSource = 101;
 
-  private playerRackSource = new BehaviorSubject([]);
+  private playerRackSource: BehaviorSubject<
+    any | never[]
+  > = new BehaviorSubject([]);
   currentPlayerRack = this.playerRackSource.asObservable();
 
   getPlayerRack() {
@@ -26,11 +30,11 @@ export class SourceService {
     return playerRack;
   }
 
-  changePlayerRack(rack: any[]) {
+  changePlayerRack(rack: any) {
     this.playerRackSource.next(rack);
   }
 
-  addToPlayerRack(newTiles) {
+  addToPlayerRack(newTiles: any) {
     this.currentPlayerRack.pipe(take(1)).subscribe((result: any[]) => {
       this.playerRackSource.next([...result, newTiles]);
     });
@@ -66,7 +70,7 @@ export class SourceService {
   );
   currentBoard = this.boardSource.asObservable();
 
-  changeBoard(squares) {
+  changeBoard(squares: any[]) {
     this.boardSource.next(squares);
   }
 
@@ -87,11 +91,11 @@ export class SourceService {
   });
   currentBtnAttr = this.btnAttrSource.asObservable();
 
-  changeBtnAttr(attrs) {
+  changeBtnAttr(attrs: BtnAttrs) {
     this.btnAttrSource.next(attrs);
   }
 
-  getBtnAttr() {
+  getBtnAttr(): any {
     let btnAttr;
     this.currentBtnAttr.pipe(take(1)).subscribe((result) => {
       btnAttr = result;
@@ -137,11 +141,11 @@ export class SourceService {
   public firstTurn = true;
   public isValidMove: any = false;
   public playersTurn = false;
-  public wordsLogged = [];
+  public wordsLogged: string[] = [];
   public history: HistoryEntry[] = [];
-  public rivalRack = [];
+  public rivalRack: any[] = [];
   public gameOver = false;
-  public modalTO; //?timeout
+  public modalTO: any; //?timeout
 
   public bag = shuffle(shuffle(this.letters.get()));
 }

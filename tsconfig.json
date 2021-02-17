@@ -12,8 +12,12 @@
     "importHelpers": true,
     "target": "es5",
     "module": "esnext",
-    "lib": ["es2018", "dom"],
+    "lib": ["esnext", "dom"],
     "removeComments": true,
-    "allowJs": true
+    "allowJs": true,
+    "strict": true
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true
   }
 }

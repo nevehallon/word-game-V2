@@ -6,6 +6,7 @@ import { orderBy } from 'lodash-es';
 import * as localforage from 'localforage';
 
 import { environment } from '../../environments/environment';
+import { SourceService } from './source.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class GetRequestsService {
     let requestStatus: Promise<any> = this.http
       .get(`${this.url}/wordFinder?letters=aa&numBlanks=0`, {
         observe: 'response',
+        headers: { 'x-no-compression': 'true' },
       })
       .toPromise();
 
@@ -33,7 +35,7 @@ export class GetRequestsService {
     }
   }
 
-  async getWordTrieStr(source) {
+  async getWordTrieStr(source: SourceService) {
     try {
       if (
         (await localforage.getItem('wordTrieStr')) &&
@@ -65,28 +67,28 @@ export class GetRequestsService {
     }
   }
 
-  async getWordValues(str, numBlanks = 0) {
+  async getWordValues(str: string, numBlanks = 0) {
     let data: Promise<any> = this.http
       .get(`${this.url}/wordFinder?letters=${str}&numBlanks=${numBlanks}`, {
         observe: 'response',
       })
       .toPromise();
 
-    let result = [];
+    let result: any[] = [];
 
     try {
       let {
         body: { wordsFound },
       } = await data;
-      wordsFound.forEach((word) => {
+      wordsFound.forEach((word: any) => {
         result.push({
           word,
-          points: [...word].reduce((accumulator, currentVal) => {
+          points: [...word].reduce((accumulator: number, currentVal) => {
+            let letters: any[] = this?.letters?.get() ?? [];
             return (
               accumulator +
-              this.letters
-                .get()
-                .find((l) => l.letter == currentVal.toUpperCase()).points
+              letters.find((l: any) => l.letter == currentVal.toUpperCase())
+                .points
             );
           }, 0),
         });
@@ -100,7 +102,7 @@ export class GetRequestsService {
     }
   }
 
-  async getDefinitions(words) {
+  async getDefinitions(words: string) {
     words = words.replaceAll(' ', '').toLowerCase();
 
     let data: Promise<any> = this.http

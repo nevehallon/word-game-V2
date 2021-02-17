@@ -9,20 +9,20 @@ import { SourceService } from './source.service';
 export class CreateGridService {
   $document: HTMLDocument = window.document;
 
-  gridState;
-  cleanGrid;
+  gridState: any;
+  cleanGrid: any;
 
   cleanTheGrid($document: HTMLDocument) {
     this.gridState = this.cleanGrid;
     this.updateGameState($document);
     $document.querySelectorAll('.square').forEach((x) => (x.innerHTML = ''));
-    $document.querySelector('#rack').innerHTML = '';
+    $document.querySelector('#rack')!.innerHTML = '';
   }
 
   createGrid($document: HTMLDocument) {
     let count = 0;
-    let gridLetters = [];
-    let gridMultipliers = [];
+    let gridLetters: any[] = [];
+    let gridMultipliers: any[] = [];
 
     for (let i = 0; i < 15; i++) {
       gridLetters.push([]);
@@ -52,14 +52,14 @@ export class CreateGridService {
   }
 
   updateGameState($document: HTMLDocument) {
-    let board = this.source.getBoard();
+    let board = this.source.getBoard()!;
 
     this.$document = $document;
     this.gridState = this.createGrid($document);
     this.cleanGrid = cloneDeep(this.gridState);
 
     let count = 0;
-    let gridLetters = [];
+    let gridLetters: any[] = [];
 
     for (let i = 0; i < 15; i++) {
       gridLetters.push([]);
@@ -71,14 +71,14 @@ export class CreateGridService {
         // console.log($element);
         let letter;
         if (squareRef) {
-          letter = squareRef.content.letter;
+          letter = squareRef?.content?.letter;
         }
         // prettier-ignore
-        let hot = letter ? squareRef.class.includes("hot") : " ";
+        let hot = letter ? squareRef?.class?.includes("hot") : " ";
         let id = letter
-          ? $element.querySelector('.tile').getAttribute('data-drag')
+          ? $element.querySelector('.tile')!.getAttribute('data-drag')
           : ' ';
-        let pointVal = letter ? squareRef.content.points : ' ';
+        let pointVal = letter ? squareRef?.content?.points : ' ';
         gridLetters[i].push(
           letter
             ? { letter, id, pointVal, hot }
