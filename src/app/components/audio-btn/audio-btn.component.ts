@@ -9,14 +9,14 @@ export class AudioBtnComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) {}
   ngOnInit(): void {}
 
-  private _timeOut;
+  private _timeOut!: NodeJS.Timeout;
 
   @Input() word: string = '';
   @Input() audioSources: string = '';
   hasAudio: boolean = false;
-  isPlaying: boolean = null;
+  isPlaying!: boolean;
 
-  playAudio(el: HTMLAudioElement, $animation) {
+  playAudio(el: HTMLAudioElement, $animation: HTMLSpanElement) {
     el.currentTime = 0;
     clearTimeout(this._timeOut);
     this.stop($animation);
@@ -30,8 +30,8 @@ export class AudioBtnComponent implements OnInit {
     }, 1600);
   }
 
-  stop($animation) {
-    this.isPlaying = null;
+  stop($animation: HTMLSpanElement) {
+    this.isPlaying = false;
     this.cd.markForCheck();
     $animation.style.display = 'none';
     $animation.offsetHeight; /* trigger reflow */

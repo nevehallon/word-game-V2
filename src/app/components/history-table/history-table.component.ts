@@ -44,7 +44,7 @@ import { SourceService } from 'src/app/services/source.service';
 export class HistoryTableComponent implements OnInit, AfterViewInit {
   constructor(private source: SourceService, private cd: ChangeDetectorRef) {}
 
-  @ViewChildren('td') td: QueryList<ElementRef>;
+  @ViewChildren('td') td: QueryList<ElementRef> | undefined;
 
   firstTurn = this.source.firstTurn;
   gameOver = this.source.gameOver;
@@ -57,11 +57,11 @@ export class HistoryTableComponent implements OnInit, AfterViewInit {
   lastEntry: any = this.source.history[this.source.history.length - 1];
   // lastEntry: any = def[def.length - 1]; //? mock data for testing located in mockHistoryEntries.ts
 
-  log(...rest) {
+  log(...rest: any[]) {
     console.log(...rest);
   }
 
-  expandedElement: DefinitionElement[] | null;
+  expandedElement: DefinitionElement[] | null | undefined;
 
   isExpansionDetailRow = (i: number, row: any) => {
     if (i == 0)
@@ -71,13 +71,13 @@ export class HistoryTableComponent implements OnInit, AfterViewInit {
     return true;
   };
 
-  trackByFn(index, item) {
+  trackByFn(index: any /* , item: any */) {
     return index; // or item.id
   }
 
   ngOnInit(): void {}
   ngAfterViewInit(): void {
-    let el = this.td.toArray()[this.dataSource.length - 2]?.nativeElement;
+    let el = this.td?.toArray()[this.dataSource.length - 2]?.nativeElement;
     if (!el) return;
     setTimeout(() => {
       el.scrollIntoView({

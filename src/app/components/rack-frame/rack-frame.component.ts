@@ -23,7 +23,7 @@ export class RackFrameComponent implements OnInit, OnDestroy {
 
   tiles: any[] = [];
 
-  rackSubscription: Subscription;
+  rackSubscription: Subscription | undefined;
 
   bodyElement: HTMLElement = document.body;
 
@@ -77,6 +77,6 @@ export class RackFrameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.rackSubscription.unsubscribe();
+    this.rackSubscription?.unsubscribe();
   }
 }

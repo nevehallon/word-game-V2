@@ -15,7 +15,8 @@
     "lib": ["esnext", "dom"],
     "removeComments": true,
     "allowJs": true,
-    "strict": true
+    "strict": true,
+    "types": ["node"]
   },
   "angularCompilerOptions": {
     "strictTemplates": true

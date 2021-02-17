@@ -3,35 +3,38 @@ import { Trie } from '../../assets/trie-prefix-tree-alt/main.js';
 import { without, drop, sum, uniq } from 'lodash-es';
 import { Subscription } from 'rxjs';
 import { BtnAttrs } from '../interfaces/btn-attrs.js';
+import { SourceService } from './source.service.js';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BoardValidatorService implements OnDestroy {
-  private source;
+  private source: any;
   constructor() {}
 
-  init(source) {
+  init(source: SourceService) {
     this.source = source;
     this.btnAttributeSubscription = this.source.currentBtnAttr.subscribe(
-      (attrs) => {
+      (attrs: BtnAttrs) => {
         this.btnAttributes = attrs;
       }
     );
   }
 
-  btnAttributes: BtnAttrs;
-  btnAttributeSubscription: Subscription;
+  btnAttributes!: BtnAttrs;
+  btnAttributeSubscription!: Subscription;
 
   ngOnDestroy(): void {
     this.btnAttributeSubscription.unsubscribe();
   }
 
-  zip(arrays) {
-    return arrays[0].map((_, i) => arrays.map((array) => array[i]));
+  zip(arrays: any[]) {
+    return arrays[0].map((_: any, i: number) =>
+      arrays.map((array) => array[i])
+    );
   }
 
-  difference(a, b) {
+  difference(a: any[], b: any[]) {
     return a.filter(
       function (v) {
         return !this.get(v) || !this.set(v, this.get(v) - 1);
@@ -40,19 +43,19 @@ export class BoardValidatorService implements OnDestroy {
     );
   }
 
-  rowWordStack = [];
-  columnWordStack = [];
-  potentialPoints = [];
-  wordMultiplier = [];
-  potentialZipPoints = [];
-  zipWordMultiplier = [];
+  rowWordStack: any[] = [];
+  columnWordStack: any[] = [];
+  potentialPoints: any[] = [];
+  wordMultiplier: any[] = [];
+  potentialZipPoints: any[] = [];
+  zipWordMultiplier: any[] = [];
 
-  push2(point, multi, index) {
+  push2(point: any, multi: any, index: number): void {
     this.potentialPoints[index].push(point);
     this.wordMultiplier[index].push(multi);
   }
 
-  push2Zip(point, multi, index) {
+  push2Zip(point: any, multi: any, index: number): void {
     this.potentialZipPoints[index].push(point);
     this.zipWordMultiplier[index].push(multi);
   }
@@ -96,7 +99,12 @@ export class BoardValidatorService implements OnDestroy {
     // }, 0);
   }
 
-  validate(gridState, source, isPlayer, $document: HTMLDocument) {
+  validate(
+    gridState: any,
+    source: SourceService,
+    isPlayer: boolean,
+    $document: HTMLDocument
+  ) {
     this.source = source;
     let firstTurn = this.source.firstTurn;
     let wordsLogged = this.source.wordsLogged;
@@ -116,18 +124,18 @@ export class BoardValidatorService implements OnDestroy {
           throw '(45) Your word must touch an existing word or the center star';
         }
 
-        let hotPivot;
+        let hotPivot: any;
         let hotCompare;
         let hotArr = $document.querySelectorAll('#board .hot');
         if (hotArr.length > 1) {
           hotArr.forEach((tile, index) => {
-            hotCompare = tile.parentElement
-              .getAttribute('data-location')
+            hotCompare = tile
+              .parentElement!.getAttribute('data-location')!
               .split(',');
 
             if (index === 0)
-              hotPivot = tile.parentElement
-                .getAttribute('data-location')
+              hotPivot = tile
+                .parentElement!.getAttribute('data-location')!
                 .split(',');
 
             if (
@@ -143,10 +151,10 @@ export class BoardValidatorService implements OnDestroy {
         }
       }
 
-      let letter = board.map((row) => row.map((obj) => obj.letter));
-      let id = board.map((row) => row.map((obj) => obj.id));
-      let hot = board.map((row) => row.map((obj) => obj.hot));
-      let pointVal = board.map((row) => row.map((obj) => obj.pointVal));
+      let letter = board.map((row: any[]) => row.map((obj) => obj.letter));
+      let id = board.map((row: any[]) => row.map((obj) => obj.id));
+      let hot = board.map((row: any[]) => row.map((obj) => obj.hot));
+      let pointVal = board.map((row: any[]) => row.map((obj) => obj.pointVal));
       let multiplier = multiplierMatrix;
 
       let fullMatrix = {
@@ -180,35 +188,37 @@ export class BoardValidatorService implements OnDestroy {
         multiplierColumns,
       } = fullMatrixZip;
 
-      letterRows = letterRows.map((row) => row.join(''));
-      letterColumns = letterColumns.map((column) => column.join(''));
+      letterRows = letterRows.map((row: any[]) => row.join(''));
+      letterColumns = letterColumns.map((column: any[]) => column.join(''));
 
-      // idRows = idRows.map((row) => row.join(""));
-      // idColumns = idColumns.map((column) => column.join(""));
+      // idRows = idRows.map((row: any[]) => row.join(""));
+      // idColumns = idColumns.map((column: any[]) => column.join(""));
 
-      hotRows = hotRows.map((row) => row.join(''));
-      hotColumns = hotColumns.map((column) => column.join(''));
+      hotRows = hotRows.map((row: any[]) => row.join(''));
+      hotColumns = hotColumns.map((column: any[]) => column.join(''));
 
-      multiplierRows = multiplierRows.map((row) => row.join(''));
-      multiplierColumns = multiplierColumns.map((column) => column.join(''));
+      multiplierRows = multiplierRows.map((row: any[]) => row.join(''));
+      multiplierColumns = multiplierColumns.map((column: any[]) =>
+        column.join('')
+      );
 
-      pointValRows = pointValRows.map((row) => row.join(''));
-      pointValColumns = pointValColumns.map((column) => column.join(''));
+      pointValRows = pointValRows.map((row: any[]) => row.join(''));
+      pointValColumns = pointValColumns.map((column: any[]) => column.join(''));
 
-      let words = [];
-      let ids = [];
-      let hotLetters = [];
+      let words: any[] = [];
+      let ids: any[] = [];
+      let hotLetters: any[] = [];
 
       [...letterRows, ...letterColumns].map((line) =>
-        line.split(' ').map((word) => {
+        line.split(' ').map((word: string) => {
           if (word.length > 1) return words.push(word);
         })
       );
 
       if (isPlayer) {
-        let suspectId = [];
+        let suspectId: any[] = [];
         [...idRows, ...idColumns].map((line) =>
-          line.map((id, index) => {
+          line.map((id: any, index: number) => {
             if (id === ' ') return;
             let prev =
               line[index - 1] === ' ' || line[index - 1] === undefined
@@ -249,7 +259,7 @@ export class BoardValidatorService implements OnDestroy {
       let touching = false;
       let singleHot = 0;
       [...hotRows, ...hotColumns].map((line, index) =>
-        line.split(' ').map((bool) => {
+        line.split(' ').map((bool: any) => {
           if (bool === 'true' && index < 15) singleHot = 1;
           if (bool === 'true' && index >= 15)
             singleHot ? singleHot++ : undefined;
@@ -295,11 +305,11 @@ export class BoardValidatorService implements OnDestroy {
       this.wordMultiplier = [];
       this.potentialZipPoints = [];
       this.zipWordMultiplier = [];
-      let coords = [];
-      let zipCoords = [];
+      let coords: any[] = [];
+      let zipCoords: any[] = [];
       let done = false;
 
-      fullMatrix.hotRows.forEach((row, rowIndex) => {
+      fullMatrix.hotRows.forEach((row: any[], rowIndex: number) => {
         if (without(row, ' ').length > 1 && row.includes(true)) {
           row.forEach((cell, index) => {
             if (done) return;
@@ -337,7 +347,7 @@ export class BoardValidatorService implements OnDestroy {
         }
       });
 
-      fullMatrixZip.hotColumns.forEach((column, columnIndex) => {
+      fullMatrixZip.hotColumns.forEach((column: any[], columnIndex: number) => {
         if (without(column, ' ').length > 1 && column.includes(true)) {
           column.forEach((cell, index) => {
             if (done) return;
@@ -376,7 +386,7 @@ export class BoardValidatorService implements OnDestroy {
       });
 
       //prettier-ignore
-      this.rowWordStack.forEach((coords, index) => {
+      this.rowWordStack.forEach((coords: any[], index: number) => {
         this.potentialPoints.push([]);
         this.wordMultiplier.push([]);
         coords.forEach(coord => {
@@ -391,7 +401,7 @@ export class BoardValidatorService implements OnDestroy {
       });
 
       //prettier-ignore
-      this.columnWordStack.forEach((zipCoords, index) => {
+      this.columnWordStack.forEach((zipCoords: any[], index: number) => {
         this.potentialZipPoints.push([]);
         this.zipWordMultiplier.push([]);
         zipCoords.forEach(coord => {

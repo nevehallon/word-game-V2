@@ -30,10 +30,11 @@ export class BoardComponent implements OnInit, AfterViewInit {
   // = Array(225)
   //   .fill('')
   //   .map(() => ({ data: [] }));
-  btnAttributes: BtnAttrs = null;
-  btnAttributeSubscription: Subscription;
 
-  multiplier(num) {
+  btnAttributes!: BtnAttrs;
+  btnAttributeSubscription!: Subscription;
+
+  multiplier(num: number) {
     return {
       tw: this.source.tw.includes(num) ? true : false,
       dw: this.source.dw.includes(num) ? true : false,
@@ -68,7 +69,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     if (!this.source.isZoomed) return;
     const btnAttrs: BtnAttrs = { ...this.btnAttributes };
 
-    let $board: HTMLElement = document.querySelector('#board');
+    let $board = document.querySelector('#board')!;
 
     $board.classList.remove('zoomedIn');
     this.source.isZoomed = false;
@@ -81,7 +82,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   zoomIn(target: HTMLElement, overRide: boolean = false) {
     if (this.source.isZoomed && !overRide) return;
     const btnAttrs: BtnAttrs = { ...this.btnAttributes };
-    let $board: HTMLElement = document.querySelector('#board');
+    let $board = document.querySelector('#board')!;
     $board.classList.add('zoomedIn');
     this.source.isZoomed = true;
     btnAttrs.zoomBtn.isIn = false;
@@ -145,9 +146,9 @@ export class BoardComponent implements OnInit, AfterViewInit {
           .subscribe(
             (result) => {
               if (result === false) {
-                let index = event.container.element.nativeElement.getAttribute(
+                let index = +event.container.element.nativeElement.getAttribute(
                   'data-number'
-                );
+                )!;
                 this.squares[index].data = [];
                 this.zoomOut();
                 return this.source.changeBoard(this.squares);
@@ -194,7 +195,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     validate.init(this.source);
   }
 
-  boardSubscription: Subscription;
+  boardSubscription: Subscription | undefined;
 
   ngOnInit(): void {
     this.boardSubscription = this.source.currentBoard.subscribe((squares) => {
@@ -218,8 +219,8 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.btnAttributeSubscription.unsubscribe();
-    this.boardSubscription.unsubscribe();
+    this.btnAttributeSubscription?.unsubscribe();
+    this.boardSubscription?.unsubscribe();
   }
 
   ngAfterViewInit(): void {

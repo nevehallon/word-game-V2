@@ -15,14 +15,14 @@ export class TabContainerComponent implements OnInit {
   constructor() {}
   ngOnInit() {}
 
-  @Input() element;
+  @Input() element: any;
   tabCount = 0;
   selectedTab = 0;
 
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
 
-  number_tabs;
-  swipe(eType, tabCount) {
+  number_tabs: any;
+  swipe(eType: string, tabCount: number) {
     if (!tabCount) return;
     this.tabCount = tabCount;
     // console.log(eType, tabCount, this.selectedTab);

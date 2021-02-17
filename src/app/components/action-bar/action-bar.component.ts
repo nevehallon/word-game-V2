@@ -22,7 +22,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private gridService: CreateGridService,
     public gameService: GameLogicService,
-    private validate: BoardValidatorService
+    private validate: BoardValidatorService,
+    private _timeOut: NodeJS.Timeout
   ) {}
 
   closeDialog() {
@@ -30,20 +31,18 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     this.dialog.closeAll();
   }
 
-  private _timeOut;
+  dialogRef!: MatDialogRef<any> | undefined;
 
-  dialogRef: MatDialogRef<any>;
-
-  remainingTiles;
+  remainingTiles!: number;
 
   tiles: any[] = [];
-  rackSubscription: Subscription;
+  rackSubscription!: Subscription;
 
-  squares: any[];
-  boardSubscription: Subscription;
+  squares!: any[];
+  boardSubscription!: Subscription;
 
-  btnAttributes: BtnAttrs = null;
-  btnAttributeSubscription: Subscription;
+  btnAttributes!: BtnAttrs;
+  btnAttributeSubscription!: Subscription;
 
   mixTiles() {
     // this.closeDialog();
@@ -87,7 +86,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     });
   }
 
-  prePass(wasClicked, isSwap, isAI, legalClick) {
+  prePass(
+    wasClicked: boolean | undefined,
+    isSwap: boolean | void,
+    isAI: boolean | undefined,
+    legalClick: boolean | void
+  ) {
     if (legalClick === false) return;
     this.closeDialog();
 
@@ -118,7 +122,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
       }, console.error);
   }
 
-  passPlay(action) {
+  passPlay(action: string) {
     if (!this.source.playersTurn && !this.source.gameOver) return;
 
     if (action === 'Pass') {
@@ -132,7 +136,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     this.zoomOut();
   }
 
-  swapRecall(action) {
+  swapRecall(action: string | string[]) {
     if (!this.source.playersTurn && !this.source.gameOver) return;
 
     if (action.includes('Recall')) {
@@ -193,7 +197,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     if (!this.source.isZoomed) return;
     const btnAttrs: BtnAttrs = { ...this.btnAttributes };
 
-    let $board: HTMLElement = document.querySelector('#board');
+    let $board = document.querySelector('#board')!;
 
     $board.classList.remove('zoomedIn');
     this.source.isZoomed = false;
@@ -205,8 +209,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
   zoomIn() {
     if (this.source.isZoomed) return;
     const btnAttrs: BtnAttrs = { ...this.btnAttributes };
-    let $board: HTMLElement = document.querySelector('#board');
-    let centerSquare = document.querySelector('[data-location="7,7"]');
+    let $board = document.querySelector('#board')!;
+    let centerSquare = document.querySelector('[data-location="7,7"]')!;
     $board.classList.add('zoomedIn');
     centerSquare.scrollIntoView({ block: 'center', inline: 'center' });
     this.source.isZoomed = true;

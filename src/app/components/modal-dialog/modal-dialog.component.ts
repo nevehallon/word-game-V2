@@ -32,7 +32,7 @@ export class ModalDialogComponent implements OnInit, OnDestroy {
     return b.letter > a.letter ? -1 : 1;
   });
 
-  customizer(objValue, srcValue) {
+  customizer(objValue: any, srcValue: any) {
     if (objValue) {
       return `${objValue}/${srcValue}`;
     }
@@ -50,7 +50,7 @@ export class ModalDialogComponent implements OnInit, OnDestroy {
   // *
   // * settings
   // *
-  rangeValues = {
+  rangeValues: any = {
     1: {
       text: "Easy - good if you're just starting out.",
       style: {
@@ -78,13 +78,15 @@ export class ModalDialogComponent implements OnInit, OnDestroy {
     },
   };
 
-  hints = JSON.parse(localStorage.getItem('hints')) || { show: true };
-  value = +localStorage.getItem('difficulty') || 15;
+  hints: any = JSON.parse(localStorage.getItem('hints') ?? 'null') || {
+    show: true,
+  };
+  value: any = +localStorage.getItem('difficulty')! || 15;
   checked = this.hints.show;
   difficultyText = this.rangeValues[`${this.convertVal(this.value)}`].text;
   difficultyStyles = this.rangeValues[`${this.convertVal(this.value)}`].style;
 
-  convertVal(val) {
+  convertVal(val: number) {
     let convertedVal = val < 28 ? 1 : val < 46 ? 2 : val < 60 ? 3 : 4;
 
     return convertedVal;
@@ -113,9 +115,9 @@ export class ModalDialogComponent implements OnInit, OnDestroy {
   // * swap
   // *
   tiles: any[] = [];
-  rackSubscription: Subscription;
+  rackSubscription: Subscription | undefined;
 
-  selectTile(tile) {
+  selectTile(tile: { selected: boolean }) {
     if (tile.selected) return (tile.selected = false);
     tile.selected = true;
   }
@@ -187,6 +189,6 @@ export class ModalDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.rackSubscription.unsubscribe();
+    this.rackSubscription?.unsubscribe();
   }
 }

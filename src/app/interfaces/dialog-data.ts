@@ -9,4 +9,6 @@ export interface DialogData {
   tileInfo?: any;
 
   bagLength?: number;
+
+  notes?: string;
 }

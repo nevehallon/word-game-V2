@@ -163,7 +163,7 @@
             *ngFor="let x of letterToPointsSorted"
             class="status-box"
             [mat-dialog-close]="{letter: x.letter, points: 0}"
-            [ngStyle]="x.points ? '' :{'display': 'none'}"
+            [ngStyle]="x.points ? {} :{'display': 'none'}"
         >
             <div class="tile">
 
@@ -230,7 +230,7 @@
             data.buttons; index as i"
             color="primary"
             mat-raised-button
-            [mat-dialog-close]="data.btnCloseData[i]"
+            [mat-dialog-close]="data.btnCloseData && data.btnCloseData[i]"
         >
             {{btn}}
         </button>

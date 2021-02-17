@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ScrabbleLettersService } from './scrabble-letters.service';
-import { shuffle, drop } from 'lodash-es';
+import { shuffle /* , drop  */ } from 'lodash-es';
 import { HistoryEntry } from '../interfaces/history-entry';
 import { BtnAttrs } from '../interfaces/btn-attrs';
-import { Square } from '../interfaces/square';
 
 @Injectable({
   providedIn: 'root',
