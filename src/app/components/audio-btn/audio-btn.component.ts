@@ -9,7 +9,7 @@ export class AudioBtnComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) {}
   ngOnInit(): void {}
 
-  private _timeOut!: NodeJS.Timeout;
+  private _timeOut!: ReturnType<typeof setTimeout>;
 
   @Input() word: string = '';
   @Input() audioSources: string = '';

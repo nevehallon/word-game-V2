@@ -185,7 +185,7 @@ export class GameLogicService {
       });
     }
     let status = await this.http.checkServerStatus();
-    let TO: NodeJS.Timeout;
+    let TO: ReturnType<typeof setTimeout>;
     if (status) {
       let start = () => {
         this.closeDialog();

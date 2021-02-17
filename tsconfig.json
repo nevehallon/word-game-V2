@@ -16,7 +16,8 @@
     "removeComments": true,
     "allowJs": true,
     "strict": true,
-    "types": ["node"]
+    "types": [],
+    "noImplicitThis": false
   },
   "angularCompilerOptions": {
     "strictTemplates": true

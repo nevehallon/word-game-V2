@@ -22,14 +22,15 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private gridService: CreateGridService,
     public gameService: GameLogicService,
-    private validate: BoardValidatorService,
-    private _timeOut: NodeJS.Timeout
+    private validate: BoardValidatorService
   ) {}
 
   closeDialog() {
     clearTimeout(this.source.modalTO);
     this.dialog.closeAll();
   }
+
+  public _timeOut!: ReturnType<typeof setTimeout>;
 
   dialogRef!: MatDialogRef<any> | undefined;
 
