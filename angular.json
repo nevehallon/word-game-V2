@@ -23,10 +23,18 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
-            "scripts": ["node_modules/localforage/dist/localforage.js"]
+            "scripts": ["node_modules/localforage/dist/localforage.js"],
+            "aot": true,
+            "optimization": {
+              "styles": { "inlineCritical": true }
+            },
+            "sourceMap": false,
+            "namedChunks": false,
+            "extractLicenses": true,
+            "vendorChunk": false,
+            "buildOptimizer": true
           },
           "configurations": {
             "production": {
