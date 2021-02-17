@@ -20,13 +20,14 @@ import { GetRequestsService } from './get-requests.service';
 export class GameLogicService {
   constructor(
     public dialog: MatDialog,
-    private dialogRef: MatDialogRef<any>,
     private calc: ComputeService,
     private gridService: CreateGridService,
     private validate: BoardValidatorService,
     private source: SourceService,
     private http: GetRequestsService
   ) {}
+
+  private dialogRef!: MatDialogRef<any>;
 
   closeDialog(timeOut: number = 0) {
     clearTimeout(this.source.modalTO);

@@ -26,13 +26,15 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
             "scripts": ["node_modules/localforage/dist/localforage.js"],
-            "aot": false,
-            "optimization": false,
+            "aot": true,
+            "optimization": {
+              "styles": { "inlineCritical": true }
+            },
             "sourceMap": false,
             "namedChunks": false,
             "extractLicenses": true,
             "vendorChunk": false,
-            "buildOptimizer": false
+            "buildOptimizer": true
           },
           "configurations": {
             "production": {
