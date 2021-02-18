@@ -12,6 +12,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AppComponent } from './app.component';
 import { ContainerComponent } from './components/container/container.component';
@@ -85,6 +86,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     MatDialogModule,
     MatCheckboxModule,
     FormsModule,
+    MatSlideToggleModule,
     MatSliderModule,
     MatTableModule,
     MatTabsModule,

@@ -51,6 +51,9 @@ mat-tab-group
 
 :host ::ng-deep .mat-tab-label-content {
   margin: auto;
+  span.ng-star-inserted {
+    text-shadow: none;
+  }
 }
 
 :host ::ng-deep .mat-tab-body-wrapper {

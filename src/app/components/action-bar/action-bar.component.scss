@@ -71,3 +71,23 @@ button {
     color: white;
   }
 }
+
+.theme {
+  display: flex;
+  align-items: center;
+
+  .dark {
+    color: #515e89;
+    text-shadow: var(--textShadowLight);
+    transition: 500ms 500ms ease-in-out;
+  }
+  .light {
+    color: #fff;
+    text-shadow: var(--textShadowDark);
+    transition: 500ms 500ms ease-in-out;
+  }
+
+  mat-slide-toggle {
+    transform: rotate(90deg);
+  }
+}

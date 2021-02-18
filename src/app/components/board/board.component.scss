@@ -30,8 +30,19 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
 .dw {
   background: #dc98af;
 }
-.dw::before {
+.dw:before {
   content: "DW";
+}
+[data-number="112"]:before {
+  text-shadow: var(--textShadowLight);
+  color: #515e89;
+  font-size: 4.5vmin;
+  font-family: "Material Icons";
+  -webkit-font-feature-settings: "liga" 1;
+  -moz-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga" 1;
+  content: "brightness_4";
+  transition: 500ms 500ms linear;
 }
 
 .tl {

@@ -13,6 +13,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModalDialogComponent } from '../components/modal-dialog/modal-dialog.component';
 import { DialogData } from '../interfaces/dialog-data';
 import { GetRequestsService } from './get-requests.service';
+import * as introJs from 'intro.js';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,76 @@ export class GameLogicService {
   ) {}
 
   private dialogRef!: MatDialogRef<any>;
+
+  hints: any = JSON.parse(localStorage.getItem('hints') ?? 'null') || {
+    show: true,
+  };
+
+  introJS = introJs();
+
+  giveTour($document: HTMLDocument) {
+    introJs()
+      .setOptions({
+        scrollToElement: false,
+        tooltipClass: 'toolTip',
+        showBullets: false,
+        showProgress: true,
+        exitOnOverlayClick: false,
+        exitOnEsc: false,
+        hints: [
+          {
+            element: $document.querySelector('#frame')!,
+            hint:
+              'Double click on the board to zoom into a square OR to zoom out.<br /><br /> Go ahead and give it a go!',
+            hintPosition: 'top',
+          },
+          {
+            element: $document.querySelector('.theme')!,
+            hint: 'Tooltip has position left',
+            hintPosition: 'top',
+          },
+          {
+            element: $document.querySelector('#bagBtn')!,
+            hint: 'Tooltip has position bottom',
+            hintPosition: 'top',
+          },
+          {
+            element: $document.querySelector('#scoresBtn')!,
+            hint: 'Tooltip has position top',
+            hintPosition: 'top',
+          },
+          {
+            element: $document.querySelector('#mixBtn')!,
+            hint: 'Tooltip has position left',
+            hintPosition: 'top',
+          },
+          {
+            element: $document.querySelector('#swapRecall')!,
+            hint: 'Tooltip has position bottom',
+            hintPosition: 'top',
+          },
+          {
+            element: $document.querySelector('#settingsBtn')!,
+            hint: 'Tooltip has position top',
+            hintPosition: 'top',
+          },
+          {
+            element: $document.querySelector('#zoomBtns')!,
+            hint: 'Tooltip has position left',
+            hintPosition: 'top',
+          },
+          {
+            element: $document.querySelector('#passPlay')!,
+            hint: 'Tooltip has position bottom',
+            hintPosition: 'top',
+          },
+        ],
+      })
+      .start()
+      .oncomplete(() => {
+        return this.startGame($document);
+      });
+  }
 
   closeDialog(timeOut: number = 0) {
     clearTimeout(this.source.modalTO);
@@ -64,13 +135,11 @@ export class GameLogicService {
     let { player, pc } = this.whoStarts();
     if (player === pc) return this.startGame($document);
 
-    // this.source.lettersUsed = 14;
-
     let playerRack;
     let data: DialogData;
     if (player < pc /* || true */) {
       /*            ^           ^
-      ? uncomment so that player gets first turn
+      ? uncomment     "|| true" so that player gets first turn
        */
       playerRack = this.deal2Player();
       this.deal2PC();
@@ -191,6 +260,9 @@ export class GameLogicService {
       let start = () => {
         this.closeDialog();
         this.source.loaderShown = false;
+        if (!this.source.tutorialGiven && this.hints.show) {
+          return this.giveTour($document);
+        }
         return this.startGame($document);
       };
       let checkHasList = () => {

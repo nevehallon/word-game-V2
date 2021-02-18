@@ -67,6 +67,14 @@ body {
   }
 }
 
+body,
+.square,
+.mat-dialog-container {
+  -webkit-transition: 1s ease;
+  -o-transition: 1s ease;
+  transition: 1s ease;
+}
+
 body.inheritCursors * {
   cursor: inherit !important;
 }
@@ -116,4 +124,63 @@ body.inheritCursors * {
   direction: ltr;
   -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
+}
+
+/* note that Internet Explorer does not support css variables */
+:root {
+  --accent: #515e89;
+  --textShadowLight: -1px -1px 4px #e1e1e1, 1px -1px 4px #e1e1e1,
+    -1px 1px 4px #e1e1e1, 1px 1px 4px #e1e1e1;
+  --textShadowDark: -1px -1px 4px #000, 1px -1px 4px #000, -1px 1px 4px #000,
+    1px 1px 4px #000;
+  --textShadowAccent: -1px -1px 4px #515e89, 1px -1px 4px #515e89,
+    -1px 1px 4px #515e89, 1px 1px 4px #515e89;
+}
+
+body.dark-mode,
+body.dark-mode table,
+body.dark-mode .mat-tab-body-wrapper,
+body.dark-mode mat-dialog-container {
+  background: var(--accent);
+
+  .square:not(.tw):not(.dw):not(.tl):not(.dl) {
+    background: steelblue;
+  }
+  mat-tab-group {
+    background: inherit !important;
+  }
+
+  [data-number="112"]:before {
+    color: white;
+    content: "brightness_5";
+    text-shadow: var(--textShadowDark);
+    transition: 500ms 500ms linear;
+  }
+}
+
+body.dark-mode table,
+body.dark-mode .mat-tab-body-wrapper,
+body.dark-mode mat-dialog-container {
+  *:not(button):not(.mat-button-wrapper):not(.ng-star-inserted):not(.mat-icon) {
+    font-weight: bold;
+    text-shadow: var(--textShadowLight);
+    .wordOrigin,
+    .opponent,
+    .player {
+      text-shadow: inherit !important;
+    }
+  }
+}
+
+.toolTip {
+  text-align: center;
+  max-width: 500px !important;
+
+  .introjs-tooltip-header {
+    display: none !important;
+  }
+  .introjs-tooltiptext {
+    padding: 10px;
+  }
+  // height: 300px;
 }

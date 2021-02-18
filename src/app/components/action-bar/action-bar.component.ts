@@ -23,7 +23,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private gridService: CreateGridService,
     public gameService: GameLogicService,
     private validate: BoardValidatorService
-  ) {}
+  ) {
+    this.checkAndSetDarkMode();
+  }
 
   closeDialog() {
     clearTimeout(this.source.modalTO);
@@ -44,6 +46,15 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
   btnAttributes!: BtnAttrs;
   btnAttributeSubscription!: Subscription;
+
+  isChecked!: boolean;
+
+  /* Body */
+  body = document.querySelector('body');
+
+  rematch() {
+    window.location.reload();
+  }
 
   mixTiles() {
     // this.closeDialog();
@@ -266,25 +277,52 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     //show list of moves. who played what and how many points were earned
   }
 
-  rematch() {
-    window.location.reload();
+  toggleThemes() {
+    // Dark Mode Action
+    let darkMode = localStorage.getItem('darkMode');
+
+    darkMode ? this.disableDarkMode() : this.enableDarkMode();
+    // darkMode = localStorage.getItem('darkMode');
+  }
+
+  // Enable Dark Mode
+  enableDarkMode = () => {
+    this.isChecked = false;
+    this.body!.classList.add('dark-mode');
+    localStorage.setItem('darkMode', 'true');
+  };
+
+  // Disable Dark Mode
+  disableDarkMode = () => {
+    this.isChecked = true;
+    this.body!.classList.remove('dark-mode');
+    localStorage.setItem('darkMode', '');
+  };
+
+  checkAndSetDarkMode() {
+    let darkMode = localStorage.getItem('darkMode');
+
+    darkMode ? this.enableDarkMode() : this.disableDarkMode();
   }
 
   ngOnInit(): void {
-    this.rackSubscription = this.source.currentPlayerRack.subscribe(
-      (tiles) => (this.tiles = tiles)
-    );
+    this.rackSubscription = this.source.currentPlayerRack.subscribe((tiles) => {
+      this.tiles = tiles;
+      if (!this.source.history.length) {
+        this.remainingTiles = this.source.bag.length;
+      }
+    });
     this.btnAttributeSubscription = this.source.currentBtnAttr.subscribe(
       (attrs) => {
         this.btnAttributes = attrs;
       }
     );
-    this.boardSubscription = this.source.currentBoard.subscribe((squares) => {
-      this.squares = squares;
-      setTimeout(() => {
+    this.boardSubscription = this.source.currentBoard.subscribe(
+      (squares: any[]) => {
+        this.squares = squares;
         this.remainingTiles = this.source.bag.length;
-      }, 1000);
-    });
+      }
+    );
   }
 
   ngOnDestroy(): void {

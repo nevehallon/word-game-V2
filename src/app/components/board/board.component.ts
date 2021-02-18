@@ -198,13 +198,15 @@ export class BoardComponent implements OnInit, AfterViewInit {
   boardSubscription: Subscription | undefined;
 
   ngOnInit(): void {
-    this.boardSubscription = this.source.currentBoard.subscribe((squares) => {
-      this.squares = squares;
-      // if (this.gameService.lettersUsed === 0) return;
-      // setTimeout(() => {
-      //   this.gridService.updateGameState(document);
-      // }, 0);
-    });
+    this.boardSubscription = this.source.currentBoard.subscribe(
+      (squares: any[]) => {
+        this.squares = squares;
+        // if (this.gameService.lettersUsed === 0) return;
+        // setTimeout(() => {
+        //   this.gridService.updateGameState(document);
+        // }, 0);
+      }
+    );
     this.btnAttributeSubscription = this.source.currentBtnAttr.subscribe(
       (attrs) => {
         this.btnAttributes = attrs;

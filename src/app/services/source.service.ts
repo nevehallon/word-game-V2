@@ -129,6 +129,7 @@ export class SourceService {
 
   public DEBUG_MODE = false; //? change to true for the AI to play it self
 
+  public tutorialGiven = false;
   public loaderShown = false;
   public playerScore = 0;
   public computerScore = 0;

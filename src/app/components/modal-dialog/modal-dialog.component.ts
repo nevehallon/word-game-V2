@@ -78,7 +78,7 @@ export class ModalDialogComponent implements OnInit, OnDestroy {
     },
   };
 
-  hints: any = JSON.parse(localStorage.getItem('hints') ?? 'null') || {
+  hints = JSON.parse(localStorage.getItem('hints') ?? 'null') || {
     show: true,
   };
   value: any = +localStorage.getItem('difficulty')! || 15;
