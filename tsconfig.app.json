@@ -6,7 +6,8 @@
     "types": [],
     "removeComments": true,
     "allowJs": true,
-    "noImplicitThis": false
+    "noImplicitThis": false,
+    "allowSyntheticDefaultImports": true
   },
   "files": ["src/main.ts", "src/polyfills.ts"],
   "include": ["src/**/*.d.ts"]

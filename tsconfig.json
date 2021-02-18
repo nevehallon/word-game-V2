@@ -17,7 +17,8 @@
     "allowJs": true,
     "strict": true,
     "types": [],
-    "noImplicitThis": false
+    "noImplicitThis": false,
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "strictTemplates": true

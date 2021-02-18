@@ -13,7 +13,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModalDialogComponent } from '../components/modal-dialog/modal-dialog.component';
 import { DialogData } from '../interfaces/dialog-data';
 import { GetRequestsService } from './get-requests.service';
-import * as introJs from 'intro.js';
+import Driver from 'driver.js';
+import 'driver.js/dist/driver.min.css';
 
 @Injectable({
   providedIn: 'root',
@@ -34,70 +35,101 @@ export class GameLogicService {
     show: true,
   };
 
-  introJS = introJs();
-
   giveTour($document: HTMLDocument) {
-    introJs()
-      .setOptions({
-        scrollToElement: false,
-        tooltipClass: 'toolTip',
-        showBullets: false,
-        showProgress: true,
-        exitOnOverlayClick: false,
-        exitOnEsc: false,
-        hints: [
-          {
-            element: $document.querySelector('#frame')!,
-            hint:
-              'Double click on the board to zoom into a square OR to zoom out.<br /><br /> Go ahead and give it a go!',
-            hintPosition: 'top',
-          },
-          {
-            element: $document.querySelector('.theme')!,
-            hint: 'Tooltip has position left',
-            hintPosition: 'top',
-          },
-          {
-            element: $document.querySelector('#bagBtn')!,
-            hint: 'Tooltip has position bottom',
-            hintPosition: 'top',
-          },
-          {
-            element: $document.querySelector('#scoresBtn')!,
-            hint: 'Tooltip has position top',
-            hintPosition: 'top',
-          },
-          {
-            element: $document.querySelector('#mixBtn')!,
-            hint: 'Tooltip has position left',
-            hintPosition: 'top',
-          },
-          {
-            element: $document.querySelector('#swapRecall')!,
-            hint: 'Tooltip has position bottom',
-            hintPosition: 'top',
-          },
-          {
-            element: $document.querySelector('#settingsBtn')!,
-            hint: 'Tooltip has position top',
-            hintPosition: 'top',
-          },
-          {
-            element: $document.querySelector('#zoomBtns')!,
-            hint: 'Tooltip has position left',
-            hintPosition: 'top',
-          },
-          {
-            element: $document.querySelector('#passPlay')!,
-            hint: 'Tooltip has position bottom',
-            hintPosition: 'top',
-          },
-        ],
-      })
-      .start()
-      .oncomplete(() => {
-        return this.startGame($document);
+    setTimeout(() => {
+      const driver = new Driver({
+        className: 'toolTip', // className to wrap driver.js popover
+        animate: true, // Animate while changing highlighted element
+        opacity: 0.75, // Background opacity (0 means only popovers and without overlay)
+        padding: 10, // Distance of element from around the edges
+        allowClose: false, // Whether clicking on overlay should close or not
+        overlayClickNext: true, // Should it move to next step on overlay click
+        doneBtnText: 'Done', // Text on the final button
+        closeBtnText: 'Close', // Text on the close button for this step
+        nextBtnText: 'Next', // Next button text for this step
+        prevBtnText: 'Previous', // Previous button text for this step
+        showButtons: true, // Do not show control buttons in footer
+        keyboardControl: false, // Allow controlling through keyboard (escape to close, arrow keys to move)
       });
+      const steps = [
+        {
+          element: '#frame',
+          popover: {
+            title: 'Tap to zoom',
+            description: 'Body of the popover',
+            offset: 20,
+          },
+        },
+        {
+          element: '.theme',
+          popover: {
+            title: 'Theme',
+            description: 'Body of the popover',
+            offset: 20,
+          },
+        },
+        {
+          element: '#bagBtn',
+          popover: {
+            title: 'Tiles left',
+            description: 'Body of the popover',
+            offset: -50,
+          },
+        },
+        {
+          element: '#scoresBtn',
+          popover: {
+            title: 'Game Stats',
+            description: 'Body of the popover',
+            offset: 20,
+          },
+        },
+        {
+          element: '#mixBtn',
+          popover: {
+            title: 'Tap to shuffle',
+            description: 'Body of the popover',
+            offset: 20,
+          },
+        },
+        {
+          element: '#swapRecall',
+          popover: {
+            title: 'Swap or Recall',
+            description: 'Body of the popover',
+            offset: 20,
+          },
+        },
+        {
+          element: '#settingsBtn',
+          popover: {
+            title: 'Change Settings',
+            description: 'Body of the popover',
+            offset: 20,
+          },
+        },
+        {
+          element: '#zoomBtns',
+          popover: {
+            title: 'Zoom',
+            description: 'Body of the popover',
+            offset: 20,
+          },
+        },
+        {
+          element: '#passPlay',
+          popover: {
+            title: 'Play or Pass',
+            description: 'Body of the popover',
+            offset: 20,
+          },
+        },
+      ];
+      // Define the steps for introduction
+      driver.defineSteps(steps);
+      // Start the introduction
+      driver.start();
+    }, 1000);
   }
 
   closeDialog(timeOut: number = 0) {

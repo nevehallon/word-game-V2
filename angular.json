@@ -27,11 +27,11 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.scss",
-              "node_modules/intro.js/minified/introjs.min.css"
+              "node_modules/driver.js/dist/driver.min.css"
             ],
             "scripts": [
               "node_modules/localforage/dist/localforage.js",
-              "node_modules/intro.js/minified/intro.min.js"
+              "node_modules/driver.js/dist/driver.min.js"
             ]
           },
           "configurations": {
@@ -105,11 +105,11 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.scss",
-              "node_modules/intro.js/minified/introjs.min.css"
+              "node_modules/driver.js/dist/driver.min.css"
             ],
             "scripts": [
               "node_modules/localforage/dist/localforage.js",
-              "node_modules/intro.js/minified/intro.min.js"
+              "node_modules/driver.js/dist/driver.min.js"
             ]
           }
         },
