@@ -197,28 +197,70 @@ export class ModalDialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (this.data.type === 'logo') {
-      anime({
-        targets: '#loader circle',
-        strokeDashoffset: [anime.setDashoffset, 0],
-        easing: 'easeInOutQuart',
-        duration: 1500,
-        delay: 300,
-        direction: 'alternate',
+      // anime({
+      //   targets: '#loader circle',
+      //   strokeDashoffset: [anime.setDashoffset, 0],
+      //   easing: 'easeInOutQuart',
+      //   duration: 1500,
+      //   delay: 300,
+      //   direction: 'alternate',
+      //   loop: true,
+      // });
+
+      // anime({
+      //   targets: '#loader .lines path',
+      //   strokeDashoffset: [anime.setDashoffset, 0],
+      //   easing: 'easeInOutSine',
+      //   duration: 1500,
+      //   delay: function (el, i) {
+      //     return i * 250;
+      //   },
+      //   direction: 'alternate',
+      //   loop: true,
+      // });
+      const loader = anime.timeline({
+        complete: () => (this.source.tutorialGiven = true),
         loop: true,
+        // direction: 'alternate',
       });
 
-      anime({
-        targets: '#loader .el',
-        fill: '#00FFB3',
-        strokeDashoffset: [anime.setDashoffset, 0],
-        easing: 'easeInOutSine',
-        duration: 1500,
-        delay: function (el, i) {
-          return i * 250;
-        },
-        direction: 'alternate',
-        loop: true,
-      });
+      loader
+        .add({
+          targets: '#logo path',
+          delay: 300,
+          duration: 1500,
+          easing: 'easeInOutBack',
+          strokeDashoffset: [anime.setDashoffset, 0],
+        })
+        .add({
+          targets: '#logo #B path',
+          duration: 2100,
+          easing: 'easeInCirc',
+          opacity: {
+            value: 1,
+            duration: 500,
+          },
+          delay: function (el, i) {
+            return i * 700;
+          },
+          strokeDashoffset: [anime.setDashoffset, 0],
+        })
+        .add({
+          targets: '#logo',
+          delay: 500,
+          duration: 300,
+          easing: 'easeInOutQuart',
+          opacity: 0,
+          scale: 0.1,
+        })
+        .add({
+          targets: '.loader',
+          duration: 200,
+          easing: 'easeInOutQuart',
+          opacity: 0,
+          zIndex: -1,
+        });
+      loader.play;
     }
   }
 

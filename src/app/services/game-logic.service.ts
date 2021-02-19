@@ -258,6 +258,17 @@ export class GameLogicService {
   }
 
   serverCheck = async (check: SourceService, $document: HTMLDocument) => {
+    this.closeDialog();
+    return setTimeout(() => {
+      this.dialogRef = this.dialog.open(ModalDialogComponent, {
+        data: {
+          type: 'logo',
+        },
+        maxWidth: '75vh',
+        disableClose: true,
+        id: 'logoModal',
+      });
+    }, 1000);
     if (this.storageAvailable('localStorage') !== true) {
       // not available
       let data: DialogData = {
