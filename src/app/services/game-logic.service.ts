@@ -15,6 +15,7 @@ import { DialogData } from '../interfaces/dialog-data';
 import { GetRequestsService } from './get-requests.service';
 import Driver from 'driver.js';
 import 'driver.js/dist/driver.min.css';
+import anime from 'animejs';
 
 @Injectable({
   providedIn: 'root',
@@ -36,89 +37,91 @@ export class GameLogicService {
   };
 
   giveTour($document: HTMLDocument) {
-    setTimeout(() => {
-      const driver = new Driver({
-        className: 'toolTip', // className to wrap driver.js popover
-        allowClose: false, // Whether clicking on overlay should close or not
-        overlayClickNext: true, // Should it move to next step on overlay click
-        doneBtnText: 'Done', // Text on the final button
-        nextBtnText: 'Next', // Next button text for this step
-        prevBtnText: 'Previous', // Previous button text for this step
-        // showButtons: true, // Do not show control buttons in footer
-        keyboardControl: false, // Allow controlling through keyboard (escape to close, arrow keys to move)
-      });
-      const steps = [
-        {
-          element: '#frame',
-          popover: {
-            className: 'firstStep',
-            title: 'Tap to zoom',
-            description: 'Body of the popover',
-          },
+    const driver = new Driver({
+      className: 'toolTip', // className to wrap driver.js popover
+      allowClose: false, // Whether clicking on overlay should close or not
+      overlayClickNext: true, // Should it move to next step on overlay click
+      doneBtnText: 'Done', // Text on the final button
+      nextBtnText: 'Next', // Next button text for this step
+      prevBtnText: 'Previous', // Previous button text for this step
+      keyboardControl: false, // Allow controlling through keyboard (escape to close, arrow keys to move)
+    });
+    const steps = [
+      {
+        element: '#frame',
+        popover: {
+          className: 'firstStep',
+          title: 'Tap to zoom',
+          description: 'Body of the popover',
         },
-        {
-          element: '.theme',
-          popover: {
-            title: 'Theme',
-            description: 'Body of the popover',
-          },
+      },
+      {
+        element: '.theme',
+        popover: {
+          title: 'Theme',
+          description: 'Body of the popover',
         },
-        {
-          element: '#bagBtn',
-          popover: {
-            title: 'Tiles left',
-            description: 'Body of the popover',
-          },
+      },
+      {
+        element: '#bagBtn',
+        popover: {
+          title: 'Tiles left',
+          description: 'Body of the popover',
         },
-        {
-          element: '#scoresBtn',
-          popover: {
-            title: 'Game Stats',
-            description: 'Body of the popover',
-          },
+      },
+      {
+        element: '#scoresBtn',
+        popover: {
+          title: 'Game Stats',
+          description: 'Body of the popover',
         },
-        {
-          element: '#mixBtn',
-          popover: {
-            title: 'Tap to shuffle',
-            description: 'Body of the popover',
-          },
+      },
+      {
+        element: '#mixBtn',
+        popover: {
+          title: 'Tap to shuffle',
+          description: 'Body of the popover',
         },
-        {
-          element: '#swapRecall',
-          popover: {
-            title: 'Swap or Recall',
-            description: 'Body of the popover',
-          },
+      },
+      {
+        element: '#swapRecall',
+        popover: {
+          title: 'Swap or Recall',
+          description: 'Body of the popover',
         },
-        {
-          element: '#settingsBtn',
-          popover: {
-            title: 'Change Settings',
-            description: 'Body of the popover',
-          },
+      },
+      {
+        element: '#settingsBtn',
+        popover: {
+          title: 'Change Settings',
+          description: 'Body of the popover',
         },
-        {
-          element: '#zoomBtns',
-          popover: {
-            title: 'Zoom',
-            description: 'Body of the popover',
-          },
+      },
+      {
+        element: '#zoomBtns',
+        popover: {
+          title: 'Zoom',
+          description: 'Body of the popover',
         },
-        {
-          element: '#passPlay',
-          popover: {
-            title: 'Play or Pass',
-            description: 'Body of the popover',
-          },
-          onNext: () => this.startGame($document),
+      },
+      {
+        element: '#passPlay',
+        popover: {
+          title: 'Play or Pass',
+          description: 'Body of the popover',
         },
-      ];
-      // Define the steps for introduction
-      driver.defineSteps(steps);
-      // Start the introduction
-      driver.start();
-    }, 1000);
+        onNext: () => {
+          // trigger animation
+          setTimeout(() => {
+            this.startGame($document);
+          }, 2000);
+        },
+      },
+    ];
+    // Define the steps for introduction
+    driver.defineSteps(steps);
+    // Start the introduction
+    driver.start();
   }
 
   closeDialog(timeOut: number = 0) {
