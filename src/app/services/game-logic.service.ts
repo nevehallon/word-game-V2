@@ -39,25 +39,21 @@ export class GameLogicService {
     setTimeout(() => {
       const driver = new Driver({
         className: 'toolTip', // className to wrap driver.js popover
-        animate: true, // Animate while changing highlighted element
-        opacity: 0.75, // Background opacity (0 means only popovers and without overlay)
-        padding: 10, // Distance of element from around the edges
         allowClose: false, // Whether clicking on overlay should close or not
         overlayClickNext: true, // Should it move to next step on overlay click
         doneBtnText: 'Done', // Text on the final button
-        closeBtnText: 'Close', // Text on the close button for this step
         nextBtnText: 'Next', // Next button text for this step
         prevBtnText: 'Previous', // Previous button text for this step
-        showButtons: true, // Do not show control buttons in footer
+        // showButtons: true, // Do not show control buttons in footer
         keyboardControl: false, // Allow controlling through keyboard (escape to close, arrow keys to move)
       });
       const steps = [
         {
           element: '#frame',
           popover: {
+            className: 'firstStep',
             title: 'Tap to zoom',
             description: 'Body of the popover',
-            offset: 20,
           },
         },
         {
@@ -65,7 +61,6 @@ export class GameLogicService {
           popover: {
             title: 'Theme',
             description: 'Body of the popover',
-            offset: 20,
           },
         },
         {
@@ -73,7 +68,6 @@ export class GameLogicService {
           popover: {
             title: 'Tiles left',
             description: 'Body of the popover',
-            offset: -50,
           },
         },
         {
@@ -81,7 +75,6 @@ export class GameLogicService {
           popover: {
             title: 'Game Stats',
             description: 'Body of the popover',
-            offset: 20,
           },
         },
         {
@@ -89,7 +82,6 @@ export class GameLogicService {
           popover: {
             title: 'Tap to shuffle',
             description: 'Body of the popover',
-            offset: 20,
           },
         },
         {
@@ -97,7 +89,6 @@ export class GameLogicService {
           popover: {
             title: 'Swap or Recall',
             description: 'Body of the popover',
-            offset: 20,
           },
         },
         {
@@ -105,7 +96,6 @@ export class GameLogicService {
           popover: {
             title: 'Change Settings',
             description: 'Body of the popover',
-            offset: 20,
           },
         },
         {
@@ -113,7 +103,6 @@ export class GameLogicService {
           popover: {
             title: 'Zoom',
             description: 'Body of the popover',
-            offset: 20,
           },
         },
         {
@@ -121,8 +110,8 @@ export class GameLogicService {
           popover: {
             title: 'Play or Pass',
             description: 'Body of the popover',
-            offset: 20,
           },
+          onNext: () => this.startGame($document),
         },
       ];
       // Define the steps for introduction
