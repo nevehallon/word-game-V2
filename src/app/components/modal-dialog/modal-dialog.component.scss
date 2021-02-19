@@ -230,7 +230,6 @@ mat-dialog-actions {
 // *
 // * message
 // *
-
 .bold {
   font-weight: bold;
 }
@@ -243,4 +242,22 @@ mat-dialog-actions {
 .opponent {
   color: #c82333;
   text-shadow: #1e7e34 0px 0px 1px;
+}
+
+// *
+// * logo
+// *
+
+::ng-deep .mat-dialog-container#logoModal {
+  transition: none;
+  background: transparent !important;
+  box-shadow: none;
+}
+
+#loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  transform: translate(-50%, -50%);
 }

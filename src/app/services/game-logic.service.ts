@@ -15,7 +15,6 @@ import { DialogData } from '../interfaces/dialog-data';
 import { GetRequestsService } from './get-requests.service';
 import Driver from 'driver.js';
 import 'driver.js/dist/driver.min.css';
-import anime from 'animejs';
 
 @Injectable({
   providedIn: 'root',
@@ -112,21 +111,19 @@ export class GameLogicService {
         },
         onNext: () => {
           // trigger animation
-          anime({
-            targets: '.logo',
-            strokeDashoffset: [anime.setDashoffset, 0],
-            easing: 'easeInOutSine',
-            duration: 1500,
-            delay: function (el, i) {
-              return i * 250;
+          this.closeDialog();
+          this.dialogRef = this.dialog.open(ModalDialogComponent, {
+            data: {
+              type: 'logo',
             },
-            direction: 'alternate',
-            loop: true,
+            maxWidth: '75vh',
+            disableClose: true,
+            id: 'logoModal',
           });
 
-          setTimeout(() => {
-            this.startGame($document);
-          }, 2000);
+          // setTimeout(() => {
+          //   this.startGame($document);
+          // }, 2000);
         },
       },
     ];

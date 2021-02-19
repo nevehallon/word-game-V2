@@ -1,4 +1,10 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  OnDestroy,
+  AfterViewInit,
+} from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LetterToPointsService } from 'src/app/services/letter-to-points.service';
 import { ScrabbleLettersService } from 'src/app/services/scrabble-letters.service';
@@ -7,14 +13,15 @@ import { MatSliderChange } from '@angular/material/slider';
 import { SourceService } from 'src/app/services/source.service';
 import { Subscription } from 'rxjs';
 import { DialogData } from 'src/app/interfaces/dialog-data';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import anime from 'animejs';
 
 @Component({
   selector: 'app-modal-dialog',
   templateUrl: './modal-dialog.component.html',
   styleUrls: ['./modal-dialog.component.scss'],
 })
-export class ModalDialogComponent implements OnInit, OnDestroy {
+export class ModalDialogComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialog: MatDialog,
@@ -186,6 +193,33 @@ export class ModalDialogComponent implements OnInit, OnDestroy {
     this.rackSubscription = this.source.currentPlayerRack.subscribe(
       (tiles) => (this.tiles = tiles)
     );
+  }
+
+  ngAfterViewInit(): void {
+    if (this.data.type === 'logo') {
+      anime({
+        targets: '#loader circle',
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutQuart',
+        duration: 1500,
+        delay: 300,
+        direction: 'alternate',
+        loop: true,
+      });
+
+      anime({
+        targets: '#loader .el',
+        fill: '#00FFB3',
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutSine',
+        duration: 1500,
+        delay: function (el, i) {
+          return i * 250;
+        },
+        direction: 'alternate',
+        loop: true,
+      });
+    }
   }
 
   ngOnDestroy(): void {
