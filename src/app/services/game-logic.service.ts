@@ -112,6 +112,18 @@ export class GameLogicService {
         },
         onNext: () => {
           // trigger animation
+          anime({
+            targets: '.logo',
+            strokeDashoffset: [anime.setDashoffset, 0],
+            easing: 'easeInOutSine',
+            duration: 1500,
+            delay: function (el, i) {
+              return i * 250;
+            },
+            direction: 'alternate',
+            loop: true,
+          });
+
           setTimeout(() => {
             this.startGame($document);
           }, 2000);
