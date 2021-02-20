@@ -51,63 +51,66 @@ export class GameLogicService {
         popover: {
           className: 'firstStep',
           title: 'Tap to zoom',
-          description: 'Body of the popover',
+          description:
+            'Double click on the board to zoom into that square OR to zoom out.',
         },
       },
       {
         element: '.theme',
         popover: {
-          title: 'Theme',
-          description: 'Body of the popover',
+          title: 'Themes',
+          description: 'Change color theme to dark or light',
         },
       },
       {
         element: '#bagBtn',
         popover: {
           title: 'Tiles left',
-          description: 'Body of the popover',
+          description: 'See what tiles remain in the bag',
         },
       },
       {
         element: '#scoresBtn',
         popover: {
           title: 'Game Stats',
-          description: 'Body of the popover',
+          description: 'See words that were played and their definitions',
         },
       },
       {
         element: '#mixBtn',
         popover: {
           title: 'Tap to shuffle',
-          description: 'Body of the popover',
+          description: 'Shuffle the tiles on your rack',
         },
       },
       {
         element: '#swapRecall',
         popover: {
           title: 'Swap or Recall',
-          description: 'Body of the popover',
+          description:
+            'Trade in for new letters OR return your unplayed tiles from the board',
         },
       },
       {
         element: '#settingsBtn',
         popover: {
           title: 'Change Settings',
-          description: 'Body of the popover',
+          description:
+            'Check and change game settings<br /> (turn off these hints or change game difficulty)',
         },
       },
       {
         element: '#zoomBtns',
         popover: {
           title: 'Zoom',
-          description: 'Body of the popover',
+          description: 'Zoom in to the center of the board OR zoom out.',
         },
       },
       {
         element: '#passPlay',
         popover: {
           title: 'Play or Pass',
-          description: 'Body of the popover',
+          description: 'Play a word OR pass your turn',
         },
         onNext: () => {
           if (localStorage.getItem('logoShown')) {
