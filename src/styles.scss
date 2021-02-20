@@ -156,6 +156,10 @@ body.dark-mode mat-dialog-container {
     text-shadow: var(--textShadowDark);
     transition: 500ms 500ms linear;
   }
+
+  .spinner-container svg {
+    background: #00ff008a;
+  }
 }
 
 body.dark-mode table,
