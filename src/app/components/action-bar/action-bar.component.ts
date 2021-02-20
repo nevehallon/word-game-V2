@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -11,12 +11,14 @@ import { CreateGridService } from 'src/app/services/create-grid.service';
 import { GameLogicService } from 'src/app/services/game-logic.service';
 import { BoardValidatorService } from 'src/app/services/board-validator.service';
 
+import anime from 'animejs';
+
 @Component({
   selector: 'app-action-bar',
   templateUrl: './action-bar.component.html',
   styleUrls: ['./action-bar.component.scss'],
 })
-export class ActionBarComponent implements OnInit, OnDestroy {
+export class ActionBarComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public source: SourceService,
     public dialog: MatDialog,
@@ -24,7 +26,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     public gameService: GameLogicService,
     private validate: BoardValidatorService
   ) {
-    this.checkAndSetDarkMode();
+    this.checkAndSetDarkMode(true);
   }
 
   closeDialog() {
@@ -285,25 +287,58 @@ export class ActionBarComponent implements OnInit, OnDestroy {
   }
 
   // Enable Dark Mode
-  enableDarkMode = () => {
+  enableDarkMode = (init: boolean = false) => {
     this.isChecked = false;
-    this.body!.classList.add('dark-mode');
     localStorage.setItem('darkMode', 'true');
+    if (init) return;
+    return anime({
+      targets: '.square',
+      scale: [
+        { value: 0.1, easing: 'easeOutSine', duration: 500 },
+        { value: 1, easing: 'easeInOutQuad', duration: 1200 },
+      ],
+      background: [
+        { value: '#4682b4', easing: 'easeInOutQuad', duration: 250 },
+      ],
+      delay: anime.stagger(200, { grid: [15, 15], from: 'center' }),
+      complete: (anim) => {
+        this.body!.classList.add('dark-mode');
+      },
+    });
   };
 
   // Disable Dark Mode
-  disableDarkMode = () => {
+  disableDarkMode = (init: boolean = false) => {
     this.isChecked = true;
-    this.body!.classList.remove('dark-mode');
     localStorage.setItem('darkMode', '');
+
+    if (init) return;
+    return anime({
+      targets: '.square',
+      scale: [
+        { value: 0.1, easing: 'easeOutSine', duration: 500 },
+        { value: 1, easing: 'easeInOutQuad', duration: 1200 },
+      ],
+      background: [{ value: '#fff', easing: 'easeInOutQuad', duration: 250 }],
+      delay: anime.stagger(200, { grid: [15, 15], from: 'center' }),
+      complete: (anim) => {
+        this.body!.classList.remove('dark-mode');
+      },
+    });
   };
 
-  checkAndSetDarkMode() {
+  checkAndSetDarkMode(init: boolean = false) {
     let darkMode = localStorage.getItem('darkMode');
 
     darkMode = darkMode === null ? 'true' : darkMode; //? sets default to dark mode
 
-    darkMode ? this.enableDarkMode() : this.disableDarkMode();
+    darkMode ? this.enableDarkMode(init) : this.disableDarkMode(init);
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.checkAndSetDarkMode();
+    }, 0);
   }
 
   ngOnInit(): void {

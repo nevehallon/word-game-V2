@@ -21,18 +21,19 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
 }
 
 .tw {
-  background: #d53b5d;
+  background: #d53b5d !important;
 }
 .tw::before {
   content: "TW";
 }
 
 .dw {
-  background: #dc98af;
+  background: #dc98af !important;
 }
 .dw:before {
   content: "DW";
 }
+
 [data-number="112"]:before {
   text-shadow: var(--textShadowLight);
   color: #515e89;
@@ -46,7 +47,7 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
 }
 
 .tl {
-  background: #0655c3;
+  background: #0655c3 !important;
 }
 .tl::before {
   content: "TL";
@@ -54,7 +55,7 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
 }
 
 .dl {
-  background: #97bfcd;
+  background: #97bfcd !important;
 }
 .dl::before {
   content: "DL";
