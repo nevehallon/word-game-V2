@@ -308,13 +308,21 @@ mat-dialog-actions {
   height: 100%;
 }
 
-#hex {
-  opacity: 0;
-  width: 100%;
-}
+// #hex {
+//   opacity: 0;
+//   width: 100%;
+// }
 #B path {
   opacity: 0;
   // opacity: 1;
   width: 100%;
   fill: #000;
+}
+
+#two {
+  transform: translate(-14px, 10px);
+}
+
+#A-Z {
+  transform: translate(8px, -15px);
 }
