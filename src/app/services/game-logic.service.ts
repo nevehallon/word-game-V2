@@ -43,7 +43,8 @@ export class GameLogicService {
       doneBtnText: 'Done', // Text on the final button
       nextBtnText: 'Next', // Next button text for this step
       prevBtnText: 'Previous', // Previous button text for this step
-      keyboardControl: false, // Allow controlling through keyboard (escape to close, arrow keys to move)
+      keyboardControl: false, // Allow controlling through keyboard (escape to close, arrow keys to move),
+      padding: 0,
     });
     const steps = [
       {
@@ -60,6 +61,7 @@ export class GameLogicService {
         popover: {
           title: 'Themes',
           description: 'Change color theme to dark or light',
+          position: 'top',
         },
       },
       {
@@ -67,6 +69,7 @@ export class GameLogicService {
         popover: {
           title: 'Tiles left',
           description: 'See what tiles remain in the bag',
+          position: 'top',
         },
       },
       {
@@ -74,6 +77,7 @@ export class GameLogicService {
         popover: {
           title: 'Game Stats',
           description: 'See words that were played and their definitions',
+          position: 'top',
         },
       },
       {
@@ -81,6 +85,7 @@ export class GameLogicService {
         popover: {
           title: 'Tap to shuffle',
           description: 'Shuffle the tiles on your rack',
+          position: 'top',
         },
       },
       {
@@ -89,6 +94,7 @@ export class GameLogicService {
           title: 'Swap or Recall',
           description:
             'Trade in for new letters OR return your unplayed tiles from the board',
+          position: 'top',
         },
       },
       {
@@ -97,6 +103,7 @@ export class GameLogicService {
           title: 'Change Settings',
           description:
             'Check and change game settings<br /> (turn off these hints or change game difficulty)',
+          position: 'top',
         },
       },
       {
@@ -104,6 +111,7 @@ export class GameLogicService {
         popover: {
           title: 'Zoom',
           description: 'Zoom in to the center of the board OR zoom out.',
+          position: 'top',
         },
       },
       {
@@ -111,6 +119,7 @@ export class GameLogicService {
         popover: {
           title: 'Play or Pass',
           description: 'Play a word OR pass your turn',
+          position: 'top',
         },
         onNext: () => {
           if (localStorage.getItem('logoShown')) {
