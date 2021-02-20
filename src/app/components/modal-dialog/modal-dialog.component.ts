@@ -226,6 +226,14 @@ export class ModalDialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
       loader
         .add({
+          targets: ['polygon', 'feTurbulence', 'feDisplacementMap'],
+          points: '50 5 11 27 11 72 50 95 89 73 89 28',
+          baseFrequency: 0,
+          scale: 1,
+          direction: 'alternate',
+          easing: 'easeInOutExpo',
+        })
+        .add({
           targets: '#logo path',
           delay: 300,
           duration: 1500,
@@ -238,11 +246,15 @@ export class ModalDialogComponent implements OnInit, AfterViewInit, OnDestroy {
           easing: 'easeInCirc',
           opacity: {
             value: 1,
-            duration: 500,
+            duration: 100,
           },
           delay: function (el, i) {
-            return i * 700;
+            return i * 1050;
           },
+          // scale: function (el: HTMLElement, i: number) {
+          //   return i ? 2 : 1;
+          // },
+
           strokeDashoffset: [anime.setDashoffset, 0],
         })
         .add({
