@@ -282,7 +282,6 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     let darkMode = localStorage.getItem('darkMode');
 
     darkMode ? this.disableDarkMode() : this.enableDarkMode();
-    // darkMode = localStorage.getItem('darkMode');
   }
 
   // Enable Dark Mode
@@ -301,6 +300,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
   checkAndSetDarkMode() {
     let darkMode = localStorage.getItem('darkMode');
+
+    darkMode = darkMode === null ? 'true' : darkMode; //? sets default to dark mode
 
     darkMode ? this.enableDarkMode() : this.disableDarkMode();
   }

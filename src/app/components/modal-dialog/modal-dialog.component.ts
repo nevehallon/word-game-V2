@@ -197,31 +197,12 @@ export class ModalDialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (this.data.type === 'logo') {
-      // anime({
-      //   targets: '#loader circle',
-      //   strokeDashoffset: [anime.setDashoffset, 0],
-      //   easing: 'easeInOutQuart',
-      //   duration: 1500,
-      //   delay: 300,
-      //   direction: 'alternate',
-      //   loop: true,
-      // });
-
-      // anime({
-      //   targets: '#loader .lines path',
-      //   strokeDashoffset: [anime.setDashoffset, 0],
-      //   easing: 'easeInOutSine',
-      //   duration: 1500,
-      //   delay: function (el, i) {
-      //     return i * 250;
-      //   },
-      //   direction: 'alternate',
-      //   loop: true,
-      // });
       const loader = anime.timeline({
-        complete: () => (this.source.tutorialGiven = true),
-        loop: true,
-        // direction: 'alternate',
+        complete: () => {
+          this.source.tutorialGiven = true;
+          localStorage.setItem('logoShown', 'true');
+          this.dialog.closeAll();
+        },
       });
 
       loader
@@ -229,13 +210,19 @@ export class ModalDialogComponent implements OnInit, AfterViewInit, OnDestroy {
           targets: ['polygon', 'feTurbulence', 'feDisplacementMap'],
           points: '50 5 11 27 11 72 50 95 89 73 89 28',
           baseFrequency: 0,
+          opacity: {
+            value: 1,
+            duration: 3500,
+            delay: 0,
+          },
           scale: 1,
-          direction: 'alternate',
+          delay: 1600,
+          duration: 1500,
+          translateX: '-0.5',
           easing: 'easeInOutExpo',
         })
         .add({
-          targets: '#logo path',
-          delay: 300,
+          targets: '#logo polygon',
           duration: 1500,
           easing: 'easeInOutBack',
           strokeDashoffset: [anime.setDashoffset, 0],
@@ -251,17 +238,32 @@ export class ModalDialogComponent implements OnInit, AfterViewInit, OnDestroy {
           delay: function (el, i) {
             return i * 1050;
           },
-          // scale: function (el: HTMLElement, i: number) {
-          //   return i ? 2 : 1;
-          // },
+          scale: {
+            delay: 1500,
+            value: function (el: HTMLElement, i: number) {
+              return i !== 1 ? 1 : 1.6;
+            },
+          },
+          translateX: {
+            delay: 1500,
+            value: function (el: HTMLElement, i: number) {
+              return i !== 1 ? 0 : -18;
+            },
+          },
+          translateY: {
+            delay: 1500,
+            value: function (el: HTMLElement, i: number) {
+              return i !== 1 ? 10 : -23.4;
+            },
+          },
 
           strokeDashoffset: [anime.setDashoffset, 0],
         })
         .add({
           targets: '#logo',
-          delay: 500,
-          duration: 300,
-          easing: 'easeInOutQuart',
+          delay: 300,
+          duration: 1500,
+          easing: 'easeInElastic',
           opacity: 0,
           scale: 0.1,
         })

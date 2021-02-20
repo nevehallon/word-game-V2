@@ -110,20 +110,31 @@ export class GameLogicService {
           description: 'Body of the popover',
         },
         onNext: () => {
-          // trigger animation
+          if (localStorage.getItem('logoShown')) {
+            return this.startGame($document);
+          }
+          // trigger logo animation
           this.closeDialog();
-          this.dialogRef = this.dialog.open(ModalDialogComponent, {
-            data: {
-              type: 'logo',
-            },
-            maxWidth: '75vh',
-            disableClose: true,
-            id: 'logoModal',
-          });
+          return setTimeout(() => {
+            this.dialogRef = this.dialog.open(ModalDialogComponent, {
+              data: {
+                type: 'logo',
+              },
+              width: '75vmax',
+              height: '75vmax',
+              maxWidth: '75vmax',
+              maxHeight: '75vmax',
+              disableClose: true,
+              id: 'logoModal',
+            });
 
-          // setTimeout(() => {
-          //   this.startGame($document);
-          // }, 2000);
+            this.dialogRef
+              .afterClosed()
+              .pipe(take(1))
+              .subscribe((result) => {
+                this.startGame($document);
+              }, console.error);
+          }, 1000);
         },
       },
     ];
@@ -258,17 +269,6 @@ export class GameLogicService {
   }
 
   serverCheck = async (check: SourceService, $document: HTMLDocument) => {
-    this.closeDialog();
-    return setTimeout(() => {
-      this.dialogRef = this.dialog.open(ModalDialogComponent, {
-        data: {
-          type: 'logo',
-        },
-        maxWidth: '75vh',
-        disableClose: true,
-        id: 'logoModal',
-      });
-    }, 1000);
     if (this.storageAvailable('localStorage') !== true) {
       // not available
       let data: DialogData = {

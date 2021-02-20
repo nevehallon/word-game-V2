@@ -285,18 +285,10 @@ mat-dialog-actions {
 
 .logo-wrapper {
   z-index: 99;
-
+  margin: auto;
   width: max-content;
-  // max-width: 100px;
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
   opacity: 1;
-  #loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 10;
-    transform: translate(-50%, -50%);
-  }
 }
 
 #logo {
@@ -308,10 +300,10 @@ mat-dialog-actions {
   height: 100%;
 }
 
-// #hex {
-//   opacity: 0;
-//   width: 100%;
-// }
+polygon {
+  opacity: 0;
+  transform: translate(-0.5px, 0px);
+}
 #B path {
   opacity: 0;
   // opacity: 1;
@@ -320,9 +312,9 @@ mat-dialog-actions {
 }
 
 #two {
-  transform: translate(-14px, 10px);
+  transform: translate(-16px, 15px);
 }
 
-#A-Z {
-  transform: translate(8px, -15px);
+.A-Z {
+  transform: translate(5px, -15px);
 }
