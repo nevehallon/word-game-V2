@@ -57,15 +57,15 @@ export class HistoryTableComponent implements OnInit, AfterViewInit {
   lastEntry: any = this.source.history[this.source.history.length - 1];
   // lastEntry: any = def[def.length - 1]; //? mock data for testing located in mockHistoryEntries.ts
 
-  log(...rest: any[]) {
-    console.log(...rest);
-  }
+  // log(...rest: any[]) {
+  //   console.log(...rest);
+  // }
 
   expandedElement: DefinitionElement[] | null | undefined;
 
   isExpansionDetailRow = (i: number, row: any) => {
-    if (i == 0)
-      console.log(this.source.history, this.dataSource, this.lastEntry);
+    // if (i == 0)
+    //   console.log(this.source.history, this.dataSource, this.lastEntry);
 
     if (!row.points) return false;
     return true;

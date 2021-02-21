@@ -122,17 +122,8 @@ export class ActionBarComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!result) {
           return;
         }
-        /* let remove: boolean =  */ this.gameService.pass(
-          wasClicked,
-          isSwap,
-          isAI,
-          legalClick,
-          document
-        );
+        this.gameService.pass(wasClicked, isSwap, isAI, legalClick, document);
         this.zoomOut();
-        // if (remove === true) {
-        // console.log(this.gridService.gridState);
-        // }
       }, console.error);
   }
 

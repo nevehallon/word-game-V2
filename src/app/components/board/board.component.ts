@@ -164,7 +164,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
       }
 
       this.source.changeBoard(this.squares);
-      // console.log(this.gridService.gridState);
     }, 0);
   }
 
