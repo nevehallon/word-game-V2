@@ -13,6 +13,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModalDialogComponent } from '../components/modal-dialog/modal-dialog.component';
 import { DialogData } from '../interfaces/dialog-data';
 import { GetRequestsService } from './get-requests.service';
+
+import * as localforage from 'localforage';
+
 import Driver from 'driver.js';
 import 'driver.js/dist/driver.min.css';
 
@@ -279,7 +282,7 @@ export class GameLogicService {
       storage.removeItem(x);
       return true;
     } catch (e) {
-      return (
+      throw (
         e instanceof DOMException &&
         // everything except Firefox
         (e.code === 22 ||
@@ -298,21 +301,31 @@ export class GameLogicService {
   }
 
   serverCheck = async (check: SourceService, $document: HTMLDocument) => {
-    if (this.storageAvailable('localStorage') !== true) {
-      // not available
+    try {
+      this.storageAvailable('localStorage');
+
+      await localforage.ready();
+      // This code runs once localforage
+      // has fully initialized the selected driver.
+      console.log(await localforage.driver()); // LocalStorage
+    } catch (error) {
+      // `No available storage method found.`
+      // One of the cases that `ready()` rejects,
+      // is when no usable storage driver is found
       let data: DialogData = {
         type: 'message',
-        message: `Oops! Insufficient storage on your device or browser. Please consider fixing this if you want to enjoy the game.`,
+        message: `Oops!<br/> Insufficient storage on your device or browser. Please consider fixing this if you want to enjoy the game. <br />
+        ${error}`,
       };
       this.closeDialog();
-      this.dialogRef = this.dialog.open(ModalDialogComponent, {
+      return (this.dialogRef = this.dialog.open(ModalDialogComponent, {
         disableClose: true,
         id: 'error',
         maxWidth: '99vw',
         data: data,
-      });
-      return;
+      }));
     }
+
     if (!this.source.loaderShown) {
       this.source.loaderShown = true;
       this.closeDialog();
@@ -342,7 +355,7 @@ export class GameLogicService {
       };
       let checkHasList = () => {
         clearTimeout(TO);
-        console.log(check.getHasList());
+        console.log('word list has loaded:', check.getHasList());
         if (check.getHasList()) {
           return start();
         }

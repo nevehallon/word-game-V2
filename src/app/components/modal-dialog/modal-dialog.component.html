@@ -248,7 +248,10 @@
 </div>
 
 <div *ngIf="data?.type === 'message'">
-    <h2 class="center-align">{{data.message}}</h2>
+    <h2
+        class="center-align"
+        [innerHtml]="data.message"
+    ></h2>
 
     <div class="center-align player bold">{{data.player}}</div>
     <div class="center-align opponent bold">{{data.opponent}}</div>
