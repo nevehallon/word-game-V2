@@ -165,9 +165,11 @@ export class GameLogicService {
   }
 
   deal2Player() {
+    let mockRack = Array(7).fill({ letter: 'Q', points: 10 }); // [{ letter: 'Z', points: 10 }]; //? text words by dealing your self any rack
     let playerRack = [];
     for (let i = 0; i < 7; i++) {
-      let tile = pullAt(this.source.bag, [0])[0];
+      // let tile = pullAt(this.source.bag, [0])[0];
+      let tile = pullAt(mockRack, [0])[0]; //? text words by dealing your self any rack
       playerRack.push(tile);
     }
     return playerRack;

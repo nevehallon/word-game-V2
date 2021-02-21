@@ -48,7 +48,7 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
   margin: auto;
   background-image: $wood-tile;
   color: #373737;
-  text-shadow: 0 -0.4px 0 black, 0 1px 2px black;
+  text-shadow: var(--tileTextShadowLight);
   border-radius: 8%;
   border-bottom: 0.4vh solid rgba(0, 0, 0, 0.75);
   svg {
@@ -58,6 +58,10 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
   div {
     position: absolute;
     font-weight: 500;
+    width: 100%;
+    text {
+      letter-spacing: -3px;
+    }
   }
 }
 

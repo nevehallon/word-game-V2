@@ -50,6 +50,10 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
   div {
     position: absolute;
     font-weight: 500;
+    width: 100%;
+    text {
+      letter-spacing: -3px;
+    }
   }
 }
 
@@ -249,12 +253,21 @@ mat-dialog-actions {
 // *
 
 ::ng-deep .mat-dialog-container#logoModal {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+
   transition: none;
   background: transparent !important;
   box-shadow: none;
 }
 
 .logo-wrapper {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  grid-template-columns: 0.75fr;
+  grid-template-rows: 0.75fr;
   z-index: 99;
   margin: auto;
   width: max-content;

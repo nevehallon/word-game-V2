@@ -130,6 +130,8 @@ body.inheritCursors * {
   --accent: #515e89;
   --textShadowLight: -1px -1px 4px #e1e1e1, 1px -1px 4px #e1e1e1,
     -1px 1px 4px #e1e1e1, 1px 1px 4px #e1e1e1;
+  --tileTextShadowLight: -1px ​-1px 1px #e1e1e1, 1px -1px 1px #e1e1e1,
+    -1px 1px 1px #e1e1e1, 1px 1px 1px #e1e1e1;
   --textShadowDark: -1px -1px 4px #000, 1px -1px 4px #000, -1px 1px 4px #000,
     1px 1px 4px #000;
   --textShadowAccent: -1px -1px 4px #515e89, 1px -1px 4px #515e89,
@@ -164,7 +166,8 @@ body.dark-mode mat-dialog-container {
 body.dark-mode table,
 body.dark-mode .mat-tab-body-wrapper,
 body.dark-mode mat-dialog-container {
-  *:not(button):not(.mat-button-wrapper):not(.ng-star-inserted):not(.mat-icon) {
+  *:not(button):not(.mat-button-wrapper):not(.ng-star-inserted):not(.mat-icon):not(.tile
+      *) {
     font-weight: bold;
     text-shadow: var(--textShadowLight);
     .wordOrigin,
@@ -178,10 +181,6 @@ body.dark-mode mat-dialog-container {
 /* 
 * * driver intro tour
 */
-
-// #driver-highlighted-element-stage {
-//   max-width: 103.9vw;
-// }
 
 .toolTip {
   text-align: center;
