@@ -302,11 +302,13 @@ export class GameLogicService {
       this.dialogRef = this.dialog.open(ModalDialogComponent, {
         disableClose: true,
         panelClass: 'loadingPanel',
+        maxWidth: '75vh',
+        id: '#swapModal',
         data: {
           type: 'loading',
           message: 'Loading Resources...',
           notes:
-            '*Note that if this is the first time you visit this page it might take time till everything loads - do not close this browser',
+            '*Please note*<br /><br /> If this is your first visit (in while)<br /> it might take time till everything loads<br /><br /> do not close this browser',
         },
       });
     }

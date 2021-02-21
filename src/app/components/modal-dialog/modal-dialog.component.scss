@@ -253,35 +253,6 @@ mat-dialog-actions {
   background: transparent !important;
   box-shadow: none;
 }
-/* 
-.loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 10;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  background-color: #020c1b;
-  z-index: 99;
-  .logo-wrapper {
-    width: max-content;
-    max-width: 100px;
-    transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-    opacity: 0;
-    svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-      margin: 0 auto;
-      fill: none;
-      user-select: none;
-      #B {
-        opacity: 0;
-      }
-    }
-  }
-} */
 
 .logo-wrapper {
   z-index: 99;
@@ -304,6 +275,7 @@ polygon {
   opacity: 0;
   transform: translate(-0.5px, 0px);
 }
+
 #B path {
   opacity: 0;
   // opacity: 1;
