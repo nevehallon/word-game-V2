@@ -125,28 +125,43 @@ export class GameLogicService {
           if (localStorage.getItem('logoShown')) {
             return this.startGame($document);
           }
-          // trigger logo animation
           this.closeDialog();
-          return setTimeout(() => {
-            this.dialogRef = this.dialog.open(ModalDialogComponent, {
-              data: {
-                type: 'logo',
-              },
-              width: '75vmax',
-              height: '75vmax',
-              maxWidth: '75vmax',
-              maxHeight: '75vmax',
-              disableClose: true,
-              id: 'logoModal',
-            });
 
-            this.dialogRef
-              .afterClosed()
-              .pipe(take(1))
-              .subscribe((result) => {
-                this.startGame($document);
-              }, console.error);
-          }, 1000);
+          this.dialogRef = this.dialog.open(ModalDialogComponent, {
+            data: {
+              type: 'introSettings',
+            },
+            maxWidth: '75vh',
+            width: '75%',
+          });
+
+          this.dialogRef
+            .afterClosed()
+            .pipe(take(1))
+            .subscribe((result) => {
+              // trigger logo animation
+              this.closeDialog();
+              return setTimeout(() => {
+                this.dialogRef = this.dialog.open(ModalDialogComponent, {
+                  data: {
+                    type: 'logo',
+                  },
+                  width: '75vmax',
+                  height: '75vmax',
+                  maxWidth: '75vmax',
+                  maxHeight: '75vmax',
+                  disableClose: true,
+                  id: 'logoModal',
+                });
+
+                this.dialogRef
+                  .afterClosed()
+                  .pipe(take(1))
+                  .subscribe((result) => {
+                    this.startGame($document);
+                  }, console.error);
+              }, 1000);
+            }, console.error);
         },
       },
     ];

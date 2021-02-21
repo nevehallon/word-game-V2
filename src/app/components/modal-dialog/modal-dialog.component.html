@@ -45,6 +45,35 @@
     </mat-dialog-actions>
 </div>
 
+<div *ngIf="data?.type === 'introSettings'">
+    <h1 class="center-align">Would you like to see this hints again when you start a new game?</h1>
+
+    <div>
+        <div class="center-align">
+            <label
+                id="hints"
+                for="showHints"
+            >Show hints: </label>
+            <mat-checkbox
+                id="showHints"
+                [(ngModel)]="checked"
+            ></mat-checkbox>
+        </div>
+    </div>
+
+    <mat-dialog-actions>
+        <button
+            mat-raised-button
+            mat-dialog-close
+        >Close</button>
+        <button
+            (click)="saveSettings()"
+            color="primary"
+            mat-raised-button
+            mat-dialog-close
+        >Save</button>
+    </mat-dialog-actions>
+</div>
 <div *ngIf="data?.type === 'settings'">
     <h1 class="center-align">Settings</h1>
     <h3 class="center-align">Current difficulty:</h3>
