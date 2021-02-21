@@ -35,14 +35,14 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
 }
 
 [data-number="112"]:before {
-  text-shadow: var(--textShadowLight);
-  color: #515e89;
+  color: white;
+  text-shadow: var(--textShadowDark);
   font-size: 4.5vmin;
   font-family: "Material Icons";
   -webkit-font-feature-settings: "liga" 1;
   -moz-font-feature-settings: "liga" 1;
   font-feature-settings: "liga" 1;
-  content: "brightness_4";
+  content: "brightness_5";
   transition: 500ms 500ms linear;
 }
 

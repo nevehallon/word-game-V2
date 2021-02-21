@@ -152,9 +152,9 @@ body.dark-mode mat-dialog-container {
   }
 
   [data-number="112"]:before {
-    color: white;
-    content: "brightness_5";
-    text-shadow: var(--textShadowDark);
+    content: "brightness_4";
+    text-shadow: var(--textShadowLight);
+    color: #515e89;
     transition: 500ms 500ms linear;
   }
 
