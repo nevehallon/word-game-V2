@@ -5,7 +5,7 @@ import { ScrabbleLettersService } from './scrabble-letters.service';
 import { shuffle /* , drop  */ } from 'lodash-es';
 import { HistoryEntry } from '../interfaces/history-entry';
 import { BtnAttrs } from '../interfaces/btn-attrs';
-
+// import mockBoard from '../../assets/testBoard'; //? uncomment to test board
 @Injectable({
   providedIn: 'root',
 })
@@ -39,33 +39,11 @@ export class SourceService {
     });
   }
 
-  // wordArr = ['C', 'A', 'T']; //? uncomment to test AI after "CAT" is played for first turn
-
   private boardSource = new BehaviorSubject(
     Array(225)
       .fill('')
       .map(() => ({ data: [] }))
-    // Array(225)
-    //   .fill('')
-    //   .map((x, i) => {
-    //     if (i > 111 && i < 115)
-    //       return {
-    //         data: [
-    //           {
-    //             content: {
-    //               letter: this.wordArr.splice(0, 1)[0],
-    //               points: 1,
-    //             },
-    //             id: `tile${++this.numSource}`,
-    //             class: ['tile'],
-    //             'data-drag': this.numSource,
-    //           },
-    //         ],
-    //       };
-    //     return {
-    //       data: [],
-    //     };
-    //   }) //? uncomment to test AI after "CAT" is played for first turn
+    // mockBoard //? uncomment to test board
   );
   currentBoard = this.boardSource.asObservable();
 

@@ -447,13 +447,19 @@ export class BoardValidatorService implements OnDestroy {
 
       let pointTally: any = [];
 
+      let gaveBonusPoints = false;
+
       this.potentialPoints.forEach((word, index) => {
         let isEmpty =
           this.wordMultiplier[index] === undefined ||
           this.wordMultiplier[index] == 0
             ? true
             : false;
-        if (numHot > 6 && isPlayer) pointTally.push(50);
+        if (!gaveBonusPoints && numHot > 6 && isPlayer) {
+          pointTally.push(50);
+          gaveBonusPoints = true;
+        }
+
         if (isEmpty) return pointTally.push(sum(word));
         pointTally.push(sum(word) * sum(this.wordMultiplier[index]));
       });
@@ -464,7 +470,10 @@ export class BoardValidatorService implements OnDestroy {
           this.zipWordMultiplier[index] == 0
             ? true
             : false;
-        if (numHot > 6 && isPlayer) pointTally.push(50);
+        if (!gaveBonusPoints && numHot > 6 && isPlayer) {
+          pointTally.push(50);
+          gaveBonusPoints = true;
+        }
         if (isEmpty) return pointTally.push(sum(word));
         pointTally.push(sum(word) * sum(this.zipWordMultiplier[index]));
       });
