@@ -20,17 +20,9 @@ export class ComputeService {
   }
 
   abc = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
-  idCount = 122;
 
-  async calcPcMove(
-    gridState: any,
-    // firstTurn,
-    // wordsLogged,
-    // rivalRack,
-    $document: HTMLDocument
-  ) {
-    let firstTurn = this.source.firstTurn;
-    let wordsLogged = this.source.wordsLogged;
+  async calcPcMove(gridState: any, $document: HTMLDocument) {
+    let { firstTurn, wordsLogged } = this.source;
     let rivalRack = [...this.source.rivalRack];
     this.updateBoardData();
     let difficultlyLimit = +localStorage.getItem('difficulty')!
@@ -69,12 +61,16 @@ export class ComputeService {
         let cleanGrid: any = cloneDeep(gridState);
         let start = 7;
 
+        let letterRackCopy = [...rack];
+        let rivalRackCopy = [...rivalRack];
         wordSlice[x].word
           .toUpperCase()
           .split('')
           .forEach((letter: string, index: number) => {
-            let rackIndex = rack.findIndex((tile) => tile === letter);
-            let points = rackIndex === -1 ? 0 : rivalRack[rackIndex].points;
+            let rackIndex = letterRackCopy.findIndex((tile) => tile === letter);
+            let points = rackIndex === -1 ? 0 : rivalRackCopy[rackIndex].points;
+            letterRackCopy.splice(rackIndex, 1);
+            rivalRackCopy.splice(rackIndex, 1);
 
             if (4 < x && x < 4 + extraCount && points > 1 && index > 4) {
               wordSlice.push(wordSlice[x]);
@@ -86,13 +82,16 @@ export class ComputeService {
               start = bigIndex === 5 ? 6 : 5;
             }
 
-            x < 5 && index === 0 && points > 1 && wordSlice[x].word.length > 4
-              ? (start = 3)
-              : (start = start);
+            start =
+              x < 5 && index === 0 && points > 1 && wordSlice[x].word.length > 4
+                ? 3
+                : start;
 
             cleanGrid.gridLetters[7][start + index].letter = letter;
             cleanGrid.gridLetters[7][start + index].pointVal = points;
             cleanGrid.gridLetters[7][start + index].hot = true;
+            cleanGrid.gridLetters[7][start + index].id = ++this.source
+              .numSource;
           });
 
         let { words, pointTally } = this.validate.validate(
@@ -127,7 +126,8 @@ export class ComputeService {
           gridState.gridLetters[7][bestWord.start + index].pointVal =
             tiles[index].points;
           gridState.gridLetters[7][bestWord.start + index].hot = false;
-          gridState.gridLetters[7][bestWord.start + index].id = this.idCount;
+          gridState.gridLetters[7][bestWord.start + index].id = ++this.source
+            .numSource;
 
           let classes = ['tile', 'pcPlay'];
           if (!tiles[index].points) classes.push('italicize');
@@ -1944,8 +1944,8 @@ export class ComputeService {
             cleanGrid.gridLetters[start[0] + x][start[1] + y].letter = letter;
             cleanGrid.gridLetters[start[0] + x][start[1] + y].pointVal =
               choice.points[i];
-            cleanGrid.gridLetters[start[0] + x][start[1] + y].id = ++this
-              .idCount;
+            cleanGrid.gridLetters[start[0] + x][start[1] + y].id = ++this.source
+              .numSource;
             cleanGrid.gridLetters[start[0] + x][start[1] + y].hot = isHot;
           }
           gridOrder.push({ x: start[0] + x, y: start[1] + y, taken: !isHot });
