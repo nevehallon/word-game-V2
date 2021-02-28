@@ -447,7 +447,7 @@ export class GameLogicService {
     // if (rivalRack.length < 7 && !bag.length && prompt()) {
     //   rivalRack = Array(7).fill({ letter: "Q", points: 10 });
     // }
-    // rivalRack = Array(7).fill({ letter: "Q", points: 10 }); //[...rivalRack.slice(0, 6), { letter: "", points: 0 }]; //? uncomment for testing
+    // this.source.rivalRack = [{ letter: 'W', points: 4 }]; //? uncomment for testing
 
     this.source.rivalRack.sort((a, b) => (b.letter ? 1 : -1)); //make sure that blanks are last tile
     setTimeout(async () => {

@@ -101,6 +101,7 @@ export class ComputeService {
           false,
           $document
         );
+        if (words[0].length > 6) pointTally += 50;
         if (pointTally <= difficultlyLimit) {
           candidates.push({ word: words[0], pointTally, start });
         }
