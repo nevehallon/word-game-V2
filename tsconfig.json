@@ -21,6 +21,7 @@
     "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
-    "strictTemplates": true
+    "strictTemplates": true,
+    "disableTypeScriptVersionCheck": true
   }
 }

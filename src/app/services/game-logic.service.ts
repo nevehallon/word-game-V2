@@ -38,6 +38,109 @@ export class GameLogicService {
     show: true,
   };
 
+  storageAvailable(type: any) {
+    let storage: any;
+    try {
+      storage = window[type];
+      let x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+    } catch (e) {
+      throw (
+        e instanceof DOMException &&
+        // everything except Firefox
+        (e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+        // acknowledge QuotaExceededError only if there's something already stored
+        storage &&
+        storage.length !== 0
+      );
+    }
+  }
+
+  serverCheck = async (check: SourceService, $document: HTMLDocument) => {
+    try {
+      this.storageAvailable('localStorage');
+
+      await localforage.ready();
+      // This code runs once localforage
+      // has fully initialized the selected driver.
+      console.log(await localforage.driver()); // LocalStorage
+    } catch (error) {
+      // `No available storage method found.`
+      // One of the cases that `ready()` rejects,
+      // is when no usable storage driver is found
+      let data: DialogData = {
+        type: 'message',
+        message: `Oops!<br/> Insufficient storage on your device or browser. Please consider fixing this if you want to enjoy the game. <br />
+        ${error}`,
+      };
+      this.closeDialog();
+      return (this.dialogRef = this.dialog.open(ModalDialogComponent, {
+        disableClose: true,
+        id: 'error',
+        maxWidth: '99vw',
+        data: data,
+      }));
+    }
+
+    if (!this.source.loaderShown) {
+      this.source.loaderShown = true;
+      this.closeDialog();
+      this.dialogRef = this.dialog.open(ModalDialogComponent, {
+        disableClose: true,
+        panelClass: 'loadingPanel',
+        maxWidth: '75vh',
+        id: '#swapModal',
+        data: {
+          type: 'loading',
+          message: 'Loading Resources...',
+          notes:
+            '*Please note*<br /><br /> If this is your first visit (in while)<br /> it might take time till everything loads<br /><br /> do not close this browser',
+        },
+      });
+    }
+    let status = await this.http.checkServerStatus();
+    let TO: ReturnType<typeof setTimeout>;
+    if (status) {
+      let start = () => {
+        this.closeDialog();
+        this.source.loaderShown = false;
+        if (
+          (!this.source.tutorialGiven && this.hints.show) ||
+          !localStorage.getItem('logoShown')
+        ) {
+          return this.giveTour($document);
+        }
+        return this.startGame($document);
+      };
+      let checkHasList = () => {
+        clearTimeout(TO);
+        console.log('word list has loaded:', check.getHasList());
+        if (check.getHasList()) {
+          return start();
+        }
+        return (TO = setTimeout(() => {
+          checkHasList();
+        }, 2500));
+      };
+      if (!check.getHasList()) {
+        return checkHasList();
+      }
+      return start();
+    }
+    TO = setTimeout(() => {
+      this.serverCheck(check, $document);
+    }, 2222);
+  };
+
   giveTour($document: HTMLDocument) {
     const driver = new Driver({
       className: 'toolTip', // className to wrap driver.js popover
@@ -272,106 +375,6 @@ export class GameLogicService {
       $document
     );
   }
-
-  storageAvailable(type: any) {
-    let storage: any;
-    try {
-      storage = window[type];
-      let x = '__storage_test__';
-      storage.setItem(x, x);
-      storage.removeItem(x);
-      return true;
-    } catch (e) {
-      throw (
-        e instanceof DOMException &&
-        // everything except Firefox
-        (e.code === 22 ||
-          // Firefox
-          e.code === 1014 ||
-          // test name field too, because code might not be present
-          // everything except Firefox
-          e.name === 'QuotaExceededError' ||
-          // Firefox
-          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-        // acknowledge QuotaExceededError only if there's something already stored
-        storage &&
-        storage.length !== 0
-      );
-    }
-  }
-
-  serverCheck = async (check: SourceService, $document: HTMLDocument) => {
-    try {
-      this.storageAvailable('localStorage');
-
-      await localforage.ready();
-      // This code runs once localforage
-      // has fully initialized the selected driver.
-      console.log(await localforage.driver()); // LocalStorage
-    } catch (error) {
-      // `No available storage method found.`
-      // One of the cases that `ready()` rejects,
-      // is when no usable storage driver is found
-      let data: DialogData = {
-        type: 'message',
-        message: `Oops!<br/> Insufficient storage on your device or browser. Please consider fixing this if you want to enjoy the game. <br />
-        ${error}`,
-      };
-      this.closeDialog();
-      return (this.dialogRef = this.dialog.open(ModalDialogComponent, {
-        disableClose: true,
-        id: 'error',
-        maxWidth: '99vw',
-        data: data,
-      }));
-    }
-
-    if (!this.source.loaderShown) {
-      this.source.loaderShown = true;
-      this.closeDialog();
-      this.dialogRef = this.dialog.open(ModalDialogComponent, {
-        disableClose: true,
-        panelClass: 'loadingPanel',
-        maxWidth: '75vh',
-        id: '#swapModal',
-        data: {
-          type: 'loading',
-          message: 'Loading Resources...',
-          notes:
-            '*Please note*<br /><br /> If this is your first visit (in while)<br /> it might take time till everything loads<br /><br /> do not close this browser',
-        },
-      });
-    }
-    let status = await this.http.checkServerStatus();
-    let TO: ReturnType<typeof setTimeout>;
-    if (status) {
-      let start = () => {
-        this.closeDialog();
-        this.source.loaderShown = false;
-        if (!this.source.tutorialGiven && this.hints.show) {
-          return this.giveTour($document);
-        }
-        return this.startGame($document);
-      };
-      let checkHasList = () => {
-        clearTimeout(TO);
-        console.log('word list has loaded:', check.getHasList());
-        if (check.getHasList()) {
-          return start();
-        }
-        return (TO = setTimeout(() => {
-          checkHasList();
-        }, 2500));
-      };
-      if (!check.getHasList()) {
-        return checkHasList();
-      }
-      return start();
-    }
-    TO = setTimeout(() => {
-      this.serverCheck(check, $document);
-    }, 2222);
-  };
 
   pcSwap($document: HTMLDocument) {
     //? .sort((a,b) => b > a ? -1 : 1).filter(x => x !== 0) //for sorting by point value and removing blank tiles
