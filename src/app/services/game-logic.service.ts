@@ -117,7 +117,7 @@ export class GameLogicService {
           (!this.source.tutorialGiven && this.hints.show) ||
           !localStorage.getItem('logoShown')
         ) {
-          return this.giveTour($document);
+          return this.showRules($document);
         }
         return this.startGame($document);
       };
@@ -140,6 +140,27 @@ export class GameLogicService {
       this.serverCheck(check, $document);
     }, 2222);
   };
+
+  showRules($document: HTMLDocument) {
+    this.closeDialog();
+
+          this.dialogRef = this.dialog.open(ModalDialogComponent, {
+            data: {
+              type: 'introRules',
+            },
+            id: 'rules-modal',
+            maxHeight: '95vh',
+            maxWidth: '75vh',
+            width: '99vw',
+          });
+
+          this.dialogRef
+            .afterClosed()
+            .pipe(take(1))
+            .subscribe((result) => {
+              this.giveTour($document);
+            }, console.error);
+  }
 
   giveTour($document: HTMLDocument) {
     const driver = new Driver({
@@ -457,9 +478,9 @@ export class GameLogicService {
           $document
         );
         // prettier-ignore
-        !this.source.isValidMove && this.source.rivalRack.length && this.source.bag.length ? 
-        this.pcSwap($document) : this.source.isValidMove ? 
-        this.play(true, $document) : this.source.DEBUG_MODE ? 
+        !this.source.isValidMove && this.source.rivalRack.length && this.source.bag.length ?
+        this.pcSwap($document) : this.source.isValidMove ?
+        this.play(true, $document) : this.source.DEBUG_MODE ?
         false : this.pass(true, false, true, undefined, $document);
       } catch (error) {
         if (error?.message?.includes('ranch')) {

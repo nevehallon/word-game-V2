@@ -303,3 +303,51 @@ polygon {
 .A-Z {
   transform: translate(5px, -15px);
 }
+
+// *
+// * rules
+// *
+
+::ng-deep #rules-modal {
+  padding-bottom: 55px;
+
+  .mat-dialog-content {
+    padding: 0 10px;
+
+    b {
+      font-size: initial;
+      text-decoration: underline;
+    }
+    span {
+      text-shadow: var(--textShadowDark);
+    }
+    .colorLightBlue {
+      color: #97bfcd;
+    }
+    .colorBlue {
+      color: #0655c3;
+      text-shadow: var(--textShadowLight);
+    }
+    .colorPink {
+      color: #dc98af;
+    }
+    .colorRed {
+      color: #d53b5d;
+    }
+  }
+}
+
+.btnContainer {
+  position: relative;
+
+  .mat-dialog-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    button {
+      top: 38px;
+    }
+  }
+}
