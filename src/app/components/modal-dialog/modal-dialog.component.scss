@@ -43,6 +43,7 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
   color: #373737;
   text-shadow: 0 -0.4px 0 black, 0 1px 2px white;
   border-radius: 8%;
+
   svg {
     width: 100%;
   }
@@ -51,6 +52,7 @@ $wood-tile: url(../../../assets/images/wood-tile.webp);
     position: absolute;
     font-weight: 500;
     width: 100%;
+
     text {
       letter-spacing: -3px;
     }
@@ -135,34 +137,40 @@ mat-dialog-actions {
   animation: spin 3s infinite linear alternate-reverse;
   transform-origin: center;
 }
+
 @-webkit-keyframes spin {
   0% {
     transform: scale(1);
     -ms-transform: scale(1);
     -moz-transform: scale(1);
   }
+
   50% {
     transform: scale(1.35) rotate(360deg);
     -ms-transform: scale(1.35) rotate(360deg);
     -moz-transform: scale(1.35) rotate(360deg);
   }
+
   100% {
     transform: scale(1) rotate(0deg);
     -ms-transform: scale(1) rotate(0deg);
     -moz-transform: scale(1) rotate(0deg);
   }
 }
+
 @keyframes spin {
   0% {
     transform: scale(1);
     -ms-transform: scale(1);
     -moz-transform: scale(1);
   }
+
   50% {
     transform: scale(1.35) rotate(360deg);
     -ms-transform: scale(1.35) rotate(360deg);
     -moz-transform: scale(1.35) rotate(360deg);
   }
+
   100% {
     transform: scale(1) rotate(0deg);
     -ms-transform: scale(1) rotate(0deg);
@@ -172,6 +180,7 @@ mat-dialog-actions {
 
 #path1 {
   display: inline-block;
+  -webkit-animation: spin1 2.5s infinite linear;
   animation: spin1 2.5s infinite linear;
   transform-origin: center;
 }
@@ -183,6 +192,7 @@ mat-dialog-actions {
     -moz-transform: rotate(-360deg);
   }
 }
+
 @-webkit-keyframes spin1 {
   100% {
     transform: rotate(-360deg);
@@ -193,6 +203,7 @@ mat-dialog-actions {
 
 #path2 {
   display: inline-block;
+  -webkit-animation: spin2 8s infinite linear;
   animation: spin2 8s infinite linear;
   transform-origin: center;
 }
@@ -204,6 +215,7 @@ mat-dialog-actions {
     -moz-transform: rotate(360deg);
   }
 }
+
 @-webkit-keyframes spin2 {
   100% {
     transform: rotate(360deg);
@@ -251,17 +263,39 @@ mat-dialog-actions {
 // *
 // * logo
 // *
+::ng-deep .logoModalCls .mat-mdc-dialog-container#logoModal .mdc-dialog__surface {
+  background: transparent !important;
+  box-shadow: none;
+}
 
-::ng-deep .mat-dialog-container#logoModal {
+::ng-deep .logoModalCls .mat-mdc-dialog-container#logoModal {
   display: grid;
   align-content: center;
   justify-content: center;
 
   transition: none;
-  background: transparent !important;
+  background-color: transparent !important;
   box-shadow: none;
+  transform: scale(4);
+
 }
 
+/*
+.mat-mdc-dialog-container .mdc-dialog__surface {
+    background-color: var(--mdc-dialog-container-color, white);
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--mdc-dialog-container-color, white);
+}
+
+// .mdc-dialog__surface
+.logoModal>.mat-dialog-container,
+::ng-deep .logoModal>.mat-dialog-container {
+  background-color: transparent !important;
+
+}
+
+*/
 .logo-wrapper {
   display: grid;
   align-content: center;
@@ -270,6 +304,8 @@ mat-dialog-actions {
   grid-template-rows: 0.75fr;
   z-index: 99;
   margin: auto;
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
   opacity: 1;
@@ -282,6 +318,7 @@ mat-dialog-actions {
   vertical-align: middle;
 
   height: 100%;
+
 }
 
 polygon {
@@ -318,19 +355,24 @@ polygon {
       font-size: initial;
       text-decoration: underline;
     }
+
     span {
       text-shadow: var(--textShadowDark);
     }
+
     .colorLightBlue {
       color: #97bfcd;
     }
+
     .colorBlue {
       color: #0655c3;
       text-shadow: var(--textShadowLight);
     }
+
     .colorPink {
       color: #dc98af;
     }
+
     .colorRed {
       color: #d53b5d;
     }
