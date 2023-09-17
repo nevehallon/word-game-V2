@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  serverUrl: process.env.SERVER_URL,
+  serverUrl:'https://word-game-js-server.onrender.com',
 };
