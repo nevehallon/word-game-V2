@@ -1,0 +1,77 @@
+$color: white;
+$size: 5px;
+
+button {
+  * {
+    text-shadow: none;
+  }
+  position: absolute;
+  margin: 7px;
+  opacity: 0.7;
+}
+button.active {
+  opacity: 1;
+}
+
+%wave {
+  border: $size solid rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  height: 0;
+  width: 0;
+}
+mat-icon {
+  transform: translateX(-5%);
+}
+span {
+  @extend %wave;
+  position: relative;
+  height: 0;
+  width: 0;
+  margin: auto;
+  &::before,
+  &::after {
+    @extend %wave;
+    border-right-color: $color;
+    border-width: $size / 2;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 1;
+  }
+  &::before {
+    height: $size * 2;
+    width: $size * 2;
+    transform: translate(45%, -40%);
+  }
+  &::after {
+    height: $size * 3;
+    width: $size * 3;
+    transform: translate(40%, -40%);
+  }
+}
+
+span.playing {
+  &::before,
+  &::after {
+    transition: opacity 750ms linear 0ms;
+    animation: 750ms ease 2;
+  }
+  &::before {
+    animation-name: blink-before;
+  }
+  &::after {
+    animation-name: blink-after;
+  }
+}
+
+@keyframes blink-before {
+  33.33% {
+    opacity: 0;
+  }
+}
+@keyframes blink-after {
+  66.66% {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,209 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import "@angular/material/theming";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$client-primary: mat-palette($mat-indigo);
+$client-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$client-warn: mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$client-theme: mat-light-theme((color: (primary: $client-primary,
+        accent: $client-accent,
+        warn: $client-warn,
+      ),
+    ));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($client-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
+  scrollbar-width: thin;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+  .mat-tooltip {
+    font-size: 1.1em !important;
+    text-align: center !important;
+  }
+}
+
+body,
+.mat-dialog-container {
+  transition: 1s ease;
+}
+
+body.inheritCursors * {
+  cursor: inherit !important;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+  height: 18px;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 6px;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  -webkit-border-radius: 7px;
+  background-color: rgba(0, 0, 0, 0.35);
+  -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05),
+    inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* fallback */
+@font-face {
+  font-family: "Material Icons";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("./assets/fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2") format("woff2");
+}
+
+.material-icons {
+  font-family: "Material Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* note that Internet Explorer does not support css variables */
+:root {
+  --accent: #515e89;
+  --textShadowLight: -1px -1px 4px #e1e1e1, 1px -1px 4px #e1e1e1,
+    -1px 1px 4px #e1e1e1, 1px 1px 4px #e1e1e1;
+  --tileTextShadowLight: -1px ​-1px 1px #e1e1e1, 1px -1px 1px #e1e1e1,
+    -1px 1px 1px #e1e1e1, 1px 1px 1px #e1e1e1;
+  --textShadowDark: -1px -1px 4px #000, 1px -1px 4px #000, -1px 1px 4px #000,
+    1px 1px 4px #000;
+  --textShadowAccent: -1px -1px 4px #515e89, 1px -1px 4px #515e89,
+    -1px 1px 4px #515e89, 1px 1px 4px #515e89;
+}
+
+body.dark-mode,
+body.dark-mode table,
+body.dark-mode .mat-tab-body-wrapper,
+body.dark-mode mat-dialog-container {
+  background: var(--accent);
+
+  .square:not(.tw):not(.dw):not(.tl):not(.dl) {
+    background: steelblue;
+  }
+
+  mat-tab-group {
+    background: inherit !important;
+  }
+
+  [data-number="112"]:before {
+    content: "brightness_4";
+    text-shadow: var(--textShadowLight);
+    color: #515e89;
+    transition: 500ms 500ms linear;
+  }
+
+  .spinner-container svg {
+    background: #00ff008a;
+  }
+}
+
+body.dark-mode table,
+body.dark-mode .mat-tab-body-wrapper,
+body.dark-mode mat-dialog-container {
+  *:not(button):not(.mat-button-wrapper):not(.ng-star-inserted):not(.mat-icon):not(.tile *) {
+    font-weight: bold;
+    text-shadow: var(--textShadowLight);
+
+    .wordOrigin,
+    .opponent,
+    .player {
+      text-shadow: inherit !important;
+    }
+  }
+}
+
+/*
+* * driver intro tour
+*/
+
+.toolTip {
+  text-align: center;
+  max-width: 280px !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+
+  .driver-close-btn,
+  .driver-popover-tip {
+    display: none !important;
+  }
+
+  .driver-navigation-btns {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+
+.firstStep {
+  .driver-navigation-btns {
+    .driver-prev-btn {
+      display: none !important;
+    }
+  }
+}

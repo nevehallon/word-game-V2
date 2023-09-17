@@ -1,0 +1,94 @@
+.center-align {
+  text-align: center;
+}
+
+.container {
+  height: 70vh;
+  overflow: auto;
+  overflow: overlay;
+}
+
+table {
+  width: 100%;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.player {
+  color: #1e7e34;
+  text-shadow: #c82333 0px 0px 1px;
+}
+
+.opponent {
+  color: #c82333;
+  text-shadow: #1e7e34 0px 0px 1px;
+}
+
+.mat-footer-cell {
+  border: none;
+}
+
+/* :host ::ng-deep */
+.mat-column-move {
+  padding: 0 0 0 10px !important;
+}
+/* 
+.move-column-text {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 33.3vw;
+} */
+
+.cdk-column-player {
+  text-align: center;
+}
+
+.cdk-column-opponent {
+  text-align: center;
+}
+
+/*
+* collapsed/expanded row
+*/
+
+.mat-column-expandedDetail {
+  padding: 0 !important;
+  max-width: 99vmin;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.element-row.expandable:not(.expanded-row):hover {
+  background: #f8f9fa;
+  cursor: pointer;
+}
+
+tr.element-row.expandable:not(.expanded-row):active {
+  background: #f1f3f4 !important;
+}
+
+tr.element-row {
+  box-shadow: 0px 0px 4px 0px;
+}
+
+tr.expanded-row.expandable {
+  background: #f1f3f4;
+  cursor: pointer;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.tab-container {
+  width: 100%;
+}

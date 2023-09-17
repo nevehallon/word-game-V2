@@ -1,0 +1,155 @@
+<div
+    class="theme"
+    matTooltip="Click to change color theme"
+>
+    <mat-icon
+        (click)="toggleThemes()"
+        [class]="isChecked ? 'dark' : 'light'"
+        aria-hidden="false"
+        aria-label="brightness icon"
+    >
+        {{isChecked ? 'brightness_4' : 'brightness_5'}}
+    </mat-icon>
+    <mat-slide-toggle
+        color="primary"
+        [ngModel]="isChecked"
+        (change)="toggleThemes()"
+    ></mat-slide-toggle>
+</div>
+
+<button
+    mat-raised-button
+    color="primary"
+    id="bagBtn"
+    matTooltip="Click me to see what tiles remain"
+    (click)="showBagContent()"
+>
+    {{remainingTiles}}
+</button>
+
+<button
+    (click)="showScoreHistory()"
+    mat-raised-button
+    id="scoresBtn"
+    matTooltip="Click me to see words played and their definitions"
+>
+    <div>
+        <span>player:</span><span id="playerScore">{{source.playerScore}}</span>
+    </div>
+    <div>
+        <span>pc:</span><span id="pcScore">{{source.computerScore}}</span>
+    </div>
+</button>
+
+<button
+    (click)="rematch()"
+    *ngIf="source.gameOver"
+    mat-raised-button
+    color="primary"
+    id="startGame"
+>Rematch</button>
+
+<button
+    *ngIf="!source.gameOver"
+    [disabled]="source.gameOver"
+    (click)="mixTiles()"
+    mat-raised-button
+    color="primary"
+    id="mixBtn"
+    matTooltip="Click me to shuffle the tiles on your rack"
+>
+
+    <mat-icon
+        aria-hidden="false"
+        aria-label="sync icon"
+    >sync</mat-icon>
+    Mix
+</button>
+
+<button
+    *ngIf="!source.gameOver"
+    [disabled]="source.gameOver"
+    #swapRecallRef
+    (click)="swapRecall(swapRecallRef._elementRef.nativeElement.innerText.trim())"
+    mat-raised-button
+    color="primary"
+    id="swapRecall"
+    matTooltip="Click me to trade in for new letters OR return your unplayed tiles from the board"
+>
+    <mat-icon
+        *ngIf="btnAttributes.swapRecall.icon.isUndo"
+        aria-hidden="false"
+        aria-label="undo icon"
+    >undo</mat-icon>
+
+    <mat-icon
+        *ngIf="!btnAttributes.swapRecall.icon.isUndo"
+        aria-hidden="false"
+        aria-label="swap icon"
+    >swap_vertical_circle</mat-icon>
+
+
+    {{btnAttributes.swapRecall.text}}
+</button>
+
+<button
+    (click)="showSettings()"
+    mat-raised-button
+    id="settingsBtn"
+    matTooltip="Click me to check and change game settings"
+>
+    <mat-icon
+        aria-hidden="false"
+        aria-label="settings icon"
+    >settings</mat-icon>
+    Settings
+</button>
+
+<div id="zoomBtns">
+    <button
+        (click)="zoomOut()"
+        *ngIf="!btnAttributes.zoomBtn.isIn"
+        mat-raised-button
+        id="zoomOut"
+        matTooltip="Click me to zoom out and see the whole board"
+    >
+        <mat-icon
+            aria-hidden="false"
+            aria-label="zoom out icon"
+        >zoom_out</mat-icon>
+    </button>
+
+    <button
+        (click)="zoomIn()"
+        *ngIf="btnAttributes.zoomBtn.isIn"
+        mat-raised-button
+        id="zoomIn"
+        matTooltip="Click me to zoom in to the center of the board"
+    >
+        <mat-icon
+            aria-hidden="false"
+            aria-label="zoom in icon"
+        >zoom_in</mat-icon>
+    </button>
+</div>
+
+<button
+    *ngIf="!source.gameOver"
+    [disabled]="source.gameOver"
+    #passPlayRef
+    (click)="passPlay(passPlayRef._elementRef.nativeElement.innerText.trim())"
+    mat-raised-button
+    color="primary"
+    id="passPlay"
+    matTooltip="Click me to play a word OR pass your turn"
+    [ngStyle]="{'background': btnAttributes.passPlay.bgColor}"
+>
+
+    <mat-icon
+        *ngIf="btnAttributes.passPlay.icon"
+        class="material-icons-round"
+        aria-hidden="false"
+        aria-label="block icon"
+    >{{btnAttributes.passPlay.icon}}</mat-icon>
+    {{btnAttributes.passPlay.text}}
+</button>

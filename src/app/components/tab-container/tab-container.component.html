@@ -1,0 +1,78 @@
+<mat-tab-group
+    class="element-diagram"
+    color="accent"
+    backgroundColor="primary"
+    [disablePagination]="true"
+    mat-align-tabs="center"
+    [(selectedIndex)]="selectedTab"
+    (swipeleft)="swipe($event.type, element?.definitions.length || 0)"
+    (swiperight)="swipe($event.type, element?.definitions.length || 0)"
+>
+    <mat-tab
+        *ngFor="let word of element?.definitions;index as i; count as count;"
+        [ngStyle]="{'min-width': 100 / count + '%'}"
+    >
+        <ng-template mat-tab-label>
+            <span>
+                {{word.headword || element?.word.split(", ")[i] | lowercase}}
+            </span>
+        </ng-template>
+
+        <ng-template matTabContent>
+
+            <app-audio-btn
+                [audioSources]="word.audioSources"
+                [word]="word.headword || element?.word.split(', ')[i] | lowercase"
+            >
+            </app-audio-btn>
+
+            <div
+                class="bold pronunciation"
+                *ngIf="word.pronunciation && word.pronunciation.trim()"
+            >
+                [<span [innerHTML]="word.pronunciation.trim()"></span>]
+            </div>
+            <div *ngFor="let wordDef of word.definitions | filterDefs; index as ii; last as last">
+                <div
+                    *ngIf="ii < 5"
+                    class="defContainer"
+                >
+                    <div class="moreDetails">
+                        {{ii + 1}})
+
+                        <span
+                            class="part"
+                            [innerHTML]="wordDef.part | lowercase"
+                        ></span>
+                    </div>
+                    <div class="defText bold">
+
+                        - <span [innerHTML]="wordDef.txt"></span>
+                    </div>
+
+                </div>
+            </div>
+            <div
+                class="wordOrigin"
+                [innerHTML]="'* '+origin.txt"
+                *ngFor="let origin of word?.origin"
+            ></div>
+            <div
+                class="notFound center-align"
+                *ngIf="!(word.definitions | filterDefs).length"
+            >
+                Sorry, we couldn't find the definition for the word "{{word.headword ||
+                element?.word.split(', ')[i] | lowercase}}", but you might have better luck if you
+                check
+                <a
+                    class="bold player"
+                    target="_blank"
+                    [href]="'https://www.google.com/search?q=define+' + (word.headword || element?.word.split(', ')[i]) |lowercase"
+                >
+                    here
+                </a>
+            </div>
+        </ng-template>
+
+    </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,37 @@
+<button
+    mat-mini-fab
+    color="primary"
+    aria-label="icon button with play audio icon"
+    *ngIf="hasAudio"
+    [ngClass]="{'active': isPlaying}"
+    (click)="playAudio(audio, animation)"
+>
+    <span
+        #animation
+        [ngClass]="{'playing': isPlaying}"
+    >
+        <mat-icon
+            aria-hidden="false"
+            aria-label="audio icon"
+        >volume_mute</mat-icon><span></span>
+    </span>
+</button>
+<audio
+    #audio
+    (loadeddata)="audio.readyState >= 2 ? hasAudio = true : null"
+    preload="auto"
+>
+
+
+    <source
+        *ngFor="let source of audioSources"
+        type="audio/mp3"
+        [src]="source"
+    >
+
+
+
+
+    Your browser does not support the
+    <code>audio</code> element.
+</audio>

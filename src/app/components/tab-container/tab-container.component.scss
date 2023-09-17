@@ -1,0 +1,119 @@
+.bold {
+  font-weight: bold;
+}
+
+.player {
+  color: #1e7e34;
+  text-shadow: #c82333 0px 0px 1px;
+}
+
+/*
+mat-tab-group
+ */
+
+.element-diagram {
+  min-width: 80px;
+  font-weight: lighter;
+  margin: 3px 0;
+  height: 222px;
+  direction: rtl;
+  * {
+    direction: ltr;
+  }
+}
+
+:host ::ng-deep mat-tab-group {
+  width: 100%;
+  display: flex;
+  border-radius: 10px;
+  background: lightgray;
+}
+
+:host ::ng-deep mat-tab-header {
+  direction: ltr;
+  margin: 0;
+}
+
+:host ::ng-deep .mat-tab-label-container {
+  display: block;
+}
+
+:host ::ng-deep .mat-tab-label {
+  padding: 0;
+  min-width: 50px;
+  width: 100%;
+  height: 34px;
+  box-shadow: inset 0px 0px 8px 0px black;
+}
+:host ::ng-deep .mat-tab-label-active {
+  box-shadow: inset 0px 0px 8px 0px white;
+}
+
+:host ::ng-deep .mat-tab-label-content {
+  margin: auto;
+  span.ng-star-inserted {
+    text-shadow: none;
+  }
+}
+
+:host ::ng-deep .mat-tab-body-wrapper {
+  padding: 0 5px 0 0;
+  color: rgb(63 81 181);
+  background: lightgray;
+}
+
+.pronunciation {
+  margin: 5px;
+}
+
+.defContainer {
+  margin-bottom: 25px;
+}
+
+.moreDetails {
+  background: rgba(63, 81, 181, 0.7);
+  background: linear-gradient(
+    90deg,
+    rgba(63, 81, 181, 0.7) 0%,
+    rgba(0, 0, 0, 0) 50%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f51b5",endColorstr="#000000",GradientType=1);
+
+  margin-right: 10px;
+  padding: 3px 12px;
+  border-radius: 2em;
+  font-weight: bold;
+  text-shadow: 0 0 3px white;
+}
+
+.part {
+  font-style: italic;
+}
+
+.defText {
+  margin-right: 10px;
+  padding: 3px 22px;
+
+  background: #28a74575;
+  background: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 0) 15%,
+    #28a74575 25%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f51b5",endColorstr="#000000",GradientType=1);
+
+  border-radius: 3em;
+  text-shadow: 0 0 3px white;
+}
+
+.wordOrigin {
+  margin-right: 10px;
+  text-shadow: 0px 0 2px #3f51b5;
+  margin: 5px auto;
+}
+
+.notFound {
+  margin: 60px auto;
+  width: 252px;
+}

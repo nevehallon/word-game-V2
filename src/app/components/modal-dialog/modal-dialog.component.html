@@ -1,0 +1,465 @@
+<div *ngIf="data?.type === 'bag'">
+  <h2 class="center-align">Remaining Tiles in Bag:</h2>
+  <div class="tilesLeft">
+    <div
+      *ngFor="let x of letterToPointsSorted"
+      class="status-box"
+    >
+      <div class="tile">
+        <svg viewBox="0 0 20 20">
+          <text
+            x="50%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+          >
+            {{ x.letter === '' ? '' : x.letter }}
+          </text>
+        </svg>
+        <div>
+          <svg viewBox="0 0 40 40">
+            <text
+              x="82%"
+              y="85%"
+              dominant-baseline="middle"
+              text-anchor="middle"
+            >{{ x.points }}</text>
+          </svg>
+        </div>
+      </div>
+      <svg viewBox="0 0 35 35">
+        <text
+          x="50%"
+          y="50%"
+          dominant-baseline="middle"
+          text-anchor="middle"
+        >
+          {{ currentFreq()[(x.letter === 'BLANK' ? '' : x.letter) + ''] }}
+        </text>
+      </svg>
+    </div>
+  </div>
+  <mat-dialog-actions>
+    <button
+      color="primary"
+      mat-raised-button
+      mat-dialog-close
+    >Close</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="data?.type === 'introSettings'">
+  <h1 class="center-align">Would you like to see these hints again when you start a new game?</h1>
+
+  <div>
+    <div class="center-align">
+      <label
+        id="hints"
+        for="showHints"
+      >Show hints: </label>
+      <mat-checkbox
+        id="showHints"
+        [(ngModel)]="checked"
+      ></mat-checkbox>
+    </div>
+  </div>
+
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      mat-dialog-close
+    >Close</button>
+    <button
+      (click)="saveSettings()"
+      color="primary"
+      mat-raised-button
+      mat-dialog-close
+    >Save</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="data?.type === 'introRules'">
+  <h1 class="center-align">Game Rules</h1>
+
+  <mat-dialog-content>
+    <div class="rules">
+      <h2><span class="colorLightBlue">Game Play</span></h2>
+      <p>
+        • Each player starts with seven letters on their rack. <br /><br />
+        • The player that wins the draw to go first, combines two or more of his or her letters to form a word and
+        places it on the board to read either across or down with one letter on the center square.<br /><span class="colorRed">
+          • Diagonal words are not allowed.</span><br /><br />
+        • Play passes to the next player, and then each in turn, adds one or more letters to those already played to
+        form new words.<br />
+        • All letters played on a turn must be placed in one row across or down the board, to form at least one complete
+        word.<br />
+        • If, at the same time, they touch others letters in adjacent rows, those must also form complete words,
+        crossword fashion, with all such letters. The player gets full credit for all words formed or modified on his or
+        her turn.<br /><br />
+        New words may be formed by:<br />
+        • Adding one or more letters to a word or letters already on the board.<br />
+        • Placing a word at right angles to a word already on the board. The new word must use one of the letters
+        already on the board or must add a letter to it.<br />
+        • Placing a complete word parallel to a word already played so that adjacent letters also form complete
+        words.<br /><br /><span class="colorRed">
+          • No tile may be shifted or replaced after it has been played AND scored.</span><br /><br />
+        • Blanks: The two blank tiles may be used as any letters. When playing a blank, you must decide which letter it
+        represents. It remains that letter for the rest of the game.<br /><br />
+        • You may use a turn to exchange all, some, or none of the letters.<br />To do this, press the 'Swap' button
+        (when all of your letters are still on your rack). Doing this ends your turn.<br /><br />
+        • The game ends when all letters have been drawn and one player uses his or her last letter; or when all
+        possible plays have been made.
+      </p>
+      <h2><span class="colorLightBlue">Scoring</span></h2>
+      <p>
+        • The score value of each letter is indicated by a number at the bottom of the tile. The score value of a blank
+        is zero.<br /><br />
+        • The score for each turn is the sum of the letter values in each word(s) formed or modified on that turn, plus
+        the additional points obtained from placing letters on 'Premium Squares'.<br /><br />
+        • Premium <b>Letter</b> Squares:
+        <span class="colorLightBlue">A light blue square doubles the score of a letter</span> placed on it;
+        <span class="colorBlue">a dark blue square triples the letter</span> score.<br /><br />
+        • Premium <b>Word</b> Squares: The score for an entire
+        <span class="colorPink">word is doubled when one of its letters is placed on a pink square</span>:
+        <span class="colorRed">it is tripled when one of its letters is placed on a red square.</span><br />
+        • If a word is formed that covers two premium word squares, the score is doubled and then re-doubled (4 times
+        the letter count), or tripled and then re-tripled (9 times the letter count).<br />
+        • NOTE: the center square is a pink square, which doubles the score for the first word.<br /><br />
+        • Letter and word premiums count only on the turn in which they are played. On later turns, letters already
+        played on premium squares count at face value.<br /><br />
+        • When a blank tile is played on a pink or red square, the value of the word is doubled or tripled, even though
+        the blank itself has no score value.<br /><br />
+        • When two or more words are formed in the same play, each is scored. The common letter is counted (with full
+        premium value, if any) for each word.<br /><br />
+        • BINGO! If you play seven tiles on a turn, it's a Bingo. You score a premium of 50 points after totaling your
+        score for the turn.<br /><br />
+        • Unplayed Letters: When the game ends, each player's score is reduced by the sum of his or her unplayed
+        letters.<br />
+        • In addition, if a player has used all of his or her letters, the sum of the other players' unplayed letters is
+        added to that player's score.<br />
+        • The player with the highest final score wins the game.
+      </p>
+    </div>
+  </mat-dialog-content>
+
+  <div class="btnContainer">
+    <mat-dialog-actions>
+      <button
+        class="ruleBtn"
+        color="primary"
+        mat-raised-button
+        mat-dialog-close
+      >OK</button>
+    </mat-dialog-actions>
+  </div>
+</div>
+
+<div *ngIf="data?.type === 'settings'">
+  <h1 class="center-align">Settings</h1>
+  <h3 class="center-align">Current difficulty:</h3>
+
+  <div>
+    <label
+      class="center-align"
+      [ngStyle]="difficultyStyles"
+      id="difficultyText"
+      for="difficulty"
+    >{{
+      difficultyText
+    }}</label>
+    <mat-slider
+      (input)="giveFeedBack($event)"
+      step="1"
+      min="15"
+      max="65"
+    >
+      <input
+        matSliderThumb
+        [(ngModel)]="value"
+        #slider
+      >
+    </mat-slider>
+    <div
+      [ngStyle]="difficultyStyles"
+      id="difficultyPercentage"
+      [class]="'center-align'"
+    >
+      {{ ((value - 15) * 100) / (65 - 15) }}%
+    </div>
+    <hr id="between" />
+    <div class="center-align">
+      <label
+        id="hints"
+        for="showHints"
+      >Show hints: </label>
+      <mat-checkbox
+        id="showHints"
+        [(ngModel)]="checked"
+      ></mat-checkbox>
+    </div>
+  </div>
+
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      mat-dialog-close
+    >Close</button>
+    <button
+      (click)="saveSettings()"
+      color="primary"
+      mat-raised-button
+      mat-dialog-close
+    >Save</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="data?.type === 'swap'">
+  <h1 class="center-align">Swap Tiles</h1>
+  <h3 class="center-align">Select the tiles you want to exchange</h3>
+  <div class="center-align">
+    <small>(click a second time to undo)</small>
+  </div>
+
+  <div
+    class="blankOptions"
+    [ngStyle]="{ 'grid-template-columns': 'repeat(7, 1fr)', 'max-width': '100%', 'column-gap': '0.1em' }"
+  >
+    <div
+      (click)="selectTile(tile)"
+      [ngStyle]="{ cursor: 'pointer' }"
+      [class]="tile.class"
+      *ngFor="let tile of tiles"
+      [class.selected]="tile.selected"
+    >
+      <svg viewBox="0 0 20 20">
+        <text
+          x="50%"
+          y="50%"
+          dominant-baseline="middle"
+          text-anchor="middle"
+        >{{ tile.content.letter }}</text>
+      </svg>
+      <div>
+        <svg viewBox="0 0 40 40">
+          <text
+            x="82%"
+            y="85%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+          >
+            {{ tile.content.points ? tile.content.points : '' }}
+          </text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      mat-dialog-close
+    >Close</button>
+    <button
+      (click)="swapTiles()"
+      color="primary"
+      mat-raised-button
+      [mat-dialog-close]="data.bagLength ? true : false"
+    >
+      Confirm
+    </button>
+  </mat-dialog-actions>
+</div>
+
+<div
+  id="blanks"
+  *ngIf="data?.type === 'blankOptions'"
+>
+  <h2 class="center-align">How would you like to use your blank tile?</h2>
+  <div class="blankOptions">
+    <div
+      *ngFor="let x of letterToPointsSorted"
+      class="status-box"
+      [mat-dialog-close]="{ letter: x.letter, points: 0 }"
+      [ngStyle]="x.points ? {} : { display: 'none' }"
+    >
+      <div class="tile">
+        <svg viewBox="0 0 20 20">
+          <text
+            x="50%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+          >
+            {{ x.letter === '' ? '' : x.letter }}
+          </text>
+        </svg>
+        <div>
+          <svg viewBox="0 0 40 40">
+            <text
+              x="82%"
+              y="85%"
+              dominant-baseline="middle"
+              text-anchor="middle"
+            >0</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-actions>
+    <button
+      (click)="revert()"
+      color="primary"
+      mat-raised-button
+      [mat-dialog-close]="false"
+    >Close</button>
+  </mat-dialog-actions>
+</div>
+
+<div
+  id="confirmPass"
+  *ngIf="data?.type === 'confirmPass'"
+>
+  <h2 class="center-align">Are you sure you want to pass?</h2>
+
+  <mat-dialog-actions>
+    <button
+      color="warn"
+      mat-raised-button
+      [mat-dialog-close]="false"
+    >Cancel</button>
+    <button
+      color="primary"
+      mat-raised-button
+      [mat-dialog-close]="true"
+    >Confirm</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="data?.type === 'message'">
+  <h2
+    class="center-align"
+    [innerHtml]="data.message"
+  ></h2>
+
+  <div class="center-align player bold">{{ data.player }}</div>
+  <div class="center-align opponent bold">{{ data.opponent }}</div>
+
+  <mat-dialog-actions *ngIf="data?.buttons">
+    <button
+      *ngFor="let btn of data.buttons; index as i"
+      color="primary"
+      mat-raised-button
+      [mat-dialog-close]="data.btnCloseData && data.btnCloseData[i]"
+    >
+      {{ btn }}
+    </button>
+  </mat-dialog-actions>
+</div>
+
+<div
+  class="loading"
+  *ngIf="data?.type === 'loading'"
+>
+  <h2 class="center-align">{{ data.message }}</h2>
+  <div *ngIf="data.notes">
+    <h4
+      class="center-align notes"
+      [innerHtml]="data.notes"
+    ></h4>
+  </div>
+  <div class="spinner-container center-align">
+    <svg
+      fill="currentColor"
+      class="spinner"
+      data-loading="lazy"
+      xmlns="http://www.w3.org/2000/svg"
+      width="135"
+      height="135"
+      viewBox="0 0 135 135"
+    >
+      <path
+        id="path1"
+        d="M67.447 58c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm9.448 9.447c0 5.523 4.477 10 10 10 5.522 0 10-4.477 10-10s-4.478-10-10-10c-5.523 0-10 4.477-10 10zm-9.448 9.448c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10s10-4.478 10-10c0-5.523-4.477-10-10-10zM58 67.447c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z"
+      ></path>
+      <path
+        id="path2"
+        d="M28.19 40.31c6.627 0 12-5.374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z"
+      ></path>
+    </svg>
+  </div>
+</div>
+
+<div *ngIf="data?.type === 'history'">
+  <h2 class="center-align">Play History</h2>
+
+  <app-history-table></app-history-table>
+
+  <div class="text-info center-align">* Click on word to see definition *</div>
+
+  <mat-dialog-actions>
+    <button
+      class="center-align"
+      color="primary"
+      mat-raised-button
+      mat-dialog-close
+    >Close</button>
+  </mat-dialog-actions>
+</div>
+
+<div *ngIf="data?.type === 'logo'">
+  <div class="loader">
+    <div class="logo-wrapper">
+      <svg
+        id="logo"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 100 100"
+      >
+        <g>
+          <filter id="displacementFilter">
+            <feTurbulence
+              type="turbulence"
+              baseFrequency=".05"
+              numOctaves="2"
+              result="turbulence"
+              style="transform: scale(1)"
+            ></feTurbulence>
+            <feDisplacementMap
+              in2="turbulence"
+              in="SourceGraphic"
+              scale="15"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            ></feDisplacementMap>
+          </filter>
+          <polygon
+            points="64 68.64 8.574 100 63.446 67.68 64 4 64.554 67.68 119.426 100 "
+            style="filter: url('#displacementFilter'); transform: scale(0.75)"
+            fill="black"
+            stroke="currentColor"
+          ></polygon>
+          <g
+            id="B"
+            transform="translate(18.5, 40)"
+            stroke-linecap="round"
+            fill-rule="evenodd"
+            fill="white"
+            stroke="white"
+            stroke-width="0.5"
+          >
+            <g class="A-Z">
+              <path d="M 20.864 14.816 L 20.864 11.68 L 31.072 11.68 L 31.072 14.816 L 20.864 14.816 Z" />
+            </g>
+            <g id="two">
+              <path d="M 43.245 27 L 57.87 27 L 57.87 32.13 L 37.665 32.13 A 19.499 19.499 0 0 1 37.499 31.107 Q 37.424 30.554 37.387 30.022 A 14.926 14.926 0 0 1 37.35 28.98 Q 37.35 26.683 37.96 24.905 A 9.049 9.049 0 0 1 38.25 24.165 A 10.335 10.335 0 0 1 39.749 21.755 Q 40.267 21.131 40.894 20.565 A 17.736 17.736 0 0 1 41.466 20.071 Q 42.988 18.81 45.211 17.492 A 44.269 44.269 0 0 1 45.495 17.325 Q 47.475 16.155 48.746 15.21 A 8.416 8.416 0 0 0 50.125 13.918 Q 50.557 13.413 50.929 12.825 A 5.74 5.74 0 0 0 51.69 10.956 Q 51.793 10.48 51.825 9.968 A 7.502 7.502 0 0 0 51.84 9.495 A 5.464 5.464 0 0 0 51.752 8.504 A 4.884 4.884 0 0 0 51.345 7.256 A 3.765 3.765 0 0 0 50.155 5.838 A 4.421 4.421 0 0 0 49.815 5.614 A 3.974 3.974 0 0 0 49.007 5.249 Q 48.23 4.995 47.25 4.995 Q 44.866 4.995 43.359 6.511 A 5.438 5.438 0 0 0 43.301 6.57 A 6.437 6.437 0 0 0 42.359 7.826 Q 41.694 8.979 41.406 10.505 A 11.261 11.261 0 0 0 41.355 10.8 L 36.585 8.55 Q 36.945 6.188 38.43 4.241 A 10.015 10.015 0 0 1 40.385 2.304 Q 40.957 1.875 41.603 1.511 A 12.15 12.15 0 0 1 42.3 1.148 Q 44.436 0.12 47.041 0.013 A 14.916 14.916 0 0 1 47.655 0 Q 50.468 0 52.751 1.058 A 9.205 9.205 0 0 1 53.897 1.688 A 8.321 8.321 0 0 1 56.362 4.151 A 7.865 7.865 0 0 1 57.332 6.277 Q 57.642 7.352 57.684 8.577 A 11.231 11.231 0 0 1 57.69 8.955 Q 57.69 11.512 56.857 13.501 A 9.291 9.291 0 0 1 56.666 13.928 A 11.157 11.157 0 0 1 55.59 15.718 Q 54.787 16.81 53.69 17.772 A 14.538 14.538 0 0 1 53.674 17.786 Q 51.797 19.427 48.764 21.283 A 61.565 61.565 0 0 1 48.465 21.465 A 82.144 82.144 0 0 0 48.029 21.729 Q 46.548 22.629 45.731 23.22 A 7.125 7.125 0 0 0 44.134 24.806 A 4.673 4.673 0 0 0 43.594 25.776 Q 43.437 26.154 43.334 26.577 A 6.465 6.465 0 0 0 43.245 27 Z" />
+            </g>
+
+            <g class="A-Z">
+              <path d="M 48.8 0.384 L 40.032 19.232 L 48.384 19.232 L 48.384 22.688 L 33.888 22.688 L 42.768 3.84 L 34.944 3.84 L 34.944 0.384 L 48.8 0.384 Z M 14.88 22.688 L 13.632 19.456 L 5.664 19.456 L 4.48 22.688 L 0 22.688 L 9.44 0 L 9.76 0 L 19.232 22.688 L 14.88 22.688 Z M 6.816 16.352 L 12.448 16.352 L 10.112 10.272 L 9.568 8.48 L 9.056 10.272 L 6.816 16.352 Z" />
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>

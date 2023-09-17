@@ -1,0 +1,93 @@
+.mat-icon {
+  height: 30px;
+  width: 30px;
+}
+.material-icons {
+  font-size: 30px;
+}
+
+button {
+  margin: 5px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+#scoresBtn,
+#zoomBtns,
+#settingsBtn {
+  &::ng-deep {
+    .mat-ripple-element {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+#bagBtn {
+  background-image: url("../../../assets/images/bag.webp");
+  width: 55px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-size: 30px;
+  color: black;
+  font-weight: bold;
+}
+#scoresBtn {
+  background: #343a40;
+  color: white;
+  padding: 0;
+  font-weight: bold;
+
+  width: 90px;
+
+  &::ng-deep {
+    .mat-button-wrapper {
+      width: 90%;
+    }
+  }
+
+  div {
+    display: flex;
+    justify-content: space-between;
+
+    span {
+      line-height: 1.4;
+    }
+  }
+}
+
+#settingsBtn {
+  background: #343a40;
+  color: white;
+}
+
+#zoomBtns {
+  margin: 0 5px;
+  display: flex;
+
+  button {
+    background: #343a40;
+    color: white;
+  }
+}
+
+.theme {
+  display: flex;
+  align-items: center;
+
+  .dark {
+    color: #515e89;
+    text-shadow: var(--textShadowLight);
+    transition: 500ms 500ms ease-in-out;
+  }
+  .light {
+    color: #fff;
+    text-shadow: var(--textShadowDark);
+    transition: 500ms 500ms ease-in-out;
+  }
+
+  mat-slide-toggle {
+    transform: rotate(90deg);
+  }
+}
