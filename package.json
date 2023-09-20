@@ -4,12 +4,12 @@
   "type": "module",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "deploy": "ng deploy --base-href=word-game-V2"
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test",
+    "lint": "nx lint",
+    "e2e": "nx e2e",
+    "deploy": "nx deploy --base-href=word-game-V2"
   },
   "private": true,
   "dependencies": {
@@ -36,8 +36,13 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.2.2",
+    "@angular-devkit/core": "^16.2.2",
+    "@angular-devkit/schematics": "^16.2.2",
     "@angular/cli": "^16.2.2",
     "@angular/compiler-cli": "^16.2.5",
+    "@nx/angular": "16.8.1",
+    "@nx/workspace": "16.8.1",
+    "@schematics/angular": "^16.2.2",
     "@types/animejs": "^3.1.7",
     "@types/hammerjs": "^2.0.42",
     "@types/jasmine": "^3.10.13",
@@ -53,6 +58,8 @@
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~4.0.2",
     "karma-jasmine-html-reporter": "^1.7.0",
+    "nx": "16.8.1",
+    "nx-cloud": "latest",
     "postcss": "^8.4.29",
     "protractor": "~7.0.0",
     "source-map-explorer": "^2.5.3",
