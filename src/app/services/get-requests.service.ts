@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LetterToPointsService } from './letter-to-points.service';
-import { getTrie } from '../../assets/trie-prefix-tree-alt/main.js';
+import { getTrie } from '../../assets/trie-prefix-tree-alt';
 import { HttpClient } from '@angular/common/http';
 import { orderBy } from 'lodash-es';
 import * as localforage from 'localforage';
