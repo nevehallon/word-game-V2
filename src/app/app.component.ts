@@ -14,9 +14,6 @@ export class AppComponent {
 			driver: [localforage.INDEXEDDB, localforage.WEBSQL],
 			name: 'Scrabble_Game',
 		});
-
 		http.getWordTrieStr(this.source);
 	}
-
-
 }
