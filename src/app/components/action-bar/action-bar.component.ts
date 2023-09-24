@@ -117,7 +117,7 @@ export class ActionBarComponent implements OnInit, AfterViewInit, OnDestroy {
 
 		dialogRef
 			.afterClosed()
-			.pipe(take(1))
+			// .pipe(take(1))
 			.subscribe((result) => {
 				if (!result) {
 					return;
@@ -190,7 +190,7 @@ export class ActionBarComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 		dialogRef
 			.afterClosed()
-			.pipe(take(1))
+			// .pipe(take(1))
 			.subscribe((result) => {
 				if (!result) return;
 

@@ -28,74 +28,74 @@ import { TabContainerComponent } from './components/tab-container/tab-container.
 import { FilterDefsPipe } from './pipes/filter-defs.pipe';
 
 import {
-  BrowserModule,
-  HammerModule,
-  HammerGestureConfig,
-  HAMMER_GESTURE_CONFIG,
+	BrowserModule,
+	HammerModule,
+	HammerGestureConfig,
+	HAMMER_GESTURE_CONFIG,
 } from '@angular/platform-browser';
-import * as Hammer from 'hammerjs';
+import Hammer from 'hammerjs';
 import { ScrollToPipe } from './pipes/scroll-to.pipe';
 
 @Injectable({ providedIn: 'root' })
 export class MyHammerConfig extends HammerGestureConfig {
-  overrides = <any>{
-    swipe: { direction: Hammer.DIRECTION_HORIZONTAL },
-    pinch: { enable: false },
-    rotate: { enable: false },
-  };
+	overrides = <any>{
+		swipe: { direction: Hammer.DIRECTION_HORIZONTAL },
+		pinch: { enable: false },
+		rotate: { enable: false },
+	};
 
-  buildHammer(element: HTMLElement) {
-    const mc = new Hammer(element, {
-      touchAction: 'auto',
-      inputClass: Hammer.TouchInput,
-      recognizers: [
-        [
-          Hammer.Swipe,
-          {
-            direction: Hammer.DIRECTION_HORIZONTAL,
-          },
-        ],
-      ],
-    });
-    return mc;
-  }
+	buildHammer(element: HTMLElement) {
+		const mc = new Hammer(element, {
+			touchAction: 'auto',
+			inputClass: Hammer.TouchInput,
+			recognizers: [
+				[
+					Hammer.Swipe,
+					{
+						direction: Hammer.DIRECTION_HORIZONTAL,
+					},
+				],
+			],
+		});
+		return mc;
+	}
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ContainerComponent,
-    FrameComponent,
-    BoardComponent,
-    ActionBarComponent,
-    RackFrameComponent,
-    ModalDialogComponent,
-    HistoryTableComponent,
-    FilterDefsPipe,
-    AudioBtnComponent,
-    TabContainerComponent,
-    ScrollToPipe,
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    DragDropModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatDialogModule,
-    MatCheckboxModule,
-    FormsModule,
-    MatSlideToggleModule,
-    MatSliderModule,
-    MatTableModule,
-    MatTabsModule,
-    MatRippleModule,
-    MatIconModule,
-    HammerModule,
-  ],
-  // entryComponents: [ModalDialogComponent],
-  providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig }],
-  bootstrap: [AppComponent],
+	declarations: [
+		AppComponent,
+		ContainerComponent,
+		FrameComponent,
+		BoardComponent,
+		ActionBarComponent,
+		RackFrameComponent,
+		ModalDialogComponent,
+		HistoryTableComponent,
+		FilterDefsPipe,
+		AudioBtnComponent,
+		TabContainerComponent,
+		ScrollToPipe,
+	],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+		DragDropModule,
+		MatButtonModule,
+		MatTooltipModule,
+		MatDialogModule,
+		MatCheckboxModule,
+		FormsModule,
+		MatSlideToggleModule,
+		MatSliderModule,
+		MatTableModule,
+		MatTabsModule,
+		MatRippleModule,
+		MatIconModule,
+		HammerModule,
+	],
+	// entryComponents: [ModalDialogComponent],
+	providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig }],
+	bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

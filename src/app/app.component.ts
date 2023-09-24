@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import * as localforage from 'localforage';
+import localforage from 'localforage';
 import { GetRequestsService } from './services/get-requests.service';
 import { SourceService } from './services/source.service';
 
